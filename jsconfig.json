@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/lib/*"],
+      "~/*": ["src/*"],
+      "#/*": ["src/components/*"],
+      "@static/*": ["public/static/*"],
+      "@commons/*": ["node_modules/@rafamel/react-commons"]
+    }
+  }
+}
