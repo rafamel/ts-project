@@ -4,7 +4,6 @@
 # Node, Frameworks, Editors #
 #############################
 _test.js
-lib
 build
 dist
 .cache

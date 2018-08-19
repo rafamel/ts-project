@@ -23,7 +23,7 @@ module.exports = {
   rules: {
     'no-console': 1,
     'jsx-a11y/no-autofocus': 0,
-    'no-restricted-globals': [2, 'fetch'].concat(globals),
+    'no-restricted-globals': [2, 'window', 'fetch'].concat(globals),
     'react/prop-types': [2, { ignore: ['styles', 'theme', 'store'] }],
     // eslint-plugin-babel
     'babel/no-invalid-this': 1,

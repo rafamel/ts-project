@@ -5,7 +5,7 @@
   "author": "Rafa Mel",
   "private": true,
   "scripts": {
-    "precommit": "cross-env MSG='Committing in:' nps validate",
+    "precommit": "cross-env MSG=\"Committing in:\" nps validate",
     "start": "nps start",
     "dev": "nps dev",
     "dev:hmr": "nps dev.hmr",

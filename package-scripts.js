@@ -1,6 +1,6 @@
 const registerSx = (sx, _ = (global.SX = {})) =>
   Object.keys(sx).forEach((key) => (global.SX[key] = sx[key]));
-const sx = (name) => `node -r ./package-scripts.js -e global.SX.${name}\\(\\)`;
+const sx = (name) => `node -r ./package-scripts.js -e "global.SX.${name}()"`;
 const scripts = (x) => ({ scripts: x });
 const exit0 = (x) => `${x} || shx echo `;
 const series = (x) => `(${x.join(') && (')})`;
@@ -25,9 +25,9 @@ const cnf = {
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
-  start: watch({ hmr: true, open: true, wait: 1500 }),
+  start: watch({ hmr: true, open: true, wait: 1750 }),
   dev: {
-    default: watch({ hmr: false, open: false, wait: 1000 }),
+    default: watch({ hmr: false, open: false, wait: 1750 }),
     hmr: watch({ hmr: true, open: false, wait: 2000 }),
     json: `json-server ${cnf.in.dbMock} -p 3333 -w`
   },
@@ -38,7 +38,7 @@ module.exports = scripts({
   ]),
   serve: `serve ${cnf.out.prod} --port=${cnf.port.prod} --open`,
   analyze: `source-map-explorer ${cnf.out.prod}/src.*.js`,
-  fix: `prettier --write "${cnf.in.src}/**/*.{js,jsx,ts,scss,md}"`,
+  fix: `prettier --write "${cnf.in.src}/**/*.{js,jsx,ts,scss}"`,
   lint: {
     default: series([
       `eslint ${cnf.in.src} --ext .js`,
@@ -50,10 +50,7 @@ module.exports = scripts({
     default: 'jest --runInBand',
     watch: `onchange "${cnf.in.src}/**/*.{js,jsx}" -i -- nps private.test_watch`
   },
-  validate: series([
-    'nps fix lint lint.md',
-    `npm outdated || ${sx('countdown')}`
-  ]),
+  validate: 'nps fix lint lint.md private.validate_last',
   update: 'npm update --save/save-dev && npm outdated',
   clean: series([
     exit0(`shx rm -r lib coverage .cache ${cnf.out.dev} ${cnf.out.prod}`),
@@ -61,7 +58,8 @@ module.exports = scripts({
   ]),
   // Private
   private: {
-    test_watch: `${sx('clear')} && nps test`
+    test_watch: `${sx('clear')} && nps test`,
+    validate_last: `npm outdated || ${sx('countdown')}`
   }
 });
 
@@ -80,6 +78,7 @@ registerSx({
 function watch({ hmr, open, wait }) {
   return series([
     exit0(`shx rm -r ${cnf.out.dev}`),
+    exit0(`shx rm -r .cache`),
     `shx mkdir ${cnf.out.dev}`,
     `shx cp ${cnf.in.startup} ${cnf.out.dev}/index.html`,
     'concurrently "' +
