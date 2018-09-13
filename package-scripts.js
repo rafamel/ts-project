@@ -38,13 +38,14 @@ module.exports = scripts({
   ]),
   serve: `serve ${cnf.out.prod} --port=${cnf.port.prod} --open`,
   analyze: `source-map-explorer ${cnf.out.prod}/src.*.js`,
-  fix: `prettier --write "${cnf.in.src}/**/*.{js,jsx,ts,scss}"`,
+  fix: `prettier --write "${cnf.in.src}/**/*.{js,jsx,ts,json,scss}"`,
   lint: {
     default: series([
       `eslint ${cnf.in.src} --ext .js`,
       'shx echo "No linting errors."'
     ]),
-    md: 'markdownlint *.md --config markdown.json'
+    md: 'markdownlint *.md --config markdown.json',
+    watch: `onchange "${cnf.in.src}/**/*.{js,jsx}" -i -- nps private.lint_watch`
   },
   test: {
     default: 'jest --runInBand',
@@ -58,6 +59,7 @@ module.exports = scripts({
   ]),
   // Private
   private: {
+    lint_watch: `${sx('clear')} && nps lint lint.md`,
     test_watch: `${sx('clear')} && nps test`,
     validate_last: `npm outdated || ${sx('countdown')}`
   }

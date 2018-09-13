@@ -16,6 +16,7 @@
     "fix": "nps fix",
     "lint": "nps lint",
     "lint:md": "nps lint.md",
+    "lint:watch": "nps lint.watch",
     "test": "nps test",
     "test:watch": "nps test.watch",
     "validate": "nps validate",
