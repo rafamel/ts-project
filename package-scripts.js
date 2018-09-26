@@ -57,6 +57,7 @@ registerSx({
 
     package.main = './index.js';
     delete package.scripts.prepublishOnly;
+    delete package.scripts.publish;
 
     fs.writeFileSync(
       path.join(__dirname, 'lib/package.json'),
