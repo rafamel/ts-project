@@ -8,7 +8,6 @@
     "keywords",
     "keywords"
   ],
-  "main": "./lib/index.js",
   "scripts": {
     "precommit": "cross-env MSG=\"Committing in:\" nps validate",
     "prepublishOnly": "exit 1",
@@ -72,6 +71,9 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{js,ts,jsx}"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/lib/package.json"
     ]
   }
 }
