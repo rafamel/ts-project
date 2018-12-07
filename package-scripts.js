@@ -23,7 +23,7 @@ module.exports = scripts({
     test: 'eslint ./test --ext .js',
     md: 'markdownlint *.md --config markdown.json',
     scripts: 'jake lintscripts',
-    typings: 'tslint ./typings/**/*',
+    typings: 'tslint ./typings/**/*'
   },
   test: {
     default: 'nps lint.test && jest ./test/.*.test.js',
