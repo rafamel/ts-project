@@ -74,7 +74,7 @@ function register() {
 
   logger.debug('SW: Registering');
   // The URL constructor is available in all browsers that support SW.
-  const publicUrl = new URL(config.publicUrl, window.location);
+  const publicUrl = new URL(config.get('publicUrl'), window.location);
   // SW won't work if PUBLIC_URL is on a different
   // origin (if a CDN is used to serve assets):
   // https://bit.ly/2GQ8yaT
@@ -112,5 +112,5 @@ function unregister() {
 }
 
 export default function sw() {
-  return config.serviceWorker ? register() : unregister();
+  return config.get('serviceWorker') ? register() : unregister();
 }

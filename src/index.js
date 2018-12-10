@@ -18,6 +18,7 @@ import contexts from './contexts';
 
 // Config & HMR
 import config from '~/config';
+import logger from 'logger';
 import hmr from 'hmr';
 
 // Run all
@@ -32,4 +33,5 @@ const render = (Component) => {
 };
 render(App);
 
-if (config.env.development) hmr(render, module.hot && module.hot.accept);
+logger.info(`Running on ${config.get('env')}`);
+if (config.get('hmr')) hmr(render, module.hot && module.hot.accept);

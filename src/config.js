@@ -1,21 +1,26 @@
+import config from 'slimconf';
 import { levels as loglevels } from 'loglevel';
-const e = process.env.NODE_ENV;
-const env = e === 'production' || e === 'development' ? e : 'test';
-const onEnv = (obj) => (obj.hasOwnProperty(env) ? obj[env] : obj.default);
 
-export default {
-  publicUrl: process.env.PUBLIC_URL || './',
+const setup = {
   env: {
-    production: env === 'production',
-    development: env === 'development',
-    test: env === 'test'
-  },
-  logger: onEnv({
+    default: process.env.NODE_ENV,
+    map: (env) => (env === 'production' || env === 'development' ? env : 'test')
+  }
+};
+
+export default config(setup, ({ env }, on) => ({
+  env,
+  publicUrl: process.env.PUBLIC_URL || './',
+  hmr: on.env({
+    default: false,
+    development: true
+  }),
+  logger: on.env({
     default: loglevels.WARN,
     development: loglevels.TRACE
   }),
-  serviceWorker: onEnv({
+  serviceWorker: on.env({
     default: false,
     production: true
   })
-};
+}));
