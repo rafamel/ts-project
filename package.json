@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "prepublishOnly": "exit 1",
+    "postinstall": "nps postinstall",
     "start": "npm run watch",
     "build": "nps build",
     "publish": "nps publish",
