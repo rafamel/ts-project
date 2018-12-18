@@ -1,3 +1,1 @@
-console.log(10);
-const a = () => {};
-a();
+export default function main() {}
