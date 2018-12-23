@@ -1,6 +1,4 @@
 const webpack = require('webpack');
-const convert = require('koa-connect');
-const history = require('connect-history-api-fallback');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -29,9 +27,9 @@ const development = {
     contentBase: config.paths.output,
     compress: true,
     hot: true,
-    port: config.dev.port,
-    overlay: config.dev.overlay,
-    disableHostCheck: true
+    disableHostCheck: true,
+    historyApiFallback: true,
+    ...config.dev
   },
   performance: { hints: false },
   output: {
@@ -142,7 +140,7 @@ const base = {
         test: /\.(js|mjs|jsx)$/,
         loader: 'eslint-loader',
         exclude: /(node_modules)/,
-        options: { emitWarning: process.env.NODE_ENV !== 'production' }
+        options: { quiet: true }
       },
       {
         oneOf: [
@@ -206,12 +204,6 @@ const base = {
         ]
       }
     ]
-  },
-  serve: {
-    add: (app) => app.use(convert(history())),
-    content: config.paths.entry,
-    dev: { publicPath: config.paths.output },
-    open: true
   },
   resolve: {
     modules: ['node_modules'],

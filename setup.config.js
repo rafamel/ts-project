@@ -7,7 +7,14 @@ const manifest = JSON.parse(
 module.exports = {
   publicUrl: '/',
   generateSW: true,
-  dev: { port: 5000, overlay: { warnings: false, errors: true } },
+  dev: {
+    open: false, // Open browser on init
+    port: 5000,
+    overlay: { warnings: false, errors: true }, // Warnings/errors on browser
+    clientLogLevel: 'error', // Warning/errors on CLI
+    stats: 'minimal',
+    watchOptions: { aggregateTimeout: 1000 } // Wait 1000ms after changes ocurr
+  },
   assets: {
     maxSizeEntry: 300 * 1024, // 300kb
     maxSize: 500 * 1024 // 500kb
