@@ -6,7 +6,7 @@ import LottiePlayer from '@commons/elements/LottiePlayer';
 import lottiePingPong from '@static/lottie/ping_pong.json';
 import logger from 'logger';
 
-@withContext('styles', ({ theme }) => ({
+const styles = ({ theme }) => ({
   root: {
     padding: '60px 25px',
     display: 'flex',
@@ -25,7 +25,7 @@ import logger from 'logger';
     maxWidth: 400,
     margin: 'auto'
   }
-}))
+});
 class Info extends React.Component {
   static propTypes = {
     location: PropTypes.object.isRequired
@@ -88,4 +88,4 @@ class Info extends React.Component {
   }
 }
 
-export default Info;
+export default withContext({ styles })(Info);

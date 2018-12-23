@@ -1,6 +1,7 @@
 {
-  "short_name": "react-boiler",
   "name": "React Boilerplate",
+  "short_name": "ReactBoiler",
+  "description": "A React Boilerplate.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +11,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#FFFFFF",
-  "background_color": "#000000"
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }

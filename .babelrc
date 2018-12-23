@@ -1,28 +1,10 @@
 {
-  "presets": [
-    "env",
-    "react"
-  ],
-  "env": {
-    "development": {
-      "plugins": [
-        "react-hot-loader/babel",
-        [
-          "import-globals",
-          {
-            "swal": "sweetalert"
-          }
-        ]
-      ]
-    }
-  },
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     [
-      "module-resolver",
+      "babel-plugin-module-resolver",
       {
-        "root": [
-          "./src/lib"
-        ],
+        "root": ["./src/lib"],
         "alias": {
           "~": "./src",
           "#": "./src/components",
@@ -31,23 +13,8 @@
         }
       }
     ],
-    "transform-decorators-legacy",
-    [
-      "emotion",
-      {
-        "autoLabel": true,
-        "hoist": true
-      }
-    ],
-    "transform-class-properties",
-    [
-      "transform-object-rest-spread",
-      {
-        "useBuiltIns": true
-      }
-    ]
-  ],
-  "ignore": [
-    "node_modules"
+    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]
   ]
 }

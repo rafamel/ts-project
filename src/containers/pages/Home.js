@@ -3,7 +3,7 @@ import ButtonBase from '@commons/elements/ButtonBase';
 import Fade from '@commons/Fade';
 import { withContext } from 'cxt';
 
-@withContext('styles', ({ theme }) => ({
+const styles = ({ theme }) => ({
   root: {
     padding: '45px 60px',
     textAlign: 'center'
@@ -16,8 +16,8 @@ import { withContext } from 'cxt';
     fontSize: 14,
     borderRadius: 2
   }
-}))
-export default class Home extends React.Component {
+});
+class Home extends React.Component {
   state = {
     in: true
   };
@@ -48,3 +48,5 @@ export default class Home extends React.Component {
     );
   }
 }
+
+export default withContext({ styles })(Home);

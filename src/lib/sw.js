@@ -111,6 +111,4 @@ function unregister() {
   }
 }
 
-export default function sw() {
-  return config.get('serviceWorker') ? register() : unregister();
-}
+export default { register, unregister };
