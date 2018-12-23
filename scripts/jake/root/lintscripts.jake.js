@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import nps from '~/../package-scripts';
-import packageJson from '~/../package.json';
+const fs = require('fs');
+const path = require('path');
+const nps = require('../../../package-scripts');
+const packageJson = require('../../../package.json');
 
 desc('Checks nps scripts are available as npm run scripts');
 task('lintscripts', (fix) => {
