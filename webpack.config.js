@@ -30,7 +30,8 @@ const development = {
     compress: true,
     hot: true,
     port: config.dev.port,
-    overlay: config.dev.overlay
+    overlay: config.dev.overlay,
+    disableHostCheck: true
   },
   performance: { hints: false },
   output: {

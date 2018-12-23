@@ -7,10 +7,7 @@ const manifest = JSON.parse(
 module.exports = {
   publicUrl: '/',
   generateSW: true,
-  dev: {
-    port: 5000,
-    overlay: { warnings: true, errors: true }
-  },
+  dev: { port: 5000, overlay: { warnings: false, errors: true } },
   assets: {
     maxSizeEntry: 300 * 1024, // 300kb
     maxSize: 500 * 1024 // 500kb
