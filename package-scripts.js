@@ -16,11 +16,11 @@ module.exports = scripts({
     `babel src --out-dir ${OUT_DIR}`
   ]),
   publish: `nps build && cd ${OUT_DIR} && npm publish`,
-  watch: 'onchange "./src/**/*.{js,jsx,ts}" -i -- nps private.watch',
-  fix: `prettier --write "./**/*.{js,jsx,ts,json,scss}"`,
+  watch: 'onchange "./src/**/*.{js,mjs,jsx,ts}" -i -- nps private.watch',
+  fix: `prettier --write "./**/*.{js,mjs,jsx,ts,json,scss}"`,
   lint: {
-    default: 'eslint ./src --ext .js',
-    test: 'eslint ./test --ext .js',
+    default: 'eslint ./src --ext .js,.mjs,.jsx',
+    test: 'eslint ./test --ext .js,.mjs,.jsx',
     md: 'markdownlint *.md --config markdown.json',
     scripts: 'jake lintscripts',
     typings: 'tslint ./typings/**/*'
@@ -28,7 +28,7 @@ module.exports = scripts({
   test: {
     default: 'nps lint.test && jest ./test/.*.test.js',
     watch:
-      'onchange "./{test,src}/**/*.{js,jsx,ts}" -i -- nps private.test_watch'
+      'onchange "./{test,src}/**/*.{js,mjs,jsx,ts}" -i -- nps private.test_watch'
   },
   validate:
     'nps fix lint lint.test lint.md lint.scripts lint.typings test private.validate_last',

@@ -85,7 +85,7 @@
     "testEnvironment": "node",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.{js,ts,jsx}"
+      "src/**/*.{js,mjs,jsx,ts}"
     ],
     "modulePathIgnorePatterns": [
       "<rootDir>/build"
