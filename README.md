@@ -7,7 +7,7 @@ Not intended for general use. It has a reasonably explicit configuration, so it 
 - Bundler: *Webpack 4*
 - Transpiler: *Babel 7*
 - Store: *MobX* & *MST*
-- CSS (css-in-js): *Emotion 10*
+- Styles: *Emotion 10*
 - Design: *Material UI*
 - Logs: *loglevel*
 - Tests: *Jest* & *Enzyme*
@@ -17,5 +17,4 @@ Not intended for general use. It has a reasonably explicit configuration, so it 
 
 - Service Worker (PWA ready)
 - Cross environment development compatibility via *shx* and *cross-env*
-- Optional Hot Module Reload (HMR)
 - Contextual theming and store
