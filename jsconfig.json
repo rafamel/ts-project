@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "*": ["src/lib/*"],
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "@static/*": ["public/static/*"],
+      "@commons/*": ["node_modules/@rafamel/react-commons"]
     }
   }
 }

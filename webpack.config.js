@@ -43,7 +43,8 @@ const development = {
     new HtmlWebpackPlugin({ template: config.paths.template, inject: true }),
     // Hot Updates for CSS (currently only CSS)
     new webpack.HotModuleReplacementPlugin(),
-    // Watches new dependencies installs so the server doesn't have to restart
+    // Watches new dependencies installs so the server
+    // doesn't have to restart
     new WatchMissingNodeModulesPlugin('node_modules')
   ]
 };

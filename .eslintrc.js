@@ -12,7 +12,7 @@ module.exports = {
     'prettier'
   ],
   env: {
-    node: true,
+    browser: true,
     jest: true
   },
   parserOptions: {
@@ -22,6 +22,7 @@ module.exports = {
   globals: {},
   rules: {
     'react/prop-types': [2, { ignore: ['styles', 'theme', 'store'] }],
+    'no-unused-vars': 1, // Set as warning
     'no-warning-comments': [
       1,
       { terms: ['xxx', 'fixme', 'todo', 'refactor'], location: 'start' }
