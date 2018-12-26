@@ -68,6 +68,7 @@ class Info extends React.Component {
   render() {
     const { styles } = this.props;
     const { info, redirect } = this.state;
+
     return (
       <React.Fragment>
         <div css={styles.root}>

@@ -72,6 +72,9 @@
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "css-loader": "^2.0.2",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-config-standard": "^12.0.0",
@@ -121,13 +124,20 @@
     "workbox-webpack-plugin": "^3.6.3"
   },
   "jest": {
-    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>scripts/jest/setup.js",
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.{js,ts,jsx}"
+      "src/**/*.{js,mjs,jsx,ts}"
     ],
+    "moduleNameMapper": {
+      ".*\\.(css|less|styl|scss|sass)$": "<rootDir>/scripts/jest/mocks/css-module.js",
+      ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/scripts/jest/mocks/image.js"
+    },
     "modulePathIgnorePatterns": [
       "<rootDir>/build"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
   },
   "husky": {

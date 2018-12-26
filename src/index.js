@@ -12,21 +12,12 @@ import ReactDOM from 'react-dom';
 import App from '~/containers/App';
 import sw from 'sw';
 
-// Contexts
-import { Provider } from 'cxt';
-import contexts from './contexts';
-
 // Config & HMR
 import config from '~/config';
 import logger from 'logger';
 
-// Run all
+// Render
 config.get('serviceWorker') ? sw.register() : sw.unregister();
-ReactDOM.render(
-  <Provider value={contexts.root}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
 
 logger.info(`Running on ${config.get('env')}`);

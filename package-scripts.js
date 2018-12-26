@@ -33,7 +33,7 @@ module.exports = scripts({
     scripts: 'jake lintscripts'
   },
   test: {
-    default: 'nps lint.test && jest ./test/.*.test.js',
+    default: 'cross-env NODE_ENV=test nps lint.test && jest ./test/.*.test.js',
     watch:
       'onchange "./{test,src}/**/*.{js,mjs,jsx,ts}" -i -- nps private.test_watch'
   },
