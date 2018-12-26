@@ -4,6 +4,7 @@ import grey from '@material-ui/core/colors/grey';
 
 const theme = createMuiTheme({
   typography: {
+    useNextVariants: true, // TODO remove on material-ui 4
     fontFamily: [
       'Roboto',
       '"Helvetica Neue"',

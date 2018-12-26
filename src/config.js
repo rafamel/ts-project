@@ -11,10 +11,6 @@ const setup = {
 export default config(setup, ({ env }, on) => ({
   env,
   publicUrl: process.env.PUBLIC_URL || './',
-  hmr: on.env({
-    default: false,
-    development: true
-  }),
   logger: on.env({
     default: loglevels.WARN,
     development: loglevels.TRACE
