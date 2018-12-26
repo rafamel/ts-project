@@ -1,8 +1,6 @@
-import { types as t, getParent, flow } from 'mobx-state-tree';
-import { getters } from './utils';
-import { ResetableTimeout } from '@commons/lib/promisables';
+import { types as t, getRoot, flow } from 'mobx-state-tree';
+import { wait, deferrable } from 'promist';
 
-const timeout = new ResetableTimeout();
 const declare = {
   schema: {
     calls: t.number
@@ -10,22 +8,33 @@ const declare = {
   values: {
     calls: 1
   },
-  views: getters((self) => ({
-    isLoading: () => self.calls !== 0
-  })),
-  actions: (self) => ({
-    starts: flow(function*() {
-      self.calls += 1;
-      try {
-        self.calls = yield timeout.reset(20000).then(() => 0);
-        getParent(self).alerts.addNotification('Loading is taking too long...');
-      } catch (_) {}
-    }),
-    ends() {
-      self.calls = Math.max(self.calls - 1, 0);
-      if (self.calls === 0) timeout.cancel();
+  views: (self) => ({
+    get isLoading() {
+      return self.calls !== 0;
     }
-  })
+  }),
+  actions: (self) => {
+    let promise;
+    const reset = () => {
+      promise && promise.reject();
+      promise = deferrable(wait(20000));
+    };
+
+    return {
+      starts: flow(function*() {
+        self.calls += 1;
+        try {
+          reset();
+          self.calls = yield promise.then(() => 0);
+          getRoot(self).alerts.addNotification('Loading is taking too long...');
+        } catch (_) {}
+      }),
+      ends() {
+        self.calls = Math.max(self.calls - 1, 0);
+        if (self.calls === 0) promise && promise.reject();
+      }
+    };
+  }
 };
 
 export default {

@@ -1,5 +1,4 @@
 import { types as t } from 'mobx-state-tree';
-import { getters } from './utils';
 import loading from './loading';
 import alerts from './alerts';
 
@@ -12,7 +11,7 @@ const store = {
     loading: loading.values,
     alerts: alerts.values
   },
-  views: getters((self) => ({})),
+  views: (self) => ({}),
   actions: (self) => ({})
 };
 
