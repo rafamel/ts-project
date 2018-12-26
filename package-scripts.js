@@ -10,14 +10,21 @@ module.exports = scripts({
   postinstall:
     'npm outdated || shx echo "\nUpdate dependencies: \'npm run update\'\n"',
   build: 'cross-env NODE_ENV=production webpack',
-  serve: `cd ${OUT_DIR} && serve ./ -l 8080`,
-  dev: [
-    'cross-env NODE_ENV=development',
-    'concurrently',
-    '"webpack-dev-server"',
-    '"onchange \\"./src/**/*.{js,mjs,jsx,ts}\\" -i -- nps private.dev"',
-    '-n webpack,linter -c blue,yellow'
-  ].join(' '),
+  serve: series(['jake builtensure["nps build"]', `serve ${OUT_DIR} -l 8080`]),
+  analyze: series([
+    'jake builtensure["nps build"]',
+    `source-map-explorer ${OUT_DIR}/main.*.js --only-mapped`
+  ]),
+  dev: {
+    default: [
+      'cross-env NODE_ENV=development',
+      'concurrently',
+      '"webpack-dev-server"',
+      '"onchange \\"./src/**/*.{js,mjs,jsx,ts}\\" -i -- nps private.dev"',
+      '-n webpack,linter -c blue,yellow'
+    ].join(' '),
+    json: `json-server ./scripts/mock-db.json -p 3333 -w`
+  },
   fix: `prettier --write "./**/*.{js,mjs,jsx,ts,json,scss}"`,
   lint: {
     default: 'eslint ./src --ext .js,.mjs,.jsx',
