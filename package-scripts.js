@@ -20,7 +20,7 @@ module.exports = scripts({
       'cross-env NODE_ENV=development',
       'concurrently',
       '"webpack-dev-server"',
-      '"onchange \\"./src/**/*.{js,mjs,jsx,ts}\\" -i -- nps private.dev"',
+      '"onchange \\"./src/**/*.{js,mjs,jsx,ts}\\" --initial --kill -- nps private.dev"',
       '-n webpack,linter -c blue,yellow'
     ].join(' '),
     json: `json-server ./scripts/mock-db.json -p 3333 -w`
@@ -35,7 +35,7 @@ module.exports = scripts({
   test: {
     default: 'cross-env NODE_ENV=test nps lint.test && jest ./test/.*.test.js',
     watch:
-      'onchange "./{test,src}/**/*.{js,mjs,jsx,ts}" -i -- nps private.test_watch'
+      'onchange "./{test,src}/**/*.{js,mjs,jsx,ts}" --initial --kill -- nps private.test_watch'
   },
   validate:
     'nps fix lint lint.test lint.md lint.scripts test private.validate_last',
