@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const nps = require('../../../package-scripts');
-const packageJson = require('../../../package.json');
 
 desc('Checks nps scripts are available as npm run scripts');
-task('lintscripts', (fix) => {
+task('lintscripts', (ROOT_DIR, fix) => {
+  if (!ROOT_DIR) ROOT_DIR = '../../../';
+  const nps = require(path.join(ROOT_DIR, 'package-scripts'));
+  const packageJson = require(path.join(ROOT_DIR, 'package.json'));
   const scripts = nps.scripts;
   const packageScripts = packageJson.scripts;
   const names = {};

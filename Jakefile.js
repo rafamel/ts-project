@@ -1,1 +1,1 @@
-require('./scripts/jake');
+require('./setup/jake');

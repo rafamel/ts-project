@@ -19,7 +19,6 @@
     "lint:test": "nps lint.test",
     "lint:md": "nps lint.md",
     "lint:scripts": "nps lint.scripts",
-    "lint:typings": "nps lint.typings",
     "test": "nps test",
     "test:watch": "nps test.watch",
     "validate": "nps validate",
@@ -29,8 +28,6 @@
     "nps": "nps",
     "jake": "jake"
   },
-  "main": "src/index.js",
-  "types": "./typings/index.d.ts",
   "license": "MIT",
   "homepage": "https://github.com/rafamel/-moduleName-",
   "repository": {
@@ -47,11 +44,13 @@
     "@babel/plugin-proposal-decorators": "^7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
     "@types/jest": "^23.3.9",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.4.2",
     "babel-plugin-module-resolver": "^3.1.1",
+    "concurrently": "^4.1.0",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "eslint": "^5.9.0",
@@ -81,19 +80,19 @@
     "typescript": "^3.2.1"
   },
   "dependencies": {},
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js,mjs,jsx,ts}"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/build"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "cross-env MSG=\"Committing in:\" nps validate"
     }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{js,mjs,jsx,ts,tsx}"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/build"
+    ]
   }
 }
