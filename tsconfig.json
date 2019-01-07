@@ -1,4 +1,6 @@
 {
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
   // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {
     /* Basic Options */
@@ -63,13 +65,5 @@
 
     /* Advanced Options */
     // "declarationDir": "lib"                /* Output directory for generated declaration files. */
-    "plugins": [
-      {
-        "name": "tslint-language-service",
-        "alwaysShowRuleFailuresAsWarnings": true,
-        "ignoreDefinitionFiles": true,
-        "configFile": "tslint.json"
-      }
-    ]
   }
 }
