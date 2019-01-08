@@ -16,6 +16,7 @@
     "watch": "nps watch",
     "fix": "nps fix",
     "lint": "nps lint",
+    "lint:types": "nps lint.types",
     "lint:test": "nps lint.test",
     "lint:md": "nps lint.md",
     "lint:scripts": "nps lint.scripts",

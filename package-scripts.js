@@ -16,9 +16,7 @@ module.exports = scripts({
     exit0(`shx rm -r ${OUT_DIR}`),
     `shx mkdir ${OUT_DIR}`,
     `jake fixpackage["${OUT_DIR}"]`,
-    `babel src --out-dir ${OUT_DIR} --extensions "${EXT}" --source-maps inline`,
-    `tsc --emitDeclarationOnly --outDir "${OUT_DIR}"`,
-    'nps docs'
+    'nps private.build docs',
   ),
   publish: `nps build && cd ${OUT_DIR} && npm publish`,
   watch: `onchange "./src/**/*{${EXT}}" --initial --kill -- nps private.watch`,
@@ -33,20 +31,23 @@ module.exports = scripts({
       'concurrently',
       `"eslint ./src --ext ${EXT} -c ${dir('.eslintrc.js')}"`,
       `"tslint ./src/**/*.{ts,tsx} -c ${dir('tslint.json')}"`,
-      '"tsc --noEmit"',
-      '-n eslint,tslint,tsc',
-      '-c yellow,blue,magenta'
+      '-n eslint,tslint',
+      '-c yellow,blue'
     ].join(' '),
+    types: 'tsc --noEmit',
     test: `eslint ./test --ext .js,.mjs -c ${dir('.eslintrc.js')}`,
     md: `markdownlint *.md --config ${dir('markdown.json')}`,
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
-    default: series('nps lint.test', 'jest ./test/.*.test.js'),
+    default: series(
+      'nps lint.test',
+      'cross-env NODE_ENV=test jest ./test/.*.test.js'
+    ),
     watch: `onchange "./{test,src}/**/*{${EXT}}" --initial --kill -- nps private.test_watch`
   },
   validate:
-    'nps lint lint.test lint.md lint.scripts test private.validate_last',
+    'nps lint lint.md lint.scripts test private.validate_last',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
     exit0(`shx rm -r ${OUT_DIR} ${DOCS_DIR} coverage`),
@@ -58,15 +59,17 @@ module.exports = scripts({
   ),
   // Private
   private: {
+    build: [
+      'concurrently',
+      `"babel src --out-dir ${OUT_DIR} --extensions "${EXT}" --source-maps inline"`,
+      `"tsc --emitDeclarationOnly --outDir ${OUT_DIR}"`,
+      '-n babel,tsc',
+      '-c green,magenta'
+    ].join(' '),
     watch: series(
       'jake clear',
-      [
-        'concurrently',
-        `"babel src --out-dir ${OUT_DIR} --extensions "${EXT}" --source-maps inline"`,
-        '"nps lint"',
-        '-n babel,+',
-        '-c green,grey'
-      ].join(' ')
+      'shx echo "____________\n"',
+      'concurrently "nps private.build" "nps lint"'
     ),
     test_watch: series('jake clear', 'nps test'),
     validate_last: `npm outdated || jake countdown`
