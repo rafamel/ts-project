@@ -3,11 +3,14 @@ const scripts = (x) => ({ scripts: x });
 const exit0 = (x) => `${x} || shx echo `;
 const series = (...x) => `(${x.join(') && (')})`;
 const dir = (file) => path.join(CONFIG_DIR, file);
-
-const OUT_DIR = 'build';
-const DOCS_DIR = 'docs';
-const CONFIG_DIR = __dirname;
-const EXT = '.js,.mjs,.jsx,.ts,.tsx';
+const ts = (cmd) => (TYPESCRIPT ? cmd : 'shx echo');
+const {
+  OUT_DIR,
+  DOCS_DIR,
+  CONFIG_DIR,
+  EXTENSIONS,
+  TYPESCRIPT
+} = require('./project.config');
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
@@ -16,25 +19,25 @@ module.exports = scripts({
     exit0(`shx rm -r ${OUT_DIR}`),
     `shx mkdir ${OUT_DIR}`,
     `jake fixpackage["${OUT_DIR}"]`,
-    'nps private.build docs',
+    'nps private.build docs'
   ),
   publish: `nps build && cd ${OUT_DIR} && npm publish`,
-  watch: `onchange "./src/**/*{${EXT}}" --initial --kill -- nps private.watch`,
+  watch: `onchange "./src/**/*{${EXTENSIONS}}" --initial --kill -- nps private.watch`,
   fix: [
     'prettier',
-    `--write "./**/*{${EXT},json,scss}"`,
+    `--write "./**/*{${EXTENSIONS},.json,.scss}"`,
     `--config "${dir('.prettierrc.js')}"`,
     `--ignore-path "${dir('.prettierignore')}"`
   ].join(' '),
   lint: {
     default: [
       'concurrently',
-      `"eslint ./src --ext ${EXT} -c ${dir('.eslintrc.js')}"`,
-      `"tslint ./src/**/*.{ts,tsx} -c ${dir('tslint.json')}"`,
+      `"eslint ./src --ext ${EXTENSIONS} -c ${dir('.eslintrc.js')}"`,
+      `"${ts(`tslint ./src/**/*.{ts,tsx} -c ${dir('tslint.json')}`)}"`,
       '-n eslint,tslint',
       '-c yellow,blue'
     ].join(' '),
-    types: 'tsc --noEmit',
+    types: ts('tsc --noEmit'),
     test: `eslint ./test --ext .js,.mjs -c ${dir('.eslintrc.js')}`,
     md: `markdownlint *.md --config ${dir('markdown.json')}`,
     scripts: 'jake lintscripts[' + __dirname + ']'
@@ -42,12 +45,14 @@ module.exports = scripts({
   test: {
     default: series(
       'nps lint.test',
-      'cross-env NODE_ENV=test jest ./test/.*.test.js'
+      `cross-env NODE_ENV=test jest ./test/.*.test.js -c ${dir(
+        'jest.config.js'
+      )}`
     ),
-    watch: `onchange "./{test,src}/**/*{${EXT}}" --initial --kill -- nps private.test_watch`
+    watch: `onchange "./{test,src}/**/*{${EXTENSIONS}}" --initial --kill -- nps private.test_watch`
   },
   validate:
-    'nps lint lint.md lint.scripts test private.validate_last',
+    'nps lint lint.types lint.md lint.scripts test private.validate_last',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
     exit0(`shx rm -r ${OUT_DIR} ${DOCS_DIR} coverage`),
@@ -55,14 +60,14 @@ module.exports = scripts({
   ),
   docs: series(
     exit0(`shx rm -r ${DOCS_DIR}`),
-    `typedoc --out ${DOCS_DIR} ./src`
+    ts(`typedoc --out ${DOCS_DIR} ./src`)
   ),
   // Private
   private: {
     build: [
       'concurrently',
-      `"babel src --out-dir ${OUT_DIR} --extensions "${EXT}" --source-maps inline"`,
-      `"tsc --emitDeclarationOnly --outDir ${OUT_DIR}"`,
+      `"babel src --out-dir ${OUT_DIR} --extensions "${EXTENSIONS}" --source-maps inline"`,
+      `"${ts(`tsc --emitDeclarationOnly --outDir ${OUT_DIR}`)}"`,
       '-n babel,tsc',
       '-c green,magenta'
     ].join(' '),

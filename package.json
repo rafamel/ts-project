@@ -82,16 +82,6 @@
     "typescript": "^3.2.1"
   },
   "dependencies": {},
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*.{js,mjs,jsx,ts,tsx}"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/build"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "cross-env MSG=\"Committing in:\" nps validate"

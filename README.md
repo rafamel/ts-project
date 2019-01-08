@@ -1,6 +1,6 @@
 # -moduleName-
 
-[![Version](https://img.shields.io/github/package-json/v/rafamel/-moduleName-.svg)](https://github.com/rafamel/-moduleName-)
+[![Version](https://img.shields.io/npm/v/-moduleName-.svg)](https://www.npmjs.com/package/-moduleName-)
 [![Build Status](https://travis-ci.org/rafamel/-moduleName-.svg)](https://travis-ci.org/rafamel/-moduleName-)
 [![Coverage](https://img.shields.io/coveralls/rafamel/-moduleName-.svg)](https://coveralls.io/github/rafamel/-moduleName-)
 [![Dependencies](https://david-dm.org/rafamel/-moduleName-/status.svg)](https://david-dm.org/rafamel/-moduleName-)
