@@ -4,6 +4,7 @@ const exit0 = (x) => `${x} || shx echo `;
 const series = (...x) => `(${x.join(') && (')})`;
 const dir = (file) => path.join(CONFIG_DIR, file);
 const ts = (cmd) => (TYPESCRIPT ? cmd : 'shx echo');
+const dotted = (ext) => '.' + ext.replace(/,/g, ',.');
 const {
   OUT_DIR,
   DOCS_DIR,
@@ -22,34 +23,29 @@ module.exports = scripts({
     'nps private.build docs'
   ),
   publish: `nps build && cd ${OUT_DIR} && npm publish`,
-  watch: `onchange "./src/**/*{${EXTENSIONS}}" --initial --kill -- nps private.watch`,
+  watch: `onchange "./src/**/*.{${EXTENSIONS}}" --initial --kill -- nps private.watch`,
   fix: [
     'prettier',
-    `--write "./**/*{${EXTENSIONS},.json,.scss}"`,
+    `--write "./**/*.{${EXTENSIONS},.json,.scss}"`,
     `--config "${dir('.prettierrc.js')}"`,
     `--ignore-path "${dir('.prettierignore')}"`
   ].join(' '),
   lint: {
     default: [
       'concurrently',
-      `"eslint ./src --ext ${EXTENSIONS} -c ${dir('.eslintrc.js')}"`,
+      `"eslint ./src --ext ${dotted(EXTENSIONS)} -c ${dir('.eslintrc.js')}"`,
       `"${ts(`tslint ./src/**/*.{ts,tsx} -c ${dir('tslint.json')}`)}"`,
       '-n eslint,tslint',
       '-c yellow,blue'
     ].join(' '),
     types: ts('tsc --noEmit'),
-    test: `eslint ./test --ext .js,.mjs -c ${dir('.eslintrc.js')}`,
+    test: `eslint ./test --ext ${dotted(EXTENSIONS)} -c ${dir('.eslintrc.js')}`,
     md: `markdownlint *.md --config ${dir('markdown.json')}`,
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
-    default: series(
-      'nps lint.test',
-      `cross-env NODE_ENV=test jest ./test/.*.test.js -c ${dir(
-        'jest.config.js'
-      )}`
-    ),
-    watch: `onchange "./{test,src}/**/*{${EXTENSIONS}}" --initial --kill -- nps private.test_watch`
+    default: series('nps lint.test', `cross-env NODE_ENV=test jest`),
+    watch: `onchange "./{test,src}/**/*.{${EXTENSIONS}}" --initial --kill -- nps private.test_watch`
   },
   validate:
     'nps lint lint.types lint.md lint.scripts test private.validate_last',
@@ -66,7 +62,9 @@ module.exports = scripts({
   private: {
     build: [
       'concurrently',
-      `"babel src --out-dir ${OUT_DIR} --extensions "${EXTENSIONS}" --source-maps inline"`,
+      `"babel src --out-dir ${OUT_DIR} --extensions "${dotted(
+        EXTENSIONS
+      )}" --source-maps inline"`,
       `"${ts(`tsc --emitDeclarationOnly --outDir ${OUT_DIR}`)}"`,
       '-n babel,tsc',
       '-c green,magenta'
