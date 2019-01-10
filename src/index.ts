@@ -2,4 +2,4 @@
  * @module Main
  */
 
-export default function main(a: number): void {}
+export default function main(): void {}

@@ -4,7 +4,6 @@ const exit0 = (x) => `${x} || shx echo `;
 const series = (...x) => `(${x.join(') && (')})`;
 const dir = (file) => path.join(CONFIG_DIR, file);
 const ts = (cmd) => (TYPESCRIPT ? cmd : 'shx echo');
-const dotted = (ext) => '.' + ext.replace(/,/g, ',.');
 const {
   OUT_DIR,
   DOCS_DIR,
@@ -12,6 +11,7 @@ const {
   EXTENSIONS,
   TYPESCRIPT
 } = require('./project.config');
+const DOT_EXTENSIONS = '.' + EXTENSIONS.replace(/,/g, ',.');
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
@@ -30,25 +30,26 @@ module.exports = scripts({
     `--config "${dir('.prettierrc.js')}"`,
     `--ignore-path "${dir('.prettierignore')}"`
   ].join(' '),
+  types: ts(`tsc --noEmit`),
   lint: {
     default: [
       'concurrently',
-      `"eslint ./src --ext ${dotted(EXTENSIONS)} -c ${dir('.eslintrc.js')}"`,
-      `"${ts(`tslint ./src/**/*.{ts,tsx} -c ${dir('tslint.json')}`)}"`,
+      `"eslint ./{src,test} --ext ${DOT_EXTENSIONS} -c ${dir('.eslintrc.js')}"`,
+      `"${ts(`tslint ./{src,test}/**/*.{ts,tsx} -c ${dir('tslint.json')}`)}"`,
       '-n eslint,tslint',
       '-c yellow,blue'
     ].join(' '),
-    types: ts('tsc --noEmit'),
-    test: `eslint ./test --ext ${dotted(EXTENSIONS)} -c ${dir('.eslintrc.js')}`,
     md: `markdownlint *.md --config ${dir('markdown.json')}`,
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
-    default: series('nps lint.test', `cross-env NODE_ENV=test jest`),
-    watch: `onchange "./{test,src}/**/*.{${EXTENSIONS}}" --initial --kill -- nps private.test_watch`
+    default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
+    watch: `onchange "./{src,test}/**/*.{${EXTENSIONS}}" --initial --kill -- jake clear run["nps test"]`
   },
-  validate:
-    'nps lint lint.types lint.md lint.scripts test private.validate_last',
+  validate: series(
+    'nps test lint.md lint.scripts',
+    'npm outdated || jake countdown'
+  ),
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
     exit0(`shx rm -r ${OUT_DIR} ${DOCS_DIR} coverage`),
@@ -62,9 +63,7 @@ module.exports = scripts({
   private: {
     build: [
       'concurrently',
-      `"babel src --out-dir ${OUT_DIR} --extensions "${dotted(
-        EXTENSIONS
-      )}" --source-maps inline"`,
+      `"babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXTENSIONS} --source-maps inline"`,
       `"${ts(`tsc --emitDeclarationOnly --outDir ${OUT_DIR}`)}"`,
       '-n babel,tsc',
       '-c green,magenta'
@@ -72,9 +71,7 @@ module.exports = scripts({
     watch: series(
       'jake clear',
       'shx echo "____________\n"',
-      'concurrently "nps private.build" "nps lint"'
-    ),
-    test_watch: series('jake clear', 'nps test'),
-    validate_last: `npm outdated || jake countdown`
+      'concurrently "nps lint" "nps private.build"'
+    )
   }
 });
