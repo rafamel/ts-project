@@ -34,21 +34,36 @@ module.exports = scripts({
   lint: {
     default: [
       'concurrently',
-      `"eslint ./{src,test} --ext ${DOT_EXTENSIONS} -c ${dir('.eslintrc.js')}"`,
+      `"eslint ./src ./test --ext ${DOT_EXTENSIONS} -c ${dir('.eslintrc.js')}"`,
       `"${ts(`tslint ./{src,test}/**/*.{ts,tsx} -c ${dir('tslint.json')}`)}"`,
       '-n eslint,tslint',
       '-c yellow,blue'
     ].join(' '),
-    md: `markdownlint *.md --config ${dir('markdown.json')}`,
+    md: series(
+      `markdownlint *.md --config ${dir('markdown.json')}`,
+      'jake run:conditional[' +
+        [
+          '"Interactive spellcheck?"',
+          `"mdspell --en-us '**/*.md' '!**/node_modules/**/*.md'"`,
+          `"mdspell -r --en-us '**/*.md' '!**/node_modules/**/*.md'"`,
+          'No',
+          '4',
+          'log'
+        ].join(',') +
+        ']'
+    ),
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
     default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
-    watch: `onchange "./{src,test}/**/*.{${EXTENSIONS}}" --initial --kill -- jake clear run["nps test"]`
+    watch: `onchange "./{src,test}/**/*.{${EXTENSIONS}}" --initial --kill -- jake clear run:exec["nps test"]`
   },
   validate: series(
     'nps test lint.md lint.scripts',
-    'npm outdated || jake countdown'
+    // prettier-ignore
+    process.env.MSG
+      ? `npm outdated || jake run:conditional["\n${process.env.MSG}","shx echo","exit 1",Yes,6]`
+      : exit0('npm outdated')
   ),
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
