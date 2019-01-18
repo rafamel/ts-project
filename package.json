@@ -15,6 +15,8 @@
     "publish": "nps publish",
     "watch": "nps watch",
     "fix": "nps fix",
+    "fix:format": "nps fix.format",
+    "fix:md": "nps fix.md",
     "types": "nps types",
     "lint": "nps lint",
     "lint:md": "nps lint.md",
