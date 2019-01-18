@@ -41,7 +41,10 @@ module.exports = scripts({
       '-n eslint,tslint',
       '-c yellow,blue'
     ].join(' '),
-    md: `markdownlint *.md --config ${dir('markdown.json')}`,
+    md: series(
+      `markdownlint *.md --config ${dir('markdown.json')}`,
+      "mdspell --en-us '**/*.md' '!**/node_modules/**/*.md'"
+    ),
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
