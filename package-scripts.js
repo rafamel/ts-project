@@ -25,7 +25,7 @@ module.exports = scripts({
     `jake run:zero["shx rm -r ${OUT_DIR}"]`,
     `shx mkdir ${OUT_DIR}`,
     `onchange "./src/**/*.{${EXTENSIONS}}" --initial --kill -- ` +
-      'jake clear run:exec["shx echo ⚡","concurrently \\"nps lint\\" \\"nps private.build\\""]'
+      'jake clear run:exec["shx echo ⚡"] run:zero["concurrently \\"nps lint\\" \\"nps private.build\\""]'
   ),
   fix: {
     default: 'nps fix.format fix.md',
@@ -55,7 +55,7 @@ module.exports = scripts({
     default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
     watch:
       `onchange "./{src,test}/**/*.{${EXTENSIONS}}" --initial --kill -- ` +
-      'jake clear run:exec["shx echo ⚡","nps test"]'
+      'jake clear run:exec["shx echo ⚡"] run:zero["nps test"]'
   },
   validate: series(
     'nps test lint.md lint.scripts',
