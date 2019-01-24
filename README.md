@@ -1,10 +1,10 @@
 # TS/JS Project
 
 <!-- [![Version](https://img.shields.io/npm/v/ts-project.svg)](https://www.npmjs.com/package/ts-project)
-[![Build Status](https://travis-ci.org/rafamel/ts-project.svg)](https://travis-ci.org/rafamel/ts-project)
+[![Build Status](	https://img.shields.io/travis/rafamel/ts-project.svg)](https://travis-ci.org/rafamel/ts-project)
 [![Coverage](https://img.shields.io/coveralls/rafamel/ts-project.svg)](https://coveralls.io/github/rafamel/ts-project)
-[![Dependencies](https://david-dm.org/rafamel/ts-project/status.svg)](https://david-dm.org/rafamel/ts-project)
-[![Vulnerabilities](https://snyk.io/test/npm/ts-project/badge.svg)](https://snyk.io/test/npm/ts-project)
+[![Dependencies](https://img.shields.io/david/rafamel/promist.svg)](https://david-dm.org/rafamel/ts-project)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/ts-project.svg)](https://snyk.io/test/npm/ts-project)
 [![Issues](https://img.shields.io/github/issues/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/issues)
 [![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE) -->
 
