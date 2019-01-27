@@ -20,7 +20,7 @@
 
 * Transpiling & types: [Babel 7](https://babeljs.io/), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript)
 * Tests: [Jest](https://jestjs.io/)
-* Linting & format: [ESLint](https://github.com/eslint/eslint), [TSLint](https://github.com/palantir/tslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli), [`markdown-spellcheck`](https://github.com/lukeapage/node-markdown-spellcheck)
+* Linting & format: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli), [`markdown-spellcheck`](https://github.com/lukeapage/node-markdown-spellcheck)
 * Cross-platform support: [`cross-env`](https://github.com/kentcdodds/cross-env), [`shx`](https://github.com/shelljs/shx)
 * Tasks, scripts, & hooks: [Jake](https://github.com/jakejs/jake), [`nps`](https://github.com/kentcdodds/nps), [`concurrently`](https://github.com/kimmobrunfeldt/concurrently), [`onchange`](https://github.com/Qard/onchange), [`husky`](https://github.com/typicode/husky)
 * Docs generation: [TypeDoc](https://github.com/TypeStrong/typedoc/)
@@ -54,11 +54,3 @@
 * Publish: `npm run publish`
 * Update dependencies: `npm run update`
 * Clean project (`node_modules`, `coverage`...): `npm run clean`
-
-## Known issues
-
-At this time, the [`babel-eslint`](https://github.com/babel/babel-eslint/) parser for ESLint [is pending](https://github.com/babel/babel-eslint/issues/505) [*TypeScript* support,](https://github.com/babel/babel-eslint/issues/663) which means you can either:
-
-* not parse any *TypeScript* files with ESLint (check `package-scripts.js`),
-* use [`typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint) instead,
-* or ignore problematic files on a case-by-case basis by defining them on a `.eslintignore` file.

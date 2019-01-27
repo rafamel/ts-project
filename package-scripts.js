@@ -5,10 +5,9 @@ const series = (...x) => `(${x.map((x) => x || 'shx echo').join(') && (')})`;
 const scripts = (x) => Object.entries(x)
   .reduce((m, [k, v]) => (m.scripts[k] = v || 'shx echo') && m, { scripts: {} });
 // prettier-ignore
-const {
-  OUT_DIR, DOCS_DIR, CONFIG_DIR, EXTENSIONS, TYPESCRIPT, DOCS_ON_BUILD 
-} = require('./project.config');
-const DOT_EXT = '.' + EXTENSIONS.replace(/,/g, ',.');
+const { OUT_DIR, DOCS_DIR, CONFIG_DIR, EXT_JS, EXT_TS, TYPESCRIPT, DOCS_ON_BUILD } = require('./project.config');
+const EXT = EXT_JS + ',' + EXT_TS;
+const DOT_EXT = '.' + EXT.replace(/,/g, ',.');
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
@@ -24,14 +23,14 @@ module.exports = scripts({
   watch: series(
     `jake run:zero["shx rm -r ${OUT_DIR}"]`,
     `shx mkdir ${OUT_DIR}`,
-    `onchange "./src/**/*.{${EXTENSIONS}}" --initial --kill -- ` +
-      'jake clear run:exec["shx echo ⚡"] run:zero["concurrently \\"nps lint\\" \\"nps private.build\\""]'
+    `onchange "./src/**/*.{${EXT}}" --initial --kill -- ` +
+      `jake clear run:exec["shx echo ⚡"] run:zero["nps private.watch"]`
   ),
   fix: {
     default: 'nps fix.format fix.md',
     format: [
       'prettier',
-      `--write "./**/*.{${EXTENSIONS},.json,.scss}"`,
+      `--write "./**/*.{${EXT},.json,.scss}"`,
       `--config "${dir('.prettierrc.js')}"`,
       `--ignore-path "${dir('.prettierignore')}"`
     ].join(' '),
@@ -39,22 +38,14 @@ module.exports = scripts({
   },
   types: TYPESCRIPT && 'tsc --noEmit',
   lint: {
-    default: !TYPESCRIPT
-      ? `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`
-      : [
-          'concurrently',
-          `"eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}"`,
-          `"tslint ./{src,test}/**/*.{ts,tsx} -c ${dir('tslint.json')}"`,
-          '-n eslint,tslint',
-          '-c yellow,blue'
-        ].join(' '),
+    default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: "mdspell -r --en-us '**/*.md' '!**/node_modules/**/*.md'",
     scripts: 'jake lintscripts[' + __dirname + ']'
   },
   test: {
     default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
     watch:
-      `onchange "./{src,test}/**/*.{${EXTENSIONS}}" --initial --kill -- ` +
+      `onchange "./{src,test}/**/*.{${EXT}}" --initial --kill -- ` +
       'jake clear run:exec["shx echo ⚡"] run:zero["nps test"]'
   },
   validate: series(
@@ -76,14 +67,14 @@ module.exports = scripts({
     ),
   // Private
   private: {
-    build: !TYPESCRIPT
-      ? `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`
-      : [
-          'concurrently',
-          `"babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline"`,
-          `"tsc --emitDeclarationOnly --outDir ${OUT_DIR}"`,
-          '-n babel,tsc',
-          '-c green,magenta'
-        ].join(' ')
+    build: [
+      'concurrently',
+      `"babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline"`,
+      TYPESCRIPT ? `"tsc --emitDeclarationOnly --outDir ${OUT_DIR}"` : '',
+      '-n babel,tsc',
+      '-c green,magenta'
+    ].join(' '),
+    watch:
+      'concurrently "nps lint" "nps private.build" -n eslint,- -c yellow,gray'
   }
 });
