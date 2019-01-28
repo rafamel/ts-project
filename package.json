@@ -10,6 +10,8 @@
   ],
   "scripts": {
     "prepublishOnly": "exit 1",
+    "preversion": "nps private.preversion",
+    "version": "nps private.version",
     "start": "npm run watch",
     "build": "nps build",
     "publish": "nps publish",
@@ -24,11 +26,13 @@
     "test": "nps test",
     "test:watch": "nps test.watch",
     "validate": "nps validate",
+    "docs": "nps docs",
+    "changelog": "nps changelog",
     "update": "nps update",
     "clean": "nps clean",
-    "docs": "nps docs",
     "nps": "nps",
-    "jake": "jake"
+    "jake": "jake",
+    "commit": "cross-env CZ=1 git-cz"
   },
   "license": "MIT",
   "homepage": "https://github.com/rafamel/ts-project",
@@ -53,9 +57,13 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.0.0",
     "babel-plugin-module-resolver": "^3.1.1",
+    "commitizen": "^3.0.5",
     "concurrently": "^4.1.0",
+    "conventional-changelog-cli": "^2.0.11",
+    "conventional-recommended-bump": "^4.0.4",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
+    "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^4.0.0",
     "eslint-config-standard": "^12.0.0",
@@ -76,6 +84,7 @@
     "markdownlint-cli": "^0.13.0",
     "nps": "^5.9.3",
     "onchange": "^5.2.0",
+    "pkg": "^4.3.7",
     "prettier": "^1.15.2",
     "shx": "^0.3.2",
     "typedoc": "^0.13.0",
@@ -84,7 +93,12 @@
   "dependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "cross-env MSG=\"Commit?\" nps validate"
+      "pre-commit": "cross-env COMMIT=1 nps validate"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
     }
   }
 }
