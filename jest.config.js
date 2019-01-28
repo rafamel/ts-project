@@ -8,7 +8,5 @@ module.exports = {
   collectCoverageFrom: [`<rootDir>/src/**/*.{${EXT}}`],
   modulePathIgnorePatterns: ['<rootDir>/build'],
   moduleFileExtensions: EXT_ARR.concat(['json']),
-  testMatch: [`**/__tests__/**/*.{${EXT}}`, `**/?(*.)+(spec|test).{${EXT}}`],
-  testPathIgnorePatterns: ['/node_modules/'],
-  transform: { [`^.+\\.(${EXT_ARR.join('|')})$`]: 'babel-jest' }
+  testPathIgnorePatterns: ['/node_modules/']
 };
