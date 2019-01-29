@@ -19,26 +19,33 @@ const {
 } = require('./project.config');
 const EXT = EXT_JS + ',' + EXT_TS;
 const DOT_EXT = '.' + EXT.replace(/,/g, ',.');
-const { COMMIT, CZ } = process.env;
+const { COMMIT, COMMITIZEN } = process.env;
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
-  build: series(
-    'nps validate',
-    `jake run:zero["shx rm -r ${OUT_DIR} ${BIN_DIR}"]`,
-    `shx mkdir ${OUT_DIR}`,
-    `jake fixpackage["${__dirname}","${OUT_DIR}",${Number(TS)}]`,
-    'cross-env NODE_ENV=production nps private.babel',
-    TS && `tsc --emitDeclarationOnly --outDir ${OUT_DIR}/typings`,
-    TS && `shx cp -r ${OUT_DIR}/typings/src/* ${OUT_DIR}/`,
-    TS && `shx rm -r ${OUT_DIR}/typings`,
-    pkg.bin &&
-      `pkg --out-path ${BIN_DIR} -t ${BIN_ARCHS} ${OUT_DIR}/package.json`
-  ),
+  build: {
+    default:
+      'cross-env NODE_ENV=production' +
+      ' nps validate build.prepare build.transpile build.declarations build.bin',
+    prepare: series(
+      `jake run:zero["shx rm -r ${OUT_DIR} ${BIN_DIR}"]`,
+      `shx mkdir ${OUT_DIR}`,
+      `jake run:zero["shx cp README* LICENSE* CHANGELOG* ${OUT_DIR}/"]`,
+      `jake fixpackage["${__dirname}","${OUT_DIR}"]`
+    ),
+    transpile: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
+    declarations: series(
+      TS && `tsc --emitDeclarationOnly --outDir ${OUT_DIR}/typings`,
+      TS && `shx cp -r ${OUT_DIR}/typings/src/* ${OUT_DIR}/`,
+      TS && `shx rm -r ${OUT_DIR}/typings`
+    ),
+    bin: pkg.bin
+      ? `pkg --out-path ${BIN_DIR} -t ${BIN_ARCHS} ${OUT_DIR}/package.json`
+      : 'shx echo'
+  },
   publish: `cd ${OUT_DIR} && npm publish`,
   watch: series(
-    `jake run:zero["shx rm -r ${OUT_DIR}"]`,
-    `shx mkdir ${OUT_DIR}`,
+    'nps build.prepare',
     `onchange "./src/**/*.{${EXT}}" --initial --kill -- ` +
       `jake clear run:exec["shx echo ⚡"] run:zero["nps private.watch"]`
   ),
@@ -68,21 +75,18 @@ module.exports = scripts({
       'jake clear run:exec["shx echo ⚡"] run:zero["nps test"]'
   },
   validate: series(
-    COMMIT &&
-      !CZ &&
-      'jake run:conditional[' +
+    // prettier-ignore
+    COMMIT && !COMMITIZEN && 'jake run:conditional[' +
         `"\nCommits should be done via 'npm run commit'. Continue?",` +
         '"","exit 1",Yes,5]',
     'nps test lint.md lint.scripts',
     'jake run:zero["npm outdated"]',
     COMMIT && `jake run:conditional["\nCommit?","","exit 1",Yes,5]`
   ),
-  docs:
-    TS &&
-    series(
-      `jake run:zero["shx rm -r ${DOCS_DIR}"]`,
-      `typedoc --out ${DOCS_DIR} ./src`
-    ),
+  docs: series(
+    TS && `jake run:zero["shx rm -r ${DOCS_DIR}"]`,
+    TS && `typedoc --out ${DOCS_DIR} ./src`
+  ),
   changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
@@ -91,19 +95,19 @@ module.exports = scripts({
   ),
   // Private
   private: {
+    watch:
+      'concurrently "nps build.transpile" "nps build.declarations" "nps lint"' +
+      ' -n babel,tsc,eslint -c green,magenta,yellow',
     preversion: series(
       'shx echo "Recommended version bump is:"',
       'conventional-recommended-bump --preset angular --verbose',
       `jake run:conditional["\nContinue?","","exit 1",Yes]`
     ),
     version: series(
-      RELEASE_BUILD && 'nps build',
-      RELEASE_DOCS && 'nps docs',
       'nps changelog',
+      RELEASE_DOCS && 'nps docs',
+      RELEASE_BUILD && 'nps build',
       'git add .'
-    ),
-    babel: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
-    watch:
-      'concurrently "nps lint" "nps types" "nps private.babel" -n eslint,tsc,babel -c yellow,magenta,green'
+    )
   }
 });

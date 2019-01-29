@@ -14,6 +14,10 @@
     "version": "nps private.version",
     "start": "npm run watch",
     "build": "nps build",
+    "build:prepare": "nps build.prepare",
+    "build:transpile": "nps build.transpile",
+    "build:declarations": "nps build.declarations",
+    "build:bin": "nps build.bin",
     "publish": "nps publish",
     "watch": "nps watch",
     "fix": "nps fix",
@@ -32,7 +36,7 @@
     "clean": "nps clean",
     "nps": "nps",
     "jake": "jake",
-    "commit": "cross-env CZ=1 git-cz"
+    "commit": "cross-env COMMITIZEN=# git-cz"
   },
   "license": "MIT",
   "homepage": "https://github.com/rafamel/ts-project",
@@ -93,12 +97,18 @@
   "dependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "cross-env COMMIT=1 nps validate"
+      "pre-commit": "cross-env COMMIT=# nps validate"
     }
   },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "pkg": {
+    "scripts": [],
+    "assets": [
+      "package.json"
+    ]
   }
 }
