@@ -53,9 +53,8 @@ module.exports = {
       files: [`*.{${EXT_TS}}`],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
-      rules: {
-        // Overrides don't allow for extends
-        ...ts.recommended.rules,
+      // Overrides don't allow for extends
+      rules: Object.assign(ts.recommended.rules, {
         /* DISABLED */
         '@typescript-eslint/indent': 0,
         '@typescript-eslint/no-explicit-any': 0,
@@ -71,7 +70,7 @@ module.exports = {
         /* ERRORS */
         '@typescript-eslint/interface-name-prefix': [2, 'always'],
         '@typescript-eslint/no-use-before-define': [2, { functions: false }]
-      },
+      }),
       settings: {
         // eslint-import-resolver-typescript
         'import/resolver': {
