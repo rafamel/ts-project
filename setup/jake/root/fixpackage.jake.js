@@ -21,7 +21,7 @@ task('fixpackage', (ROOT_DIR, OUT_DIR, TYPESCRIPT) => {
   const pkg = JSON.parse(plain);
 
   pkg.main = pkg.main ? pkg.main.replace(/^(\.\/)?src\//, './') : './index.js';
-
+  if (Number(TYPESCRIPT) && !pkg.types) pkg.types = './typings';
   if (pkg.bin) {
     pkg.bin = Object.keys(pkg.bin).reduce((acc, key) => {
       acc[key] = pkg.bin[key].replace(/^(\.\/)?src\//, './');

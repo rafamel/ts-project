@@ -24,12 +24,14 @@ const { COMMIT, CZ } = process.env;
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
   build: series(
-    // 'nps validate',
+    'nps validate',
     `jake run:zero["shx rm -r ${OUT_DIR} ${BIN_DIR}"]`,
     `shx mkdir ${OUT_DIR}`,
     `jake fixpackage["${__dirname}","${OUT_DIR}",${Number(TS)}]`,
     'cross-env NODE_ENV=production nps private.babel',
-    TS && `tsc --emitDeclarationOnly --outDir ${OUT_DIR}`,
+    TS && `tsc --emitDeclarationOnly --outDir ${OUT_DIR}/typings`,
+    TS && `shx cp -r ${OUT_DIR}/typings/src/* ${OUT_DIR}/`,
+    TS && `shx rm -r ${OUT_DIR}/typings`,
     pkg.bin &&
       `pkg --out-path ${BIN_DIR} -t ${BIN_ARCHS} ${OUT_DIR}/package.json`
   ),
