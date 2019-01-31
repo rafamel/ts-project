@@ -24,7 +24,7 @@ module.exports = scripts({
   build: {
     default:
       'cross-env NODE_ENV=production' +
-      ' nps validate build.prepare build.transpile build.declarations',
+      ' nps validate build.prepare build.transpile build.declaration',
     prepare: series(
       `jake run:zero["shx rm -r ${OUT_DIR}"]`,
       `shx mkdir ${OUT_DIR}`,
@@ -32,11 +32,9 @@ module.exports = scripts({
       `jake fixpackage["${__dirname}","${OUT_DIR}"]`
     ),
     transpile: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
-    declarations: series(
-      TS && `tsc --emitDeclarationOnly --outDir ${OUT_DIR}/typings`,
-      TS && `shx cp -r ${OUT_DIR}/typings/src/* ${OUT_DIR}/`,
-      TS && `shx rm -r ${OUT_DIR}/typings`
-    )
+    declaration: TS
+      ? `ttsc --project ttsconfig.json --outDir ${OUT_DIR}`
+      : 'shx echo'
   },
   publish: `cd ${OUT_DIR} && npm publish`,
   watch: series(
@@ -54,7 +52,7 @@ module.exports = scripts({
     ].join(' '),
     md: "mdspell --en-us '**/*.md' '!**/node_modules/**/*.md'"
   },
-  types: TS && 'tsc --noEmit',
+  types: TS && 'tsc',
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
@@ -91,7 +89,7 @@ module.exports = scripts({
   // Private
   private: {
     watch:
-      'concurrently "nps build.transpile" "nps build.declarations" "nps lint"' +
+      'concurrently "nps build.transpile" "nps build.declaration" "nps lint"' +
       ' -n babel,tsc,eslint -c green,magenta,yellow',
     preversion: series(
       'shx echo "Recommended version bump is:"',
