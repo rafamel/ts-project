@@ -1,4 +1,3 @@
-const pkg = require('./package.json');
 const path = require('path');
 const dir = (file) => path.join(CONFIG_DIR, file);
 const series = (...x) => `(${x.map((x) => x || 'shx echo').join(') && (')})`;
@@ -32,9 +31,10 @@ module.exports = scripts({
       `jake fixpackage["${__dirname}","${OUT_DIR}"]`
     ),
     transpile: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
-    declaration: TS
-      ? `ttsc --project ttsconfig.json --outDir ${OUT_DIR}`
-      : 'shx echo'
+    declaration: series(
+      TS && `ttsc --project ttsconfig.json --outDir ${OUT_DIR}`,
+      `shx echo "${TS ? 'Declaration files built' : ''}"`
+    )
   },
   publish: `cd ${OUT_DIR} && npm publish`,
   watch: series(
