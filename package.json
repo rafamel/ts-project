@@ -17,7 +17,6 @@
     "build:prepare": "nps build.prepare",
     "build:transpile": "nps build.transpile",
     "build:declarations": "nps build.declarations",
-    "build:bin": "nps build.bin",
     "publish": "nps publish",
     "watch": "nps watch",
     "fix": "nps fix",
@@ -89,7 +88,6 @@
     "markdownlint-cli": "^0.13.0",
     "nps": "^5.9.3",
     "onchange": "^5.2.0",
-    "pkg": "^4.3.7",
     "prettier": "^1.15.2",
     "shx": "^0.3.2",
     "typedoc": "^0.13.0",
@@ -105,11 +103,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "pkg": {
-    "scripts": [],
-    "assets": [
-      "package.json"
-    ]
   }
 }
