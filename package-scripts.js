@@ -80,7 +80,7 @@ module.exports = scripts({
     TS && `jake run:zero["shx rm -r ${DOCS_DIR}"]`,
     TS && `typedoc --out ${DOCS_DIR} ./src`
   ),
-  changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s',
+  changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s -r 0',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
     `jake run:zero["shx rm -r ${OUT_DIR} ${DOCS_DIR} coverage CHANGELOG.md"]`,
