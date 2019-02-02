@@ -50,14 +50,15 @@ module.exports = scripts({
       `--config "${dir('.prettierrc.js')}"`,
       `--ignore-path "${dir('.prettierignore')}"`
     ].join(' '),
-    md: "mdspell --en-us '**/*.md' '!**/node_modules/**/*.md'"
+    md: 
+    "mdspell --en-us '**/*.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
   },
   types: TS && 'tsc',
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
       `markdownlint README.md --config ${dir('markdown.json')}`,
-      "mdspell -r --en-us '**/*.md' '!**/node_modules/**/*.md'"
+      "mdspell -r --en-us '**/*.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
     ),
     scripts: 'jake lintscripts["' + __dirname + '"]'
   },
