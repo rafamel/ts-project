@@ -1,12 +1,12 @@
 # TS/JS Project
 
 <!-- [![Version](https://img.shields.io/npm/v/ts-project.svg)](https://www.npmjs.com/package/ts-project)
-[![Types](https://img.shields.io/npm/types/exits.svg)](https://www.npmjs.com/package/exits)
 [![Build Status](https://img.shields.io/travis/rafamel/ts-project.svg)](https://travis-ci.org/rafamel/ts-project)
 [![Coverage](https://img.shields.io/coveralls/rafamel/ts-project.svg)](https://coveralls.io/github/rafamel/ts-project)
 [![Dependencies](https://img.shields.io/david/rafamel/ts-project.svg)](https://david-dm.org/rafamel/ts-project)
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/ts-project.svg)](https://snyk.io/test/npm/ts-project)
-[![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE) -->
+[![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE)
+[![Types](https://img.shields.io/npm/types/exits.svg)](https://www.npmjs.com/package/exits) -->
 
 <!-- markdownlint-disable MD036 -->
 **A bells & whistles setup for any TS/JS project.**
@@ -56,6 +56,12 @@
 * Update dependencies: `npm run update`
 * Clean project (`node_modules`, `coverage`...): `npm run clean`
 * Commit: `npm run commit`
+
+## Limitations
+
+* **TypeScript:**
+  * Even though *TypeScript* files are transpiled with *Babel,* you should keep in mind they are still type-checked and linted in accordance to the *TypeScript* specification, which means that custom babel transforms that conflict with it might produce errors.
+  * As *TypeScript* is transpiled with *Babel,* [there are a couple things to keep in mind regarding `namespace`, `const enum` and `export =` / `import =` usage.](https://babeljs.io/docs/en/babel-plugin-transform-typescript)
 
 ## Known issues
 
