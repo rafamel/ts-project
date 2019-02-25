@@ -27,12 +27,13 @@ module.exports = scripts({
     prepare: series(
       `jake run:zero["shx rm -r ${OUT_DIR}"]`,
       `shx mkdir ${OUT_DIR}`,
-      `jake run:zero["shx cp README* LICENSE* CHANGELOG* ${OUT_DIR}/"]`,
-      `jake fixpackage["${__dirname}","${OUT_DIR}"]`
+      `jake fixpackage["${__dirname}","${OUT_DIR}"]`,
+      `jake run:zero["shx cp README* LICENSE* CHANGELOG* ${OUT_DIR}/"]`
     ),
     transpile: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
     declaration: series(
       TS && `ttsc --project ttsconfig.json --outDir ${OUT_DIR}`,
+      TS && `jake cpr["./src","${OUT_DIR}",d.ts]`,
       `shx echo "${TS ? 'Declaration files built' : ''}"`
     )
   },
@@ -46,19 +47,19 @@ module.exports = scripts({
     default: 'nps fix.format fix.md',
     format: [
       'prettier',
-      `--write "./**/*.{${EXT},.json,.scss}"`,
+      `--write "./**/*.{${EXT},json,scss}"`,
       `--config "${dir('.prettierrc.js')}"`,
       `--ignore-path "${dir('.prettierignore')}"`
     ].join(' '),
-    md: 
-    "mdspell --en-us '**/*.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
+    md:
+      "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
   },
   types: TS && 'tsc',
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
       `markdownlint README.md --config ${dir('markdown.json')}`,
-      "mdspell -r --en-us '**/*.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
+      "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
     ),
     scripts: 'jake lintscripts["' + __dirname + '"]'
   },
