@@ -2,7 +2,7 @@ module.exports = {
   // Whether to use TypeScript. Boolean.
   TYPESCRIPT: true,
   // Output build directory. String.
-  OUT_DIR: 'build',
+  OUT_DIR: 'lib',
   // Output directory for docs. String.
   DOCS_DIR: 'docs',
   // Path to most tooling configuration files. String.

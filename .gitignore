@@ -3,7 +3,6 @@
 /lib
 /bin
 /dist
-/build
 _test.*
 
 # Node, Frameworks, Editors #
