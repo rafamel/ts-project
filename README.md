@@ -6,7 +6,7 @@
 [![Dependencies](https://img.shields.io/david/rafamel/ts-project.svg)](https://david-dm.org/rafamel/ts-project)
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/ts-project.svg)](https://snyk.io/test/npm/ts-project)
 [![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE)
-[![Types](https://img.shields.io/npm/types/exits.svg)](https://www.npmjs.com/package/exits) -->
+[![Types](https://img.shields.io/npm/types/ts-project.svg)](https://www.npmjs.com/package/ts-project) -->
 
 <!-- markdownlint-disable MD036 -->
 **A bells & whistles setup for any TS/JS project.**
@@ -14,7 +14,7 @@
 
 <!-- ## Install
 
- [`npm install ts-project`](https://www.npmjs.com/package/ts-project) -->
+[`npm install ts-project`](https://www.npmjs.com/package/ts-project) -->
 
 ## Features
 
