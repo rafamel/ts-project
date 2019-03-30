@@ -258,7 +258,14 @@ const base = {
       fileName: 'asset-manifest.json',
       publicPath: config.publicUrl
     })
-  ]
+  ],
+  node: {
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty'
+  }
 };
 
 module.exports = mergewith(
