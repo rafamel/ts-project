@@ -1,7 +1,7 @@
 {
-  "name": "React Boilerplate",
-  "short_name": "ReactBoiler",
-  "description": "A React Boilerplate.",
+  "name": "React Application",
+  "short_name": "ReactApp",
+  "description": "A React Application",
   "icons": [
     {
       "src": "favicon.ico",
