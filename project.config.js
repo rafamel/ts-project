@@ -8,7 +8,7 @@ module.exports = {
   // Path to most tooling configuration files. String.
   CONFIG_DIR: __dirname,
   // Extensions for JS and TS files. Comma separated string (no dots).
-  EXT_JS: 'js,mjs,jsx',
+  EXT_JS: 'js,cjs,mjs,jsx',
   EXT_TS: 'ts,tsx',
   // Build project on version bump. Boolean.
   RELEASE_BUILD: true,
