@@ -1,5 +1,8 @@
-const { EXT_JS, EXT_TS } = require('./project.config');
-const EXT = EXT_JS + ',' + EXT_TS;
+const project = require('./project.config');
+const EXT =
+  project.get('typescript') && project.get('ext.ts')
+    ? project.get('ext.js') + ',' + project.get('ext.ts')
+    : project.get('ext.js');
 const EXT_ARR = EXT.split(',').map((x) => x.trim());
 
 module.exports = {

@@ -1,17 +1,23 @@
-module.exports = {
-  // Whether to use TypeScript. Boolean.
-  TYPESCRIPT: true,
-  // Output build directory. String.
-  OUT_DIR: 'lib',
-  // Output directory for docs. String.
-  DOCS_DIR: 'docs',
-  // Path to most tooling configuration files. String.
-  CONFIG_DIR: __dirname,
-  // Extensions for JS and TS files. Comma separated string (no dots).
-  EXT_JS: 'js,cjs,mjs,jsx',
-  EXT_TS: 'ts,tsx',
-  // Build project on version bump. Boolean.
-  RELEASE_BUILD: true,
-  // Generate docs from TS on version bump. Boolean.
-  RELEASE_DOCS: false
-};
+const { config } = require('slimconf');
+
+// TODO modify slimconf so `config(null, { ... })` is possible
+module.exports = config(undefined, () => ({
+  typescript: true,
+  // Extensions allowed for each file type, as a comma separated string
+  ext: {
+    js: 'js,cjs,mjs,jsx',
+    ts: 'ts,tsx'
+  },
+  // Paths used on build
+  paths: {
+    root: __dirname,
+    output: 'lib',
+    docs: 'docs'
+  },
+  release: {
+    // Build project on version bump. Boolean.
+    build: true,
+    // Generate docs from TS on version bump. Boolean.
+    docs: false
+  }
+}));

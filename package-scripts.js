@@ -1,20 +1,19 @@
 const path = require('path');
-const dir = (file) => path.join(CONFIG_DIR, file);
-const series = (...x) => `(${x.map((x) => x || 'shx echo').join(') && (')})`;
-// prettier-ignore
-const scripts = (x) => Object.entries(x)
-  .reduce((m, [k, v]) => (m.scripts[k] = v || 'shx echo') && m, { scripts: {} });
-const {
-  TYPESCRIPT: TS,
-  OUT_DIR,
-  DOCS_DIR,
-  CONFIG_DIR,
-  EXT_JS,
-  EXT_TS,
-  RELEASE_BUILD,
-  RELEASE_DOCS
-} = require('./project.config');
-const EXT = EXT_JS + ',' + EXT_TS;
+const project = require('./project.config');
+
+/* Define functions */
+const scripts = (x) => ({ scripts: x });
+const ifelse = (x, a, b) => (x ? a || x : b || 'shx echo');
+const series = (...x) => `(${x.map((y) => ifelse(y)).join(') && (')})`;
+
+/* Get project config */
+const dir = (file) => path.join(project.get('paths.root'), file);
+const OUT_DIR = project.get('paths.output');
+const DOCS_DIR = project.get('paths.docs');
+const TS = project.get('ext.ts') && project.get('typescript');
+const EXT = TS
+  ? project.get('ext.js') + ',' + project.get('ext.ts')
+  : project.get('ext.js');
 const DOT_EXT = '.' + EXT.replace(/,/g, ',.');
 const { COMMIT, COMMITIZEN } = process.env;
 
@@ -53,7 +52,7 @@ module.exports = scripts({
     md:
       "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
   },
-  types: TS && 'tsc',
+  types: ifelse(TS, 'tsc'),
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
@@ -99,8 +98,8 @@ module.exports = scripts({
     ),
     version: series(
       'nps changelog',
-      RELEASE_DOCS && 'nps docs',
-      RELEASE_BUILD && 'nps build',
+      project.get('release.docs') && 'nps docs',
+      project.get('release.build') && 'nps build',
       'git add .'
     )
   }

@@ -1,6 +1,6 @@
 const globals = require('eslint-restricted-globals');
-const { EXT_JS, EXT_TS } = require('./project.config');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
+const project = require('./project.config');
 
 module.exports = {
   root: true,
@@ -35,8 +35,10 @@ module.exports = {
     'import/resolver': {
       node: {
         extensions: ['json']
-          .concat(EXT_JS.split(','))
-          .concat(EXT_TS.split(','))
+          .concat(project.get('ext.js').split(','))
+          .concat(
+            project.get('typescript') ? project.get('ext.ts').split(',') : []
+          )
           .filter(Boolean)
           .map((x) => '.' + x)
       }
@@ -45,7 +47,7 @@ module.exports = {
   overrides: [
     /* JAVASCRIPT */
     {
-      files: [`*.{${EXT_JS}}`],
+      files: [`*.{${project.get('ext.js')}}`],
       parser: 'babel-eslint',
       plugins: ['babel'],
       rules: {
@@ -61,7 +63,7 @@ module.exports = {
     },
     /* TYPESCRIPT */
     {
-      files: [`*.{${EXT_TS}}`],
+      files: [`*.{${project.get('ext.ts')}}`],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
       // Overrides don't allow for extends
