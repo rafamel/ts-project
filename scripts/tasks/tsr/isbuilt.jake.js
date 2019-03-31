@@ -1,9 +1,9 @@
 const fs = require('fs');
-const config = require('../../setup.config');
+const project = require('../../../project.config');
 
 desc('Ensure project has been built.');
-task('builtensure', (cmd) => {
-  const exists = fs.existsSync(config.paths.output);
+task('isbuilt', (cmd) => {
+  const exists = fs.existsSync(project.paths.output);
   if (exists) return;
 
   console.log("Project hasn't been built yet. Building...");

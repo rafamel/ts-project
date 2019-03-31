@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import config from '~/config';
-import logger from '~/lib/logger';
+import logger from './logger';
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -12,7 +12,7 @@ const isLocalhost = Boolean(
     )
 );
 
-function checkValidSW(swUrl) {
+function checkValidSW(swUrl: string): void {
   // Check if the SW can be found. Otherwise reload the page.
   // eslint-disable-next-line
   fetch(swUrl)
@@ -20,7 +20,8 @@ function checkValidSW(swUrl) {
       // Ensure SW exists and we're getting a JS file.
       if (
         response.status === 404 ||
-        response.headers.get('content-type').indexOf('javascript') === -1
+        (response.headers.get('content-type') || '').indexOf('javascript') ===
+          -1
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
@@ -40,12 +41,13 @@ function checkValidSW(swUrl) {
     });
 }
 
-function registerValidSW(swUrl) {
+function registerValidSW(swUrl: string): void {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
+        if (!installingWorker) return;
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
@@ -67,14 +69,14 @@ function registerValidSW(swUrl) {
     });
 }
 
-function register() {
+function register(): void {
   if (!('serviceWorker' in navigator)) {
     return logger.debug('SW: Unsupported');
   }
 
   logger.debug('SW: Registering');
   // The URL constructor is available in all browsers that support SW.
-  const publicUrl = new URL(config.get('publicUrl'), window.location);
+  const publicUrl = new URL(config.get('publicUrl'), window.location as any);
   // SW won't work if PUBLIC_URL is on a different
   // origin (if a CDN is used to serve assets):
   // https://bit.ly/2GQ8yaT
@@ -101,7 +103,7 @@ function register() {
   });
 }
 
-function unregister() {
+function unregister(): void {
   logger.debug('SW: Disabled.');
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then((registration) => {

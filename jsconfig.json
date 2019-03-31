@@ -3,10 +3,8 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["src/lib/*"],
       "~/*": ["src/*"],
-      "@static/*": ["public/static/*"],
-      "@commons/*": ["node_modules/@rafamel/react-commons"]
+      "@static/*": ["public/static/*"]
     }
   }
 }

@@ -1,4 +1,4 @@
-# React Boilerplate
+# TS React Boilerplate
 
 Not intended for general use. It has a reasonably explicit configuration, so it might be a great solution to check out for many.
 
@@ -7,7 +7,7 @@ Not intended for general use. It has a reasonably explicit configuration, so it 
 - Bundler: *Webpack 4*
 - Transpiler: *Babel 7*
 - Store: *MobX* & *MST*
-- Styles: *Emotion 10*
+- Styles: *Emotion*
 - Design: *Material UI*
 - Logs: *loglevel*
 - Tests: *Jest* & *Enzyme*

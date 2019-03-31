@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const nps = require('../../../package-scripts');
-const packageJson = require('../../../package.json');
 
 desc('Checks nps scripts are available as npm run scripts');
-task('lintscripts', (fix) => {
+task('lintscripts', (ROOT_DIR, fix) => {
+  if (!ROOT_DIR) throw Error('No root path was passed');
+  const nps = require(path.join(ROOT_DIR, 'package-scripts'));
+  const packageJson = require(path.join(ROOT_DIR, 'package.json'));
   const scripts = nps.scripts;
   const packageScripts = packageJson.scripts;
   const names = {};
@@ -38,9 +39,9 @@ task('lintscripts', (fix) => {
     return;
   }
 
-  const obj = { ...packageJson, scripts: { ...packageJson.scripts, ...names } };
+  Object.assign(packageJson.scripts, names);
   fs.writeFileSync(
     path.join(__dirname, '../../../package.json'),
-    JSON.stringify(obj, null, 2)
+    JSON.stringify(packageJson, null, 2)
   );
 });

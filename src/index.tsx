@@ -3,18 +3,18 @@ import '@babel/polyfill';
 // import 'whatwg-fetch';
 
 // Fonts & Styles
-import 'typeface-roboto';
+// import 'typeface-roboto'; // TODO
 import 'normalize.css';
 
 // React and SW
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '~/containers/App';
-import sw from 'sw';
+import sw from '~/utils/sw';
 
 // Config & HMR
 import config from '~/config';
-import logger from 'logger';
+import logger from '~/utils/logger';
 
 // Render
 config.get('serviceWorker') ? sw.register() : sw.unregister();
