@@ -24,7 +24,9 @@ task('fixpackage', (ROOT_DIR, OUT_DIR) => {
   delete pkg.scripts.publish;
 
   fs.writeFileSync(
-    path.join(ROOT_DIR, OUT_DIR, 'package.json'),
+    OUT_DIR[0] === '/'
+      ? path.join(OUT_DIR, 'package.json')
+      : path.join(ROOT_DIR, OUT_DIR, 'package.json'),
     JSON.stringify(pkg, null, 2)
   );
 });

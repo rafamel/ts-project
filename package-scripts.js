@@ -23,19 +23,19 @@ module.exports = scripts({
     default: 'cross-env NODE_ENV=production nps validate build.dev',
     dev: 'nps build.prepare build.transpile build.declaration',
     prepare: series(
-      `jake run:zero["shx rm -r ${OUT_DIR}"]`,
-      `shx mkdir ${OUT_DIR}`,
-      `jake fixpackage["${__dirname}","${OUT_DIR}"]`,
-      `jake run:zero["shx cp README* LICENSE* CHANGELOG* ${OUT_DIR}/"]`
+      `jake run:zero["shx rm -r \"${OUT_DIR}\""]`,
+      `shx mkdir "${OUT_DIR}"`,
+      `jake fixpackage["${project.get('paths.root')}","${OUT_DIR}"]`
+      // `jake run:zero["shx cp README* LICENSE* CHANGELOG* \"${OUT_DIR}/\""]`
     ),
-    transpile: `babel src --out-dir ${OUT_DIR} --extensions ${DOT_EXT} --source-maps inline`,
+    transpile: `babel src --out-dir "${OUT_DIR}" --extensions ${DOT_EXT} --source-maps inline`,
     declaration: series(
-      TS && `ttsc --project ttsconfig.json --outDir ${OUT_DIR}`,
+      TS && `ttsc --project ttsconfig.json --outDir "${OUT_DIR}"`,
       TS && `jake cpr["./src","${OUT_DIR}",d.ts]`,
       `shx echo "${TS ? 'Declaration files built' : ''}"`
     )
   },
-  publish: `cd ${OUT_DIR} && npm publish`,
+  publish: `cd "${OUT_DIR}" && npm publish`,
   watch: series(
     'nps build.prepare',
     `onchange "./src/**/*.{${EXT}}" --initial --kill -- ` +
@@ -59,7 +59,7 @@ module.exports = scripts({
       `markdownlint README.md --config ${dir('markdown.json')}`,
       "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
     ),
-    scripts: 'jake lintscripts["' + __dirname + '"]'
+    scripts: 'jake lintscripts["' + project.get('paths.root') + '"]'
   },
   test: {
     default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
@@ -77,13 +77,13 @@ module.exports = scripts({
     COMMIT && `jake run:conditional["\nCommit?","","exit 1",Yes,5]`
   ),
   docs: series(
-    TS && `jake run:zero["shx rm -r ${DOCS_DIR}"]`,
-    TS && `typedoc --out ${DOCS_DIR} ./src`
+    TS && `jake run:zero["shx rm -r \"${DOCS_DIR}\""]`,
+    TS && `typedoc --out "${DOCS_DIR}" ./src`
   ),
   changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s -r 0',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
-    `jake run:zero["shx rm -r ${OUT_DIR} ${DOCS_DIR} coverage CHANGELOG.md"]`,
+    `jake run:zero["shx rm -r \"${OUT_DIR}\" \"${DOCS_DIR}\" coverage CHANGELOG.md"]`,
     'shx rm -rf node_modules'
   ),
   // Private
