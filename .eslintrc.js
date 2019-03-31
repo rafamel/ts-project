@@ -71,6 +71,8 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/no-object-literal-type-assertion': 0,
         /* WARNINGS */
+        '@typescript-eslint/camelcase': 1,
+        '@typescript-eslint/explicit-function-return-type': 1,
         '@typescript-eslint/no-unused-vars': [
           1,
           {
@@ -82,8 +84,7 @@ module.exports = {
         /* ERRORS */
         '@typescript-eslint/interface-name-prefix': [2, 'always'],
         '@typescript-eslint/no-use-before-define': [2, { functions: false }],
-        '@typescript-eslint/array-type': [2, 'array-simple'],
-        '@typescript-eslint/explicit-function-return-type': 2
+        '@typescript-eslint/array-type': [2, 'array-simple']
       }),
       settings: {
         // eslint-import-resolver-typescript

@@ -1,9 +1,10 @@
 # Project Specific #
 ####################
+/build
 /lib
 /bin
 /dist
-_test.*
+_test*
 
 # Node, Frameworks, Editors #
 #############################
