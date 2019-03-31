@@ -1,6 +1,19 @@
+const path = require('path');
+const fs = require('fs');
 const globals = require('eslint-restricted-globals');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
 const project = require('./project.config');
+
+const dir = (file) => path.join(project.get('paths.root'), file);
+const prettier = require(dir('.prettierrc'));
+const babel = JSON.parse(fs.readFileSync(dir('.babelrc')));
+const aliases =
+  babel &&
+  babel.plugins &&
+  babel.plugins
+    .filter((plugin) => Array.isArray(plugin))
+    .filter((plugin) => plugin[0] === 'babel-plugin-module-resolver')
+    .map((plugin) => plugin[1] && plugin[1].alias)[0];
 
 module.exports = {
   root: true,
@@ -29,11 +42,12 @@ module.exports = {
     // Add custom globals
     'no-restricted-globals': [2, 'fetch'].concat(globals),
     // Prettier
-    'prettier/prettier': [2, require('./.prettierrc')]
+    'prettier/prettier': [2, prettier]
   },
   settings: {
     'import/resolver': {
-      node: {
+      alias: {
+        map: Object.entries(aliases || {}),
         extensions: ['json']
           .concat(project.get('ext.js').split(','))
           .concat(
