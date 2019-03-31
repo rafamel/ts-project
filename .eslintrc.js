@@ -1,6 +1,17 @@
+const fs = require('fs');
+const path = require('path');
 const globals = require('eslint-restricted-globals');
 const project = require('./project.config');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
+
+const babel = JSON.parse(fs.readFileSync(path.join(__dirname, '.babelrc')));
+const aliases =
+  babel &&
+  babel.plugins &&
+  babel.plugins
+    .filter((plugin) => Array.isArray(plugin))
+    .filter((plugin) => plugin[0] === 'babel-plugin-module-resolver')
+    .map((plugin) => plugin[1] && plugin[1].alias)[0];
 
 module.exports = {
   root: true,
@@ -46,10 +57,14 @@ module.exports = {
       version: '16.6'
     },
     'import/resolver': {
-      node: {
+      alias: {
+        map: Object.entries(aliases || {}),
         extensions: ['json']
           .concat(project.ext.js.split(','))
-          .concat(project.ext.ts.split(','))
+          .concat(project.ext.ts ? project.ext.ts.split(',') : [])
+          .concat(project.ext.image.split(','))
+          .concat(project.ext.html.split(','))
+          .concat(project.ext.style.split(','))
           .filter(Boolean)
           .map((x) => '.' + x)
       }
@@ -64,12 +79,6 @@ module.exports = {
       rules: {
         'babel/no-invalid-this': 1,
         'babel/semi': 1
-      },
-      settings: {
-        // babel-plugin-module-resolver
-        'import/resolver': {
-          'babel-module': {}
-        }
       }
     },
     /* TYPESCRIPT */
@@ -98,13 +107,7 @@ module.exports = {
         '@typescript-eslint/interface-name-prefix': [2, 'always'],
         '@typescript-eslint/no-use-before-define': [2, { functions: false }],
         '@typescript-eslint/array-type': [2, 'array-simple']
-      }),
-      settings: {
-        // eslint-import-resolver-typescript
-        'import/resolver': {
-          typescript: {}
-        }
-      }
+      })
     }
   ]
 };
