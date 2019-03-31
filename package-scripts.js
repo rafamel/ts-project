@@ -25,8 +25,8 @@ module.exports = scripts({
     prepare: series(
       `jake run:zero["shx rm -r \"${OUT_DIR}\""]`,
       `shx mkdir "${OUT_DIR}"`,
-      `jake fixpackage["${project.get('paths.root')}","${OUT_DIR}"]`
-      // `jake run:zero["shx cp README* LICENSE* CHANGELOG* \"${OUT_DIR}/\""]`
+      `jake fixpackage["${project.get('paths.root')}","${OUT_DIR}"]`,
+      `jake run:zero["shx cp README* LICENSE* CHANGELOG* \"${OUT_DIR}/\""]`
     ),
     transpile: `babel src --out-dir "${OUT_DIR}" --extensions ${DOT_EXT} --source-maps inline`,
     declaration: series(

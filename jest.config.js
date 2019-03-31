@@ -3,7 +3,7 @@ const EXT =
   project.get('typescript') && project.get('ext.ts')
     ? project.get('ext.js') + ',' + project.get('ext.ts')
     : project.get('ext.js');
-const EXT_ARR = EXT.split(',').map((x) => x.trim());
+const EXT_ARR = EXT.split(',');
 
 module.exports = {
   testEnvironment: 'node',
