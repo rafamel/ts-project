@@ -52,14 +52,14 @@ module.exports = scripts({
       `--ignore-path "${dir('.prettierignore')}"`
     ].join(' '),
     md:
-      "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
+      "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
   },
   types: TS && 'tsc',
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
       `markdownlint README.md --config ${dir('markdown.json')}`,
-      "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/build/**/*.md'"
+      "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
     ),
     scripts: 'jake lintscripts["' + __dirname + '"]'
   },
