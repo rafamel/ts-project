@@ -8,24 +8,27 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   devServer: Object.assign(
     {
-      contentBase: project.paths.output,
+      contentBase: project.get('paths.output'),
       compress: true,
       hot: true,
       disableHostCheck: true,
       historyApiFallback: true
     },
-    project.dev
+    project.get('dev')
   ),
   performance: { hints: false },
   output: {
-    publicPath: project.publicUrl,
+    publicPath: project.get('publicUrl'),
     filename: '[name].js',
-    path: project.paths.output,
+    path: project.get('paths.output'),
     chunkFilename: '[name].chunk.js',
     pathinfo: true // adds filename comments for require()
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: project.paths.template, inject: true }),
+    new HtmlWebpackPlugin({
+      template: project.get('paths.template'),
+      inject: true
+    }),
     // Hot Updates for CSS (currently only CSS)
     new webpack.HotModuleReplacementPlugin(),
     // Watches new dependencies installs so the server

@@ -1,14 +1,20 @@
-const series = (...x) => `(${x.map((x) => x || 'shx echo').join(') && (')})`;
-// prettier-ignore
-const scripts = (x) => Object.entries(x)
-  .reduce((m, [k, v]) => (m.scripts[k] = v || 'shx echo') && m, { scripts: {} });
-const { COMMIT, COMMITIZEN } = process.env;
-
+const path = require('path');
 const project = require('./project.config');
-const OUT_DIR = project.paths.output;
-const TS = Boolean(project.ext.ts);
-const EXT = TS ? project.ext.js + ',' + project.ext.ts : project.ext.js;
+
+/* Define functions */
+const scripts = (x) => ({ scripts: x });
+const ifelse = (x, a, b) => (x ? a || x : b || 'shx echo');
+const series = (...x) => `(${x.map((y) => ifelse(y)).join(') && (')})`;
+
+/* Get project config */
+const dir = (file) => path.join(project.get('paths.root'), file);
+const OUT_DIR = project.get('paths.output');
+const TS = project.get('ext.ts') && project.get('typescript');
+const EXT = TS
+  ? project.get('ext.js') + ',' + project.get('ext.ts')
+  : project.get('ext.js');
 const DOT_EXT = '.' + EXT.replace(/,/g, ',.');
+const { COMMIT, COMMITIZEN } = process.env;
 
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
@@ -19,13 +25,13 @@ module.exports = scripts({
   serve: {
     default: series(
       'jake tsr:isbuilt["nps build"]',
-      `serve ${OUT_DIR} -l 8080`
+      `serve "${OUT_DIR}" -l 8080`
     ),
-    json: `json-server ./scripts/mock-db.json -p 3333 -w`
+    json: `json-server ${dir('scripts/mock-db.json')} -p 3333 -w`
   },
   analyze: series(
     'jake tsr:isbuilt["nps build"]',
-    `source-map-explorer ${OUT_DIR}/main.*.js --only-mapped`
+    `source-map-explorer "${OUT_DIR}/main.*.js" --only-mapped`
   ),
   watch: [
     'cross-env NODE_ENV=development',
@@ -36,18 +42,23 @@ module.exports = scripts({
   ].join(' '),
   fix: {
     default: 'nps fix.format fix.md',
-    format: `prettier --write "./**/*.{${EXT},json,scss}"`,
+    format: [
+      'prettier',
+      `--write "./**/*.{${EXT},json,scss}"`,
+      `--config "${dir('.prettierrc.js')}"`,
+      `--ignore-path "${dir('.prettierignore')}"`
+    ].join(' '),
     md:
       "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
   },
-  types: TS && 'tsc',
+  types: ifelse(TS, 'tsc'),
   lint: {
-    default: `eslint ./src ./test --ext ${DOT_EXT}`,
+    default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
     md: series(
-      `markdownlint README.md --config 'markdown.json'`,
+      `markdownlint README.md --config ${dir('markdown.json')}`,
       "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
     ),
-    scripts: 'jake lintscripts["' + __dirname + '"]'
+    scripts: 'jake lintscripts["' + project.get('paths.root') + '"]'
   },
   test: {
     default: series('nps lint types', 'cross-env NODE_ENV=test jest'),
@@ -67,7 +78,7 @@ module.exports = scripts({
   changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s -r 0',
   update: series('npm update --save/save-dev', 'npm outdated'),
   clean: series(
-    `jake run:zero["shx rm -r ${OUT_DIR} coverage CHANGELOG.md"]`,
+    `jake run:zero["shx rm -r \"${OUT_DIR}\" coverage CHANGELOG.md"]`,
     'shx rm -rf node_modules'
   ),
   // Private

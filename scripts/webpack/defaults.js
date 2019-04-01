@@ -8,13 +8,14 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const project = require('../../project.config');
 const path = require('path');
 
-const jsts = project.ext.ts
-  ? project.ext.js + ',' + project.ext.ts
-  : project.ext.js;
+const jsts =
+  project.get('typescript') && project.get('ext.ts')
+    ? project.get('ext.js') + ',' + project.get('ext.ts')
+    : project.get('ext.js');
 
 module.exports = {
   target: 'web',
-  entry: project.paths.entry,
+  entry: project.get('paths.entry'),
   optimization: {
     runtimeChunk: true,
     splitChunks: { name: 'all', name: false }
@@ -45,7 +46,7 @@ module.exports = {
           },
           {
             // Dependencies
-            test: regex(project.ext.js),
+            test: regex(project.get('ext.js')),
             loader: 'babel-loader',
             exclude: /@babel(?:\/|\\{1,2})runtime/,
             options: {
@@ -56,15 +57,15 @@ module.exports = {
             }
           },
           {
-            test: regex(project.ext.image),
+            test: regex(project.get('ext.image')),
             use: {
               loader: 'url-loader',
               options: { limit: 100 * 1024 /* 100kB */ }
             }
           },
-          { test: regex(project.ext.html), use: 'html-loader' },
+          { test: regex(project.get('ext.html')), use: 'html-loader' },
           {
-            test: regex(project.ext.style),
+            test: regex(project.get('ext.style')),
             use: [
               'style-loader',
               'css-loader',
@@ -88,9 +89,9 @@ module.exports = {
             loader: 'file-loader',
             exclude: [
               regex(jsts),
-              regex(project.ext.image),
-              regex(project.ext.html),
-              regex(project.ext.style),
+              regex(project.get('ext.image')),
+              regex(project.get('ext.html')),
+              regex(project.get('ext.style')),
               /\.json$/
             ]
           }
@@ -101,11 +102,10 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['json']
-      .concat(project.ext.js.split(','))
-      .concat(project.ext.ts ? project.ext.ts.split(',') : [])
-      .concat(project.ext.image.split(','))
-      .concat(project.ext.html.split(','))
-      .concat(project.ext.style.split(','))
+      .concat(jsts.split(','))
+      .concat(project.get('ext.image').split(','))
+      .concat(project.get('ext.html').split(','))
+      .concat(project.get('ext.style').split(','))
       .filter(Boolean)
       .map((x) => '.' + x)
   },
@@ -119,20 +119,20 @@ module.exports = {
     }),
     // Make env available on JS
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(project.env.define)
+      'process.env': JSON.stringify(project.get('env.define'))
     }),
     // Make env available on template
-    new InterpolateHtmlPlugin(HtmlWebpackPlugin, project.env.define),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, project.get('env.define')),
     // Prevent moment from including all locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     // Provides context to not found errors
-    new ModuleNotFoundPlugin(project.paths.base),
+    new ModuleNotFoundPlugin(project.get('paths.root')),
     // Copy assets
     new CopyWebpackPlugin(
       (() => {
         const getRelative = (file) => {
           file = path.resolve(file);
-          const assets = path.resolve(project.paths.assets);
+          const assets = path.resolve(project.get('paths.assets'));
           const split = (path.parse(file).dir + '/').split(assets + '/');
           return split.length > 1 && !split[0]
             ? path.join(
@@ -143,17 +143,17 @@ module.exports = {
         };
         return [
           {
-            context: project.paths.assets,
+            context: project.get('paths.assets'),
             from: '*',
-            to: project.paths.output,
+            to: project.get('paths.output'),
             // Adds template relative to assets path to ignore IF
             // it's within that path
-            ignore: [].concat(getRelative(project.paths.template) || [])
+            ignore: [].concat(getRelative(project.get('paths.template')) || [])
           },
           {
-            context: project.paths.assets,
+            context: project.get('paths.assets'),
             from: '*/**/*',
-            to: project.paths.output
+            to: project.get('paths.output')
           }
         ];
       })()
@@ -161,7 +161,7 @@ module.exports = {
     // Generate assets manifest
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
-      publicPath: project.publicUrl
+      publicPath: project.get('publicUrl')
     })
   ],
   node: {

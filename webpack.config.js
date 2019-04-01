@@ -6,7 +6,7 @@ const production = require('./scripts/webpack/production');
 const project = require('./project.config.js');
 
 // Require
-requireEnv(...project.env.require);
+requireEnv(...project.get('env.require'));
 
 module.exports = mergewith(
   process.env.NODE_ENV === 'production' ? production : development,

@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { config } from 'slimconf';
+import slim from 'slimconf';
 import { levels as loglevels } from 'loglevel';
 
 const setup = {
   env: {
-    default: process.env.NODE_ENV,
+    from: process.env.NODE_ENV,
     map: (env: string) =>
       env === 'production' || env === 'development' ? env : 'test'
   }
 };
 
-export default config(setup, ({ env }, on) => ({
+export default slim(setup, ({ env }, on) => ({
   env,
   publicUrl: process.env.PUBLIC_URL || './',
   logger: on.env({

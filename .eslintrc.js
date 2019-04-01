@@ -60,11 +60,13 @@ module.exports = {
       alias: {
         map: Object.entries(aliases || {}),
         extensions: ['json']
-          .concat(project.ext.js.split(','))
-          .concat(project.ext.ts ? project.ext.ts.split(',') : [])
-          .concat(project.ext.image.split(','))
-          .concat(project.ext.html.split(','))
-          .concat(project.ext.style.split(','))
+          .concat(project.get('ext.js').split(','))
+          .concat(
+            project.get('typescript') ? project.get('ext.ts').split(',') : []
+          )
+          .concat(project.get('ext.image').split(','))
+          .concat(project.get('ext.html').split(','))
+          .concat(project.get('ext.style').split(','))
           .filter(Boolean)
           .map((x) => '.' + x)
       }
@@ -73,7 +75,7 @@ module.exports = {
   overrides: [
     /* JAVASCRIPT */
     {
-      files: [`*.{${project.ext.js}}`],
+      files: [`*.{${project.get('ext.js')}}`],
       parser: 'babel-eslint',
       plugins: ['babel'],
       rules: {
@@ -83,7 +85,7 @@ module.exports = {
     },
     /* TYPESCRIPT */
     {
-      files: [`*.{${project.ext.ts}}`],
+      files: [`*.{${project.get('ext.ts')}}`],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
       // Overrides don't allow for extends

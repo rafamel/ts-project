@@ -1,8 +1,9 @@
 const project = require('./project.config');
-const EXT = project.ext.ts
-  ? project.ext.js + ',' + project.ext.ts
-  : project.ext.js;
-const EXT_ARR = EXT.split(',').map((x) => x.trim());
+const EXT =
+  project.get('typescript') && project.get('ext.ts')
+    ? project.get('ext.js') + ',' + project.get('ext.ts')
+    : project.get('ext.js');
+const EXT_ARR = EXT.split(',');
 
 module.exports = {
   testEnvironment: 'jsdom',

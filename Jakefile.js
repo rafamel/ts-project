@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const project = require('./project.config');
 
-const JAKE_DIR = path.join(__dirname, 'scripts/tasks');
+const JAKE_DIR = path.join(project.get('paths.root'), 'scripts/tasks');
 
 (function run(dir = JAKE_DIR) {
   fs.readdirSync(dir).forEach((name) => {

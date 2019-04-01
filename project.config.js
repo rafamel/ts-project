@@ -1,11 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const { default: slim } = require('slimconf');
 
 const PUBLIC_URL = '/';
 const MANIFEST = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'public/app.webmanifest'))
 );
-module.exports = {
+module.exports = slim({
   publicUrl: PUBLIC_URL,
   generateSW: true,
   dev: {
@@ -22,6 +23,8 @@ module.exports = {
     maxSizeEntry: 300 * 1024, // 300kb; max size of a single file
     maxSize: 500 * 1024 // 500kb; max aggregate assets size
   },
+  typescript: true,
+  // Extensions allowed for each file type, as a comma separated string
   ext: {
     js: 'js,cjs,mjs,jsx',
     ts: 'ts,tsx',
@@ -29,9 +32,9 @@ module.exports = {
     html: 'html',
     style: 'css,scss'
   },
-  // Paths used for webpack build
+  // Paths used on build
   paths: {
-    base: __dirname,
+    root: __dirname,
     output: path.join(__dirname, 'build'),
     entry: path.join(__dirname, 'src/index.tsx'),
     assets: path.join(__dirname, 'public'),
@@ -51,4 +54,4 @@ module.exports = {
       }, {})
     }
   }
-};
+});

@@ -12,13 +12,13 @@ module.exports = {
   devtool: 'source-map',
   performance: {
     hints: 'warning',
-    maxEntrypointSize: project.assets.maxSizeEntry,
-    maxAssetSize: project.assets.maxSize
+    maxEntrypointSize: project.get('assets.maxSizeEntry'),
+    maxAssetSize: project.get('assets.maxSize')
   },
   output: {
-    publicPath: project.publicUrl,
+    publicPath: project.get('publicUrl'),
     filename: '[name].[hash].js',
-    path: project.paths.output,
+    path: project.get('paths.output'),
     chunkFilename: '[name].[chunkhash].js'
   },
   optimization: {
@@ -45,7 +45,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: project.paths.template,
+      template: project.get('paths.template'),
       inject: true,
       minify: {
         removeComments: true,
@@ -62,13 +62,13 @@ module.exports = {
     }),
     new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     new CleanWebpackPlugin(),
-    project.generateSW &&
+    project.get('generateSW') &&
       new WorkboxWebpackPlugin.GenerateSW({
         clientsClaim: true,
         exclude: [/\.map$/, /asset-manifest\.json$/],
         importWorkboxFrom: 'cdn',
         navigateFallback:
-          project.publicUrl.replace(/(^\.)?\/$/, '') + '/index.html',
+          project.get('publicUrl').replace(/(^\.)?\/$/, '') + '/index.html',
         navigateFallbackBlacklist: [
           // Exclude URLs starting with /_, as they're likely an API call
           new RegExp('^/_'),
