@@ -5,6 +5,7 @@
 /lib
 /bin
 /dist
+/out
 _test*
 
 # Node, Frameworks, Editors #
