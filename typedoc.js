@@ -1,6 +1,6 @@
 const pkg = require('./package.json');
 const path = require('path');
-const project = require('project');
+const project = require('./project.config');
 
 module.exports = {
   name: `${pkg.name} ${pkg.version}`,
