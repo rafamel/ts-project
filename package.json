@@ -8,7 +8,7 @@
     "keyword",
     "keyword"
   ],
-  "main": "./lib",
+  "main": "./src",
   "scripts": {
     "prepublishOnly": "exit 1",
     "preversion": "nps private.preversion",
@@ -16,9 +16,6 @@
     "start": "npm run watch",
     "build": "nps build",
     "build:force": "nps build.force",
-    "build:prepare": "nps build.prepare",
-    "build:transpile": "nps build.transpile",
-    "build:declaration": "nps build.declaration",
     "publish": "nps publish",
     "watch": "nps watch",
     "fix": "nps fix",
@@ -52,8 +49,12 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
     "@babel/preset-typescript": "^7.1.0",
+    "@pika/pack": "^0.3.6",
+    "@pika/plugin-build-node": "^0.3.14",
+    "@pika/plugin-build-types": "^0.3.14",
+    "@pika/plugin-build-web": "^0.3.14",
+    "@pika/plugin-standard-pkg": "^0.3.14",
     "@types/jest": "^24.0.9",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
     "@typescript-eslint/parser": "^1.5.0",
@@ -103,5 +104,27 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-standard-pkg",
+        {
+          "exclude": [
+            "__mocks__/**/*",
+            "__tests__/**/*"
+          ]
+        }
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
+    ]
   }
 }
