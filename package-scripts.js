@@ -42,24 +42,16 @@ module.exports = scripts({
     `onchange "./src/**/*.{${EXT}}" --initial --kill -- ` +
       `jake clear run:exec["shx echo ⚡"] run:zero["nps private.watch"]`
   ),
-  fix: {
-    default: 'nps fix.format fix.md',
-    format: [
-      'prettier',
-      `--write "./**/*.{${EXT},json,scss}"`,
-      `--config "${dir('.prettierrc.js')}"`,
-      `--ignore-path "${dir('.prettierignore')}"`
-    ].join(' '),
-    md:
-      "mdspell --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
-  },
+  fix: [
+    'prettier',
+    `--write "./**/*.{${EXT},json,scss}"`,
+    `--config "${dir('.prettierrc.js')}"`,
+    `--ignore-path "${dir('.prettierignore')}"`
+  ].join(' '),
   types: ifelse(TS, 'tsc'),
   lint: {
     default: `eslint ./src ./test --ext ${DOT_EXT} -c ${dir('.eslintrc.js')}`,
-    md: series(
-      `markdownlint README.md --config ${dir('markdown.json')}`,
-      "mdspell -r --en-us '**/*.md' '!**/CHANGELOG.md' '!**/node_modules/**/*.md' '!**/lib/**/*.md'"
-    ),
+    md: `markdownlint README.md --config ${dir('markdown.json')}`,
     scripts: 'jake lintscripts["' + project.get('paths.root') + '"]'
   },
   test: {

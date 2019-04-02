@@ -20,12 +20,12 @@
 
 * Transpiling & types: [Babel 7](https://babeljs.io/), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript)
 * Tests: [Jest](https://jestjs.io/)
-* Linting & format: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli), [`markdown-spellcheck`](https://github.com/lukeapage/node-markdown-spellcheck)
+* Linting & format: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli)
 * Cross-platform support: [`cross-env`](https://github.com/kentcdodds/cross-env), [`shx`](https://github.com/shelljs/shx)
 * Tasks, scripts: [Jake](https://github.com/jakejs/jake), [`nps`](https://github.com/kentcdodds/nps), [`concurrently`](https://github.com/kimmobrunfeldt/concurrently), [`onchange`](https://github.com/Qard/onchange)
 * Commits & hooks: [`commitizen`](https://github.com/commitizen/cz-cli), [`husky`](https://github.com/typicode/husky)
 * Docs generation: [TypeDoc](https://github.com/TypeStrong/typedoc/), [`conventional-changelog`](https://github.com/conventional-changelog)
-* Opt-in CI: [TravisCI](https://travis-ci.org/) & [Coveralls](https://coveralls.io/)
+* Opt-in CI: [TravisCI](https://travis-ci.org/), [Coveralls](https://coveralls.io/)
 
 ## Usage
 
@@ -66,4 +66,3 @@
 ## Known issues
 
 * **Git hooks on Windows:** There's currently an issue with [`husky`'s](https://github.com/typicode/husky) `stdin` support on Windows. As interactivity on hooks was only available on `husky@1.3.0`, that version is locked on `package.json`. However, if [you experience hooks hanging on Windows](https://github.com/typicode/husky/issues/431), you should update husky's version to disable `stdin` support [until another solution is available.](https://github.com/typicode/husky/issues/442)
-* **Spellcheck:** [`markdown-spellcheck`](https://github.com/lukeapage/node-markdown-spellcheck) fails to parse certain markdown files. The project is now mostly unmaintained, so it will be switched for another tool in the near future.
