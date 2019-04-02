@@ -20,8 +20,9 @@ const { COMMIT, COMMITIZEN } = process.env;
 process.env.LOG_LEVEL = 'disable';
 module.exports = scripts({
   build: {
-    default: 'cross-env NODE_ENV=production nps validate build.dev',
-    dev: 'nps build.prepare build.transpile build.declaration',
+    default: 'nps validate build.force',
+    force:
+      'cross-env NODE_ENV=production nps build.prepare build.transpile build.declaration',
     prepare: series(
       `jake run:zero["shx rm -r \"${OUT_DIR}\""]`,
       `shx mkdir "${OUT_DIR}"`,
