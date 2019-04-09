@@ -8,6 +8,19 @@
 [![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE)
 [![Types](https://img.shields.io/npm/types/ts-project.svg)](https://www.npmjs.com/package/ts-project) -->
 
+<!-- <div align="center">
+  <br />
+  <br />
+  <a href="https://www.npmjs.com/package/ts-project" target="_blank">
+    <img alt="ts-project" width="350" src="https://raw.githubusercontent.com/rafamel/ts-project/master/scripts/assets/logo.png" />
+  </a>
+  <br />
+  <br />
+  <strong>A bells & whistles setup for any TS/JS project</strong>
+  <br />
+  <br />
+</div> -->
+
 <!-- markdownlint-disable MD036 -->
 **A bells & whistles setup for any TS/JS project.**
 <!-- markdownlint-enable MD036 -->
@@ -18,7 +31,7 @@
 
 ## Features
 
-* Transpiling & types: [Babel 7](https://babeljs.io/), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript)
+* Transpiling & types: [Babel 7](https://babeljs.io/), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript), [@pika/pack](https://github.com/pikapkg/pack)
 * Tests: [Jest](https://jestjs.io/)
 * Linting & format: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli)
 * Cross-platform support: [`cross-env`](https://github.com/kentcdodds/cross-env), [`shx`](https://github.com/shelljs/shx)
