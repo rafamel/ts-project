@@ -8,6 +8,8 @@
     "keyword",
     "keyword"
   ],
+  "main": "pkg/dist-node/index.js",
+  "types": "pkg/dist-types/index.d.ts",
   "scripts": {
     "prepublishOnly": "exit 1",
     "preversion": "nps private.preversion",
