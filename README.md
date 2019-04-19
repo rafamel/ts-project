@@ -1,4 +1,4 @@
-# TS/JS Project
+# TS Project
 
 <!-- [![Version](https://img.shields.io/npm/v/ts-project.svg)](https://www.npmjs.com/package/ts-project)
 [![Build Status](https://img.shields.io/travis/rafamel/ts-project.svg)](https://travis-ci.org/rafamel/ts-project)
@@ -21,13 +21,15 @@
   <br />
 </div> -->
 
-<!-- markdownlint-disable MD036 -->
-**A bells & whistles setup for any TS/JS project.**
-<!-- markdownlint-enable MD036 -->
+> A bells & whistles setup for any TypeScript project.
+
+If you find it useful, consider [starring the project](https://github.com/rafamel/cli-belt) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
 
 <!-- ## Install
 
-[`npm install ts-project`](https://www.npmjs.com/package/ts-project) -->
+[`npm install ts-project`](https://www.npmjs.com/package/ts-project) 
+
+## Motivation / Use cases | Documentation | Usage / Examples -->
 
 ## Features
 
@@ -38,7 +40,7 @@
 * Tasks, scripts: [Jake](https://github.com/jakejs/jake), [`nps`](https://github.com/kentcdodds/nps), [`concurrently`](https://github.com/kimmobrunfeldt/concurrently), [`onchange`](https://github.com/Qard/onchange)
 * Commits & hooks: [`commitizen`](https://github.com/commitizen/cz-cli), [`husky`](https://github.com/typicode/husky)
 * Docs generation: [TypeDoc](https://github.com/TypeStrong/typedoc/), [`conventional-changelog`](https://github.com/conventional-changelog)
-* Opt-in CI: [TravisCI](https://travis-ci.org/), [Coveralls](https://coveralls.io/)
+* Opt-in CI: [TravisCI](https://travis-ci.org/), [Coveralls](https://coveralls.io/), and minimal noise configuration for [Renovate](https://renovatebot.com/)
 
 ## Usage
 
