@@ -2,6 +2,7 @@
   "extends": [
     "config:base",
     "docker:disable",
+    ":pinOnlyDevDependencies",
     ":automergeRequireAllStatusChecks",
     ":prHourlyLimitNone",
     ":prConcurrentLimit10",
@@ -17,7 +18,6 @@
       "commitMessageSuffix": "(development)",
       "extends": ["schedule:monthly"],
       "minor": {
-        "automerge": true,
         "groupName": "all non-major dependencies",
         "groupSlug": "all-dev-minor-patch"
       }
@@ -28,7 +28,6 @@
       "commitMessageSuffix": "",
       "extends": ["schedule:daily"],
       "minor": {
-        "automerge": true,
         "extends": ["schedule:monthly"],
         "groupName": "all non-major dependencies",
         "groupSlug": "all-minor-patch"
