@@ -12,7 +12,7 @@
   <br />
   <br />
   <a href="https://www.npmjs.com/package/ts-project" target="_blank">
-    <img alt="ts-project" width="350" src="https://raw.githubusercontent.com/rafamel/ts-project/master/scripts/assets/logo.png" />
+    <img alt="ts-project" width="350" src="https://raw.githubusercontent.com/rafamel/ts-project/master/assets/logo.png" />
   </a>
   <br />
   <br />
@@ -37,7 +37,7 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 * Tests: [Jest](https://jestjs.io/)
 * Linting & format: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli)
 * Cross-platform support: [`cross-env`](https://github.com/kentcdodds/cross-env), [`shx`](https://github.com/shelljs/shx)
-* Tasks, scripts: [Jake](https://github.com/jakejs/jake), [`nps`](https://github.com/kentcdodds/nps), [`concurrently`](https://github.com/kimmobrunfeldt/concurrently), [`onchange`](https://github.com/Qard/onchange)
+* Tasks, scripts: [`kpo`](https://github.com/rafamel/kpo), [`onchange`](https://github.com/Qard/onchange)
 * Commits & hooks: [`commitizen`](https://github.com/commitizen/cz-cli), [`husky`](https://github.com/typicode/husky)
 * Docs generation: [TypeDoc](https://github.com/TypeStrong/typedoc/), [`conventional-changelog`](https://github.com/conventional-changelog)
 * Opt-in CI: [TravisCI](https://travis-ci.org/), [Coveralls](https://coveralls.io/), and minimal noise configuration for [Renovate](https://renovatebot.com/)
