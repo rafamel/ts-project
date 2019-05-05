@@ -7,7 +7,6 @@ const project = require('./project.config');
 verify('nodeOnly', 'typescript', 'ext.js', 'ext.ts', 'paths.docs', 'release.build', 'release.docs');
 const vars = {
   node: !!project.nodeOnly,
-  commit: !!process.env.COMMIT,
   prompt: !!process.env.COMMIT && !process.env.COMMITIZEN,
   ext: extensions(),
   dotExt: '.' + extensions().replace(/,/g, ',.')
@@ -75,8 +74,7 @@ module.exports = {
         no: Error()
       }),
     'kpo test lint.md lint.scripts',
-    silent`npm outdated`,
-    vars.commit && confirm({ timeout: 5000, no: Error() })
+    silent`npm outdated`
   ],
   docs: project.typescript && [
     rm`${project.paths.docs}`,
