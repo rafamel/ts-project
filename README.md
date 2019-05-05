@@ -1,8 +1,8 @@
 # TS Project
 
 <!-- [![Version](https://img.shields.io/npm/v/ts-project.svg)](https://www.npmjs.com/package/ts-project)
-[![Build Status](https://img.shields.io/travis/rafamel/ts-project.svg)](https://travis-ci.org/rafamel/ts-project)
-[![Coverage](https://img.shields.io/coveralls/rafamel/ts-project.svg)](https://coveralls.io/github/rafamel/ts-project)
+[![Build Status](https://img.shields.io/travis/rafamel/ts-project/master.svg)](https://travis-ci.org/rafamel/ts-project)
+[![Coverage](https://img.shields.io/coveralls/rafamel/ts-project/master.svg)](https://coveralls.io/github/rafamel/ts-project)
 [![Dependencies](https://img.shields.io/david/rafamel/ts-project.svg)](https://david-dm.org/rafamel/ts-project)
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/ts-project.svg)](https://snyk.io/test/npm/ts-project)
 [![License](https://img.shields.io/github/license/rafamel/ts-project.svg)](https://github.com/rafamel/ts-project/blob/master/LICENSE)
@@ -27,7 +27,7 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 
 <!-- ## Install
 
-[`npm install ts-project`](https://www.npmjs.com/package/ts-project) 
+[`npm install ts-project`](https://www.npmjs.com/package/ts-project)
 
 ## Motivation / Use cases | Documentation | Usage / Examples -->
 
