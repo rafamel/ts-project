@@ -1,4 +1,5 @@
 const project = require('./project.config');
+
 const EXT =
   project.get('typescript') && project.get('ext.ts')
     ? project.get('ext.js') + ',' + project.get('ext.ts')
@@ -10,6 +11,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [`<rootDir>/src/**/*.{${EXT}}`],
   modulePathIgnorePatterns: [
+    '.*\\.d\\.ts$',
     '<rootDir>/pkg',
     '<rootDir>/src/@types',
     '<rootDir>/src/.*/__mocks__'
