@@ -1,5 +1,8 @@
 // prettier-ignore
-const { series, parallel, ensure, line, json, log, confirm, silent, rm, remove, copy } = require('kpo');
+const { series, parallel, ensure, line, json, log, confirm, rm, remove, kpo, silent, copy, glob } = require('kpo');
+const path = require('path');
+const bump = require('conventional-recommended-bump');
+const { promisify } = require('util');
 const { merge } = require('slimconf');
 const project = require('./project.config');
 
@@ -7,21 +10,22 @@ const project = require('./project.config');
 verify('nodeOnly', 'typescript', 'ext.js', 'ext.ts', 'paths.docs', 'release.build', 'release.docs');
 const vars = {
   node: !!project.nodeOnly,
-  prompt: !!process.env.COMMIT && !process.env.COMMITIZEN,
+  semantic: !!process.env.SEMANTIC,
+  commit: !!process.env.COMMITIZEN || !!process.env.SEMANTIC,
   ext: extensions(),
   dotExt: '.' + extensions().replace(/,/g, ',.')
 };
 
-module.exports = {
-  start: 'kpo watch',
+module.exports.scripts = {
+  start: kpo`watch`,
   build: {
-    default: 'kpo validate build.force',
+    default: kpo`validate build.force`,
     force: series.env('kpo build.pack build.types', { NODE_ENV: 'production' }),
     $pack: [ensure`./pkg`, 'pack build'].concat(
       vars.node && [
         line`babel src --out-dir ./pkg/dist-node
-          --extensions ${vars.dotExt} --source-maps inline`,
-        json('./pkg/package.json', (pkg) => {
+        --extensions ${vars.dotExt} --source-maps inline`,
+        json('./pkg/package.json', (file, pkg) => {
           if (pkg.main || pkg.module || pkg.esnext) throw Error(`!node pack`);
           return merge(pkg, { main: 'dist-node/index.js' });
         })
@@ -29,16 +33,33 @@ module.exports = {
     ),
     $types: project.typescript && [
       `ttsc --project ttsconfig.json --outDir ./pkg/dist-types/`,
-      json('./pkg/package.json', (pkg) => {
+      copy(glob`./src/**/*.d.ts`, { from: 'src', to: 'pkg/dist-types' }),
+      json('./pkg/package.json', (file, pkg) => {
         return merge(pkg, { types: 'dist-types/index.d.ts' });
       }),
       log`Declaration files built`
     ]
   },
-  publish: series('npm publish', { cwd: './pkg' }),
+  commit: series.env('git-cz', { COMMITIZEN: '#' }),
+  semantic: ([type]) =>
+    promisify(bump)({ preset: 'angular' }).then(({ reason, releaseType }) => {
+      type ? log.fn`\nVersion bump: ${type}` : log.fn``;
+      log.fn`Recommended version bump: ${releaseType}\n    ${reason}`;
+      return confirm({
+        no: Error(),
+        yes: series.env(`npm version ${type ? '' : releaseType}`, {
+          SEMANTIC: '#'
+        })
+      });
+    }),
+  release: [
+    series('npm publish --dry-run', { cwd: './pkg' }),
+    confirm({ no: Error() }),
+    series('npm publish', { cwd: './pkg' }),
+    series(['git push', 'git push --tags'], { args: [] })
+  ],
   watch: {
-    default: line`onchange "./src/**/*.{${vars.ext}}" --initial --kill 
-  -- kpo watch.task`,
+    default: 'onchange ./src --initial --kill -- kpo watch.task',
     $task: [
       log`\x1Bc⚡`,
       parallel(['kpo build.pack build.types', 'kpo lint'], {
@@ -48,61 +69,53 @@ module.exports = {
     ]
   },
   fix: {
-    default: 'kpo fix.format fix.scripts',
-    format: `prettier --write "./**/*.{${vars.ext},json,scss}"`,
-    scripts: 'kpo :raise --confirm --fail'
+    default: kpo`fix.format fix.scripts`,
+    format: `prettier --write ./**/*.{${vars.ext},json,scss}`,
+    scripts: kpo`:raise --purge --confirm --fail`
   },
   types: project.typescript && 'tsc --noEmit --emitDeclarationOnly false',
   lint: {
     default: `eslint ./src ./test --ext ${vars.dotExt}`,
-    md: 'markdownlint README.md --config markdown.json',
-    scripts: 'npx kpo :raise --dry --fail'
+    md: line`markdownlint README.md
+    --config ${path.join(__dirname, 'markdown.json')}`,
+    scripts: kpo`:raise --dry --fail`
   },
   test: {
-    default: 'kpo lint types test.force',
+    default: kpo`lint types test.force`,
     force: series.env('jest', { NODE_ENV: 'test' }),
     watch: {
-      default: line`onchange "./{src,test}/**/*.{${vars.ext}}" 
-        --initial --kill -- kpo test.watch.task`,
-      $task: [log`\x1Bc⚡`, 'kpo test']
+      default: 'onchange ./{src,test} --initial --kill -- kpo test.watch.task',
+      $task: [log`\x1Bc⚡`, kpo`test`]
     }
   },
-  validate: [
-    vars.prompt &&
-      confirm(`Commits should be done via "kpo commit". Continue?`, {
-        timeout: 5000,
-        no: Error()
-      }),
-    'kpo test lint.md lint.scripts',
-    silent`npm outdated`
-  ],
+  validate: [kpo`test lint.md lint.scripts`, silent`npm outdated`],
   docs: project.typescript && [
     rm`${project.paths.docs}`,
-    `typedoc --out "${project.paths.docs}" ./src`
+    `typedoc ./src --out "${project.paths.docs}"`
   ],
   changelog: 'conventional-changelog -p angular -i CHANGELOG.md -s -r 0',
   update: ['npm update', 'npm outdated'],
+  outdated: 'npm outdated',
   clean: {
-    default: 'kpo clean.top clean.modules',
+    default: kpo`clean.top clean.modules`,
     top: remove(
       [`./pkg`, `${project.paths.docs}`, `./coverage`, `CHANGELOG.md`],
       { confirm: true }
     ),
     modules: remove('./node_modules', { confirm: true })
   },
-  commit: series.env('git-cz', { COMMITIZEN: '#' }),
   /* Hooks */
-  $precommit: series.env('kpo validate', { COMMIT: '#' }),
-  prepublishOnly: Error("Publish should be done via 'kpo publish'"),
-  preversion: [
-    log`Recommended version bump is:`,
-    'conventional-recommended-bump --preset angular --verbose',
-    confirm({ no: Error() })
+  $precommit: [
+    !vars.commit && Error(`Commit by running 'kpo commit'`),
+    kpo`validate`
   ],
+  prepublishOnly: Error(`Run 'kpo release'`),
+  preversion: !vars.semantic && Error(`Run 'kpo semantic'`),
   version: [
-    'kpo changelog',
-    project.release.docs && 'kpo docs',
-    project.release.build && 'kpo build',
+    kpo`preversion`,
+    kpo`changelog`,
+    project.release.build && kpo`build`,
+    project.release.docs && kpo`docs`,
     'git add .'
   ]
 };
@@ -113,7 +126,7 @@ function verify(...arr) {
 
 function extensions() {
   return (project.typescript ? project.ext.ts.split(',') : [])
-    .concat(project.ext.js)
+    .concat(project.ext.js.split(','))
     .filter(Boolean)
     .join(',');
 }
