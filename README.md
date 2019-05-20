@@ -56,7 +56,7 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 * Modify your project info (name, description, keywords, author, repo...) @ `package.json`.
 * Modify `LICENSE` & `README.md`
 * Project config @ `project.config.js`
-* Tasks @ `package-scripts.js`
+* Tasks @ `kpo.scripts.js`
 
 ### Running tasks
 
@@ -77,7 +77,3 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 * **TypeScript:**
   * Even though *TypeScript* files are transpiled with *Babel,* you should keep in mind they are still type-checked and linted in accordance to the *TypeScript* specification, which means that custom babel transforms that conflict with it might produce errors.
   * As *TypeScript* is transpiled with *Babel,* [there are a couple things to keep in mind regarding `namespace`, `const enum` and `export =` / `import =` usage.](https://babeljs.io/docs/en/babel-plugin-transform-typescript)
-
-## Known issues
-
-* **Git hooks on Windows:** There's currently an issue with [`husky`'s](https://github.com/typicode/husky) `stdin` support on Windows. As interactivity on hooks was only available on `husky@1.3.0`, that version is locked on `package.json`. However, if [you experience hooks hanging on Windows](https://github.com/typicode/husky/issues/431), you should update husky's version to disable `stdin` support [until another solution is available.](https://github.com/typicode/husky/issues/442)
