@@ -3,8 +3,7 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "@static/*": ["public/static/*"]
+      "~/*": ["src/*"]
     }
   }
 }

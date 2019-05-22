@@ -128,36 +128,29 @@ module.exports = {
     // Provides context to not found errors
     new ModuleNotFoundPlugin(project.get('paths.root')),
     // Copy assets
-    new CopyWebpackPlugin(
-      (() => {
-        const getRelative = (file) => {
-          file = path.resolve(file);
-          const assets = path.resolve(project.get('paths.assets'));
-          const split = (path.parse(file).dir + '/').split(assets + '/');
-          return split.length > 1 && !split[0]
-            ? path.join(
-                split.slice(1).join(assets + '/'),
-                path.parse(file).base
-              )
-            : null;
-        };
-        return [
-          {
-            context: project.get('paths.assets'),
-            from: '*',
-            to: project.get('paths.output'),
-            // Adds template relative to assets path to ignore IF
-            // it's within that path
-            ignore: [].concat(getRelative(project.get('paths.template')) || [])
-          },
-          {
-            context: project.get('paths.assets'),
-            from: '*/**/*',
-            to: project.get('paths.output')
-          }
-        ];
-      })()
-    ),
+    new CopyWebpackPlugin([
+      {
+        context: project.get('paths.assets'),
+        from: '*',
+        to: project.get('paths.output'),
+        // Adds template relative to assets path to ignore IF
+        // it's within that path
+        ignore:
+          path
+            .relative(
+              project.get('paths.assets'),
+              project.get('paths.template')
+            )
+            .slice(0, 2) === '..'
+            ? []
+            : [project.get('paths.template')]
+      },
+      {
+        context: project.get('paths.assets'),
+        from: '*/**/*',
+        to: project.get('paths.output')
+      }
+    ]),
     // Generate assets manifest
     new ManifestPlugin({
       fileName: 'asset-manifest.json',

@@ -1,12 +1,12 @@
-const { requireEnv } = require('slimconf');
 const mergewith = require('lodash.mergewith');
-const defaults = require('./scripts/webpack/defaults');
-const development = require('./scripts/webpack/development');
-const production = require('./scripts/webpack/production');
+const defaults = require('./setup/webpack/defaults');
+const development = require('./setup/webpack/development');
+const production = require('./setup/webpack/production');
 const project = require('./project.config.js');
+const { envs } = require('slimconf');
 
 // Require
-requireEnv(...project.get('env.require'));
+envs.assert(...project.get('env.require'));
 
 module.exports = mergewith(
   process.env.NODE_ENV === 'production' ? production : development,

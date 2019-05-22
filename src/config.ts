@@ -1,24 +1,20 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import slim from 'slimconf';
+import slim, { fallback, IUse } from 'slimconf';
 import { levels as loglevels } from 'loglevel';
 
-const setup = {
-  env: {
-    from: process.env.NODE_ENV,
-    map: (env: string) =>
-      env === 'production' || env === 'development' ? env : 'test'
-  }
+const use: IUse = {
+  env: [process.env.NODE_ENV, fallback('development', ['production', 'test'])]
 };
 
-export default slim(setup, ({ env }, on) => ({
+export default slim(use, (on, { env }) => ({
   env,
   publicUrl: process.env.PUBLIC_URL || './',
   logger: on.env({
-    default: loglevels.WARN,
+    defaults: loglevels.WARN,
     development: loglevels.TRACE
   }),
   serviceWorker: on.env({
-    default: false,
+    defaults: false,
     production: true
   }),
   manifest: {
