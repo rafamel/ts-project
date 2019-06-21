@@ -10,7 +10,7 @@ module.exports = function cra(...args) {
     );
     await promisify(fs.writeFile)(file, 'module.exports = function () {};');
 
-    await series.fn('react-scripts', {
+    await series.fn('craco', {
       env: define,
       args: (args || []).concat(inner)
     });
