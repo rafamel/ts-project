@@ -79,7 +79,6 @@
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-restricted-globals": "^0.2.0",
-    "husky": "^2.4.1",
     "kpo": "^0.11.0",
     "markdownlint-cli": "^0.17.0",
     "node-sass": "^4.12.0",
@@ -106,11 +105,6 @@
     "react-dom": "^16.8.6",
     "react-transition-group": "^4.1.1",
     "slimconf": "^0.9.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "kpo precommit"
-    }
   },
   "config": {
     "commitizen": {
