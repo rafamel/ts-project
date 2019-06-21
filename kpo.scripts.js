@@ -1,36 +1,27 @@
-const hook = require('./setup/hook');
-hook();
-
-const { series, parallel, line, log, kpo } = require('kpo');
+const { line, kpo, series } = require('kpo');
 const { scripts, options } = require('./setup/project/kpo.scripts');
-const project = require('./project.config');
+const cra = require('./setup/cra');
 
 module.exports.options = options;
 module.exports.scripts = {
   ...scripts,
   build: {
-    default: kpo`validate build.pack`,
-    pack: series.env('webpack', { NODE_ENV: 'production' })
+    default: kpo`validate build.force`,
+    force: {
+      default: series.env('kpo build.force.task', { PUBLIC_URL: '/' }),
+      $task: cra('build')
+    }
   },
   serve: {
-    default: `serve ${project.get('paths.output')} -l 8080`,
+    default: `serve ./build -l 8080`,
     json: `json-server ./setup/mock-db.json -p 3333 -w`
   },
-  analyze: line`source-map-explorer 
-    ${project.get('paths.output')}/main.*.js --only-mapped`,
-  watch: {
-    default: parallel(
-      [
-        'webpack-dev-server',
-        'onchange ./src --initial --kill -- kpo watch.task'
-      ],
-      {
-        names: ['webpack', 'lint'],
-        colors: ['blue', 'yellow'],
-        env: { NODE_ENV: 'development' }
-      }
-    ),
-    $task: [log`\x1Bc⚡`, kpo`lint types`]
+  analyze: line`source-map-explorer build/static/js/*.js --only-mapped`,
+  watch: cra('start'),
+  test: {
+    ...scripts.test,
+    force: cra('test', '--watchAll=false'),
+    watch: cra('test')
   },
   release: [],
   docs: []

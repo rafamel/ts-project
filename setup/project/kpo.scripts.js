@@ -1,12 +1,11 @@
 // prettier-ignore
 const { series, parallel, ensure, line, json, log, confirm, rm, remove, kpo, silent, copy, glob } = require('kpo');
 const path = require('path');
-const bump = require('conventional-recommended-bump');
 const { promisify } = require('util');
 const project = require('./project.config');
 
-// prettier-ignore
-verify('esnext', 'typescript', 'ext.js', 'ext.ts', 'paths.docs', 'release.build', 'release.docs');
+verify('esnext', 'typescript', 'ext.js', 'ext.ts');
+verify('paths.docs', 'release.build', 'release.docs');
 const vars = {
   semantic: !!process.env.SEMANTIC,
   commit: !!process.env.COMMITIZEN || !!process.env.SEMANTIC,
@@ -17,37 +16,33 @@ const vars = {
 module.exports.scripts = {
   start: kpo`watch`,
   build: {
-    default: [
-      kpo`validate`,
-      series.env('kpo build.pack', { NODE_ENV: 'production' })
-    ],
-    pack: kpo`build.prepare build.node build.esnext build.types`,
-    $prepare: [
-      [rm`pkg`, ensure`pkg`],
-      copy(['README.md', 'LICENSE', 'CHANGELOG.md'], { to: 'pkg' }),
-      json('./package.json', './pkg/package.json', ({ json }) => ({
-        ...json,
-        scripts: undefined,
-        files: ['dist-*/'],
-        main: 'dist-node/index.js',
-        esnext: project.esnext ? 'dist-src/index.js' : undefined,
-        types: project.typescript ? 'dist-types/index.d.ts' : undefined
-      }))
+    default: series.env('kpo validate build.force', { NODE_ENV: 'production' }),
+    force: kpo`build.pack build.node build.types`,
+    $pack: [
+      [rm`pkg`, ensure`pkg`, series.env('pack build', { ESNEXT: '#' })],
+      json('./pkg/package.json', ({ json }) => {
+        const fail = project.esnext
+          ? !json.esnext || !json.module
+          : json.esnext || json.module;
+        if (fail) throw Error(`Bad @pika/pack configuration for esnext`);
+        return {
+          ...json,
+          main: 'dist-node/index.js',
+          types: project.typescript ? 'dist-types/index.d.ts' : undefined
+        };
+      })
     ],
     $node: series(
       'babel ./src --out-dir ./pkg/dist-node --source-maps inline',
       { args: ['--extensions', vars.dotExt] }
     ),
-    $esnext: project.esnext && [
-      series.env('standard-pkg --src src/ --dist pkg/dist-src', { ESNEXT: '#' })
-    ],
     $types: project.typescript && [
       `ttsc --project ttsconfig.json --outDir ./pkg/dist-types/`,
       copy(glob`./src/**/*.d.ts`, { from: 'src', to: 'pkg/dist-types' })
     ]
   },
   commit: series.env('git-cz', { COMMITIZEN: '#' }),
-  semantic: ([type]) =>
+  semantic: ([type], bump = require('conventional-recommended-bump')) =>
     promisify(bump)({ preset: 'angular' }).then(({ reason, releaseType }) => {
       type ? log.fn`\nVersion bump: ${type}` : log.fn``;
       log.fn`Recommended version bump: ${releaseType}\n    ${reason}`;
@@ -68,7 +63,7 @@ module.exports.scripts = {
     default: 'onchange ./src --initial --kill -- kpo watch.task',
     $task: [
       log`\x1Bc⚡`,
-      parallel(['kpo build.pack', 'kpo lint types'], {
+      parallel(['kpo build.force', 'kpo lint types'], {
         names: ['build', 'lint'],
         colors: ['blue', 'yellow']
       })
@@ -87,7 +82,7 @@ module.exports.scripts = {
     scripts: kpo`:raise --dry --fail`
   },
   test: {
-    default: kpo`lint types test.force`,
+    default: [series('kpo lint types', { args: [] }), kpo`test.force`],
     force: series.env('jest', { NODE_ENV: 'test' }),
     watch: {
       default: 'onchange ./{src,test} --initial --kill -- kpo test.watch.task',
@@ -105,7 +100,7 @@ module.exports.scripts = {
   clean: {
     default: kpo`clean.top clean.modules`,
     top: remove(
-      [`./pkg`, `${project.paths.docs}`, `./coverage`, `CHANGELOG.md`],
+      [`pkg`, 'build', `${project.paths.docs}`, `coverage`, `CHANGELOG.md`],
       { confirm: true }
     ),
     modules: remove('./node_modules', { confirm: true })
@@ -131,8 +126,9 @@ function verify(...arr) {
 }
 
 function extensions() {
-  return (project.typescript ? project.ext.ts.split(',') : [])
-    .concat(project.ext.js.split(','))
+  return project.ext.js
+    .split(',')
+    .concat(project.typescript ? project.ext.ts.split(',') : [])
     .filter(Boolean)
     .join(',');
 }
