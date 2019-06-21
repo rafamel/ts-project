@@ -1,0 +1,126 @@
+{
+  "name": "ts-react",
+  "version": "0.0.0",
+  "author": "Rafa Mel",
+  "description": "A bells & whistles React boilerplate with TypeScript support",
+  "keywords": [],
+  "private": true,
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "start": "kpo start --",
+    "build": "kpo build --",
+    "build.force": "kpo build.force --",
+    "commit": "kpo commit --",
+    "semantic": "kpo semantic --",
+    "release": "kpo release --",
+    "watch": "kpo watch --",
+    "fix": "kpo fix --",
+    "fix.format": "kpo fix.format --",
+    "fix.scripts": "kpo fix.scripts --",
+    "types": "kpo types --",
+    "lint": "kpo lint --",
+    "lint.md": "kpo lint.md --",
+    "lint.scripts": "kpo lint.scripts --",
+    "test": "kpo test --",
+    "test.force": "kpo test.force --",
+    "test.watch": "kpo test.watch --",
+    "validate": "kpo validate --",
+    "docs": "kpo docs --",
+    "changelog": "kpo changelog --",
+    "update": "kpo update --",
+    "outdated": "kpo outdated --",
+    "clean": "kpo clean --",
+    "clean.top": "kpo clean.top --",
+    "clean.modules": "kpo clean.modules --",
+    "prepublishOnly": "kpo prepublishOnly --",
+    "preversion": "kpo preversion --",
+    "version": "kpo version --",
+    "serve": "kpo serve --",
+    "analyze": "kpo analyze --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/ts-react",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/ts-react"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/ts-react/issues"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-import-meta": "^7.2.0",
+    "@craco/craco": "^5.2.3",
+    "@types/jest": "^24.0.15",
+    "@types/loglevel": "^1.5.4",
+    "@types/react": "^16.8.22",
+    "@types/react-dom": "^16.8.4",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "commitizen": "^3.1.1",
+    "conventional-changelog-cli": "^2.0.21",
+    "conventional-recommended-bump": "^5.0.0",
+    "coveralls": "^3.0.4",
+    "cz-conventional-changelog": "^2.1.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.3.5",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^5.0.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^22.7.0",
+    "eslint-plugin-node": "^9.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-restricted-globals": "^0.2.0",
+    "kpo": "^0.11.0",
+    "markdownlint-cli": "^0.17.0",
+    "node-sass": "^4.12.0",
+    "onchange": "^6.0.0",
+    "prettier": "^1.18.2",
+    "react-scripts": "^3.0.1",
+    "serve": "^11.0.2",
+    "source-map-explorer": "^2.0.1",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.10",
+    "@material-ui/core": "^4.1.1",
+    "@material-ui/icons": "^4.2.0",
+    "@material-ui/styles": "^4.1.1",
+    "emotion": "^10.0.9",
+    "loglevel": "^1.6.3",
+    "mobx": "^5.10.1",
+    "mobx-react": "^5.4.4",
+    "mobx-state-tree": "^3.14.0",
+    "normalize.css": "^8.0.1",
+    "promist": "^0.7.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-transition-group": "^4.1.1",
+    "slimconf": "^0.9.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
