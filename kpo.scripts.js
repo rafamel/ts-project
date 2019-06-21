@@ -12,10 +12,7 @@ module.exports.scripts = {
       $task: cra('build')
     }
   },
-  serve: {
-    default: `serve ./build -l 8080`,
-    json: `json-server ./setup/mock-db.json -p 3333 -w`
-  },
+  serve: `serve ./build -l 8080`,
   analyze: line`source-map-explorer build/static/js/*.js --only-mapped`,
   watch: cra('start'),
   test: {
