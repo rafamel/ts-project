@@ -1,9 +1,9 @@
-const globals = require('eslint-restricted-globals');
 const { configs: ts } = require('@typescript-eslint/eslint-plugin');
 const project = require('./project.config');
+const path = require('path');
 
 const prettier = require('./.prettierrc');
-const babel = require('./.babelrc');
+const babel = require(path.join(project.get('paths.root'), '.babelrc'));
 const aliases =
   babel &&
   babel.plugins &&
@@ -36,8 +36,6 @@ module.exports = {
     'no-unused-vars': 1,
     'no-console': 1,
     /* ERRORS */
-    // Add custom globals
-    'no-restricted-globals': [2, 'fetch'].concat(globals),
     // Prettier
     'prettier/prettier': [2, prettier]
   },
