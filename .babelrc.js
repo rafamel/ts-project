@@ -1,10 +1,5 @@
-const project = require('./project.config');
-
 module.exports = {
-  presets: [
-    ['react-app', { typescript: project.get('typescript') }],
-    '@emotion/babel-preset-css-prop'
-  ].filter(Boolean),
+  presets: ['react-app'],
   plugins: [
     [
       'babel-plugin-module-resolver',
@@ -16,6 +11,5 @@ module.exports = {
       }
     ],
     '@babel/plugin-syntax-import-meta'
-  ],
-  ignore: ['**/*.d.ts']
+  ]
 };
