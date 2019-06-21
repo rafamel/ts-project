@@ -1,5 +1,5 @@
 {
-  "name": "ts-project",
+  "name": "lib-starter",
   "version": "0.0.0",
   "author": "Rafa Mel",
   "description": "A bells & whistles setup for any TS/JS project",
@@ -44,13 +44,13 @@
     "version": "kpo version --"
   },
   "license": "MIT",
-  "homepage": "https://github.com/rafamel/ts-project",
+  "homepage": "https://github.com/rafamel/lib-starter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafamel/ts-project"
+    "url": "https://github.com/rafamel/lib-starter"
   },
   "bugs": {
-    "url": "https://github.com/rafamel/ts-project/issues"
+    "url": "https://github.com/rafamel/lib-starter/issues"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -91,7 +91,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "husky": "^2.3.0",
     "jest-cli": "^24.8.0",
-    "kpo": "^0.8.0",
+    "kpo": "^0.9.0",
     "markdownlint-cli": "^0.16.0",
     "onchange": "^6.0.0",
     "prettier": "^1.17.1",
