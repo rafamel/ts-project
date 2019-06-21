@@ -1,15 +1,9 @@
-// Shims/Polyfills
-import '@babel/polyfill';
-// import 'whatwg-fetch';
-
 // Fonts & Styles
-// import 'typeface-roboto'; // TODO
-import 'normalize.css';
 
 // React and SW
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from '~/containers/App';
+import App from '~/App';
 import sw from '~/utils/sw';
 
 // Config & HMR
