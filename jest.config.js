@@ -13,6 +13,7 @@ module.exports = {
   modulePathIgnorePatterns: [
     '.*\\.d\\.ts$',
     '<rootDir>/pkg',
+    '<rootDir>/dist',
     '<rootDir>/src/@types',
     '<rootDir>/src/.*/__mocks__'
   ],
