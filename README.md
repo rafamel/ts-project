@@ -1,4 +1,4 @@
-# React Boilerplate
+# react-starter
 
 <!-- [![Build Status](https://img.shields.io/travis/rafamel/ts-react/master.svg)](https://travis-ci.org/rafamel/ts-react)
 [![Coverage](https://img.shields.io/coveralls/rafamel/ts-react/master.svg)](https://coveralls.io/github/rafamel/ts-react)
@@ -23,10 +23,11 @@ If you find it useful, consider [starring the project](https://github.com/rafame
 
 ## Features
 
+* Uses [`react-scripts`](https://github.com/facebook/create-react-app/) with [`craco`](https://github.com/sharegate/craco) overrides under the hood.
 * Bundling: [Webpack 4](https://webpack.js.org/)
-* Transpiling: [Babel 7](https://babeljs.io/), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript)
+* Transpiling: [Babel 7](https://babeljs.io/)
 * Tests: [Jest](https://jestjs.io/), [Enzyme](https://airbnb.io/enzyme/)
-* Linting: [ESLint](https://github.com/eslint/eslint), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli)
+* Linting: [ESLint](https://github.com/eslint/eslint), [TypeScript 3](https://en.wikipedia.org/wiki/TypeScript), [Prettier](https://github.com/prettier/prettier), [`markdownlint-cli`](https://github.com/igorshubovych/markdownlint-cli)
 * Tasks: [`kpo`](https://github.com/rafamel/kpo), [`onchange`](https://github.com/Qard/onchange)
 * Commits: [`commitizen`](https://github.com/commitizen/cz-cli), [`husky`](https://github.com/typicode/husky)
 * Docs: [`conventional-changelog`](https://github.com/conventional-changelog)
