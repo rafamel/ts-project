@@ -1,4 +1,7 @@
 import React from 'react';
+import TopBar from './segments/TopBar';
+import Footer from '~/segments/Footer';
+import Home from './pages/Home';
 import { variable, mui } from './theme';
 import { injectGlobal } from 'emotion';
 import LoadFadeIn from './components/LoadFadeIn';
@@ -18,7 +21,11 @@ function App(): JSX.Element {
       <MuiThemeProvider theme={mui}>
         <LoadingBar active={store.loading.isLoading} />
         <LoadFadeIn onLoad={store.loading.ends}>
-          <div>React starter</div>
+          <>
+            <TopBar />
+            <Home />
+            <Footer />
+          </>
         </LoadFadeIn>
       </MuiThemeProvider>
     </StylesProvider>
