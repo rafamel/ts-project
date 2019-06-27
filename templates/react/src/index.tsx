@@ -1,16 +1,19 @@
-// Fonts & Styles
+/* Fonts & Styles */
+import './styles/index.scss';
 
-// React and SW
+/* React and SW */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '~/App';
 import sw from '~/utils/sw';
 
-// Config & HMR
+/* Config and utils */
 import config from '~/config';
 import logger from '~/utils/logger';
 
-// Render
+/* Services */
+
+/* Render */
 config.get('serviceWorker') ? sw.register() : sw.unregister();
 ReactDOM.render(<App />, document.getElementById('root'));
 
