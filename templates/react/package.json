@@ -64,6 +64,7 @@
     "conventional-recommended-bump": "^5.0.0",
     "coveralls": "^3.0.4",
     "cz-conventional-changelog": "^2.1.0",
+    "decamelize": "^3.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.3.5",
@@ -95,16 +96,19 @@
     "@material-ui/icons": "^4.2.0",
     "@material-ui/styles": "^4.1.1",
     "emotion": "^10.0.9",
+    "google-fonts": "^1.0.0",
     "loglevel": "^1.6.3",
     "mobx": "^5.10.1",
     "mobx-react": "^5.4.4",
     "mobx-state-tree": "^3.14.0",
     "normalize.css": "^8.0.1",
+    "polished": "^3.4.1",
     "promist": "^0.7.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-transition-group": "^4.1.1",
-    "slimconf": "^0.9.1"
+    "slimconf": "^0.9.1",
+    "variable-theming": "^1.0.0"
   },
   "config": {
     "commitizen": {
