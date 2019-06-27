@@ -7,7 +7,7 @@ const values = {
 };
 
 export default t
-  .model({
+  .model('loading', {
     calls: t.number
   })
   .views((self) => ({

@@ -7,7 +7,7 @@ const values = {
 };
 
 export default t
-  .model({
+  .model('alerts', {
     errorQueue: t.array(t.string),
     warningQueue: t.array(t.string),
     notificationQueue: t.array(t.string)
