@@ -121,6 +121,7 @@
     "babel-jest": "24.x",
     "jest-cli": "24.x",
     "kpo": "^0.11.0",
+    "prettier": "1.x",
     "typescript": "3.x"
   },
   "config": {

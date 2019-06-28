@@ -1,0 +1,27 @@
+{
+  "name": "@riseup/root",
+  "version": "0.0.0",
+  "author": "Rafa Mel",
+  "description": "Riseup monorepo",
+  "keywords": [],
+  "private": true,
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {},
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.3",
+    "kpo": "^0.11.0",
+    "lerna": "^3.15.0"
+  },
+  "dependencies": {}
+}
