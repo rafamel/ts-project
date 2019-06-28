@@ -91,6 +91,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "@1natsu/handy-media-query": "^1.0.2",
     "@emotion/core": "^10.0.10",
     "@material-ui/core": "^4.1.1",
     "@material-ui/icons": "^4.2.0",
