@@ -109,6 +109,7 @@
   },
   "dependencies": {
     "@riseup/common": "^0.0.0",
+    "fs-extra": "^8.0.1",
     "merge-strategies": "^0.1.2",
     "slimconf": "^0.9.1",
     "utility-types": "^3.7.0"
