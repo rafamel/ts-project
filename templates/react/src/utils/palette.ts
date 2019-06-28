@@ -25,7 +25,7 @@ export default function palette<T extends IOfType<Partial<IPalette>>>(
   define: T
 ): { [P in keyof T]: IExtendedPalette } {
   const entries = Object.entries(define);
-  const response: Partial<{ [P in keyof T]: IExtendedPalette }> = {};
+  const response: { [P in keyof T]?: IExtendedPalette } = {};
 
   for (let [name, palette] of entries) {
     const main = palette.main || '#fafafa';
