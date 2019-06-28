@@ -108,6 +108,7 @@
     "find-up": "^4.0.0",
     "fs-extra": "^8.0.1",
     "merge-strategies": "^0.1.2",
+    "resolve-from": "^5.0.0",
     "slimconf": "^0.9.1",
     "ts-node": "^8.2.0",
     "ttypescript": "^1.5.7",

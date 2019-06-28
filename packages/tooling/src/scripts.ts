@@ -40,6 +40,7 @@ export default function getScripts(
         env,
         args: [
           './src',
+          ...['--config-file', require.resolve('./configure/babel')],
           ...['--out-dir', options.paths.build],
           ...['--source-maps', 'inline'],
           ...['--extensions', vars.dotcomma],
@@ -87,7 +88,12 @@ export default function getScripts(
     'lint:code': () => (args = []) => [
       bin('eslint', 'eslint', {
         env,
-        args: [...['./src', './test'], ...['--ext', vars.dotcomma], ...args]
+        args: [
+          ...['./src', './test'],
+          ...['--config', require.resolve('./configure/eslint')],
+          ...['--ext', vars.dotcomma],
+          ...args
+        ]
       })
     ],
     'lint:types': () => (args = []) => [
@@ -99,7 +105,11 @@ export default function getScripts(
     test: () => (args = []) => [
       bin('jest-cli', 'jest', {
         env: { ...env, NODE_ENV: 'test' },
-        args: [...['--rootDir', './'], ...args]
+        args: [
+          ...['--config', require.resolve('./configure/jest')],
+          ...['--rootDir', './'],
+          ...args
+        ]
       })
     ],
     validate: function() {
@@ -116,7 +126,12 @@ export default function getScripts(
             rm(paths.docs),
             bin('typedoc', 'typedoc', {
               env,
-              args: ['./src', ...['--out', paths.docs], ...args]
+              args: [
+                './src',
+                ...['--out', paths.docs],
+                ...['--options', require.resolve('./configure/typedoc')],
+                ...args
+              ]
             })
           ]
         : log`Skipped typedoc build`
