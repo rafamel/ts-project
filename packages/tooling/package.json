@@ -116,6 +116,8 @@
   "peerDependencies": {
     "@babel/cli": "7.x",
     "babel-eslint": "10.x",
+    "babel-jest": "24.x",
+    "jest-cli": "24.x",
     "kpo": "^0.11.0"
   },
   "config": {
