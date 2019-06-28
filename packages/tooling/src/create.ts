@@ -2,7 +2,7 @@ import slim from 'slimconf';
 import { IProjectTooling, IOptionsTooling } from './types';
 import withDefaults from './defaults';
 import commonCreate from '@riseup/common';
-import { getBabel, getEslint, getJest } from './presets';
+import { getBabel, getEslint, getJest, getTypedoc } from './presets';
 import { extend } from './utils';
 import getScripts from './scripts';
 
@@ -17,6 +17,6 @@ export default function create(options: IOptionsTooling = {}): IProjectTooling {
     babel: extend(getBabel(defaults.tooling), defaults.tooling.extend.babel),
     eslint: extend(getEslint(defaults.tooling), defaults.tooling.extend.eslint),
     jest: extend(getJest(defaults.tooling), defaults.tooling.extend.jest),
-    typedoc: extend({} as any, defaults.tooling.extend.typedoc)
+    typedoc: extend(getTypedoc(common.package), defaults.tooling.extend.typedoc)
   };
 }
