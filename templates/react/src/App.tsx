@@ -9,14 +9,12 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { StylesProvider } from '@material-ui/styles';
 import store from './store';
 import LoadingBar from './components/LoadingBar';
-import { observer } from 'mobx-react';
+import { useObserver } from 'mobx-react-lite';
 
 injectGlobal({ ':root': variable.styles });
 
-export default observer(App);
-
-function App(): JSX.Element {
-  return (
+export default function App(): JSX.Element {
+  return useObserver(() => (
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={mui}>
         <LoadingBar active={store.loading.isLoading} />
@@ -29,5 +27,5 @@ function App(): JSX.Element {
         </LoadFadeIn>
       </MuiThemeProvider>
     </StylesProvider>
-  );
+  ));
 }
