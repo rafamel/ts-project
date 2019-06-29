@@ -4,11 +4,12 @@ import { IProjectReact, IOptionsReact } from './types';
 import toolingCreate, { extend } from '@riseup/tooling';
 import getScripts from './scripts';
 import slim from 'slimconf';
+import { getBabel } from './presets';
 import withDefaults from './defaults';
 
 export default function create(options: IOptionsReact = {}): IProjectReact {
   const pre = withDefaults(options);
-  const babel = {};
+  const babel = getBabel(pre.react);
   const eslint = {};
   const jest = {};
 

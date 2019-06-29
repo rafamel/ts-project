@@ -103,8 +103,10 @@
     "typescript": "3.4.5"
   },
   "dependencies": {
+    "@babel/plugin-syntax-import-meta": "^7.2.0",
     "@riseup/common": "^0.0.0",
     "@riseup/tooling": "^0.0.0",
+    "babel-plugin-module-resolver": "^3.2.0",
     "decamelize": "^3.2.0",
     "fs-extra": "^8.1.0",
     "merge-strategies": "^0.1.2",
@@ -116,6 +118,7 @@
   },
   "peerDependencies": {
     "@craco/craco": "^5.2.3",
+    "babel-preset-react-app": "^9.x",
     "kpo": "^0.11.0",
     "react-scripts": "^3.0.1"
   },
