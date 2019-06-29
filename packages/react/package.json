@@ -101,7 +101,9 @@
     "markdownlint-cli": "^0.16.0"
   },
   "dependencies": {
+    "@riseup/common": "^0.0.0",
     "@riseup/tooling": "^0.0.0",
+    "merge-strategies": "^0.1.2",
     "slimconf": "^0.9.1",
     "utility-types": "^3.7.0"
   },
