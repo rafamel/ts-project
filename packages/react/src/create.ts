@@ -4,7 +4,7 @@ import { IProjectReact, IOptionsReact } from './types';
 import toolingCreate, { extend } from '@riseup/tooling';
 import getScripts from './scripts';
 import slim from 'slimconf';
-import { getBabel, getEslint, getJest } from './presets';
+import { getBabel, getEslint, getJest, getCraco } from './presets';
 import withDefaults from './defaults';
 
 export default function create(options: IOptionsReact = {}): IProjectReact {
@@ -42,6 +42,6 @@ export default function create(options: IOptionsReact = {}): IProjectReact {
     ...tooling,
     options: slim(defaults.react),
     scripts: getScripts(tooling, defaults.react),
-    craco: {}
+    craco: getCraco(defaults.react, tooling)
   };
 }
