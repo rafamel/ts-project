@@ -11,6 +11,9 @@
     "riseup",
     "react"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=8"
   },

@@ -2,8 +2,9 @@
   "name": "@riseup/tooling",
   "version": "0.0.0",
   "author": "Rafa Mel",
-  "description": "A set of @riseup shared tooling presets",
+  "description": "A set of riseup shared tooling presets",
   "keywords": [
+    "presets",
     "starter",
     "boilerplate",
     "config",
@@ -16,6 +17,9 @@
     "typescript",
     "typedoc"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=8"
   },

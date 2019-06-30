@@ -12,6 +12,9 @@
     "library",
     "module"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=8"
   },
