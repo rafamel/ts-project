@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@riseup/monorepo": "0.0.1",
-    "coveralls": "^3.0.3",
     "kpo": "^0.11.0",
     "lerna": "^3.15.0"
   },
