@@ -1,19 +1,19 @@
 # react-starter
 
-<!-- [![Build Status](https://img.shields.io/travis/rafamel/ts-react/master.svg)](https://travis-ci.org/rafamel/ts-react)
-[![Coverage](https://img.shields.io/coveralls/rafamel/ts-react/master.svg)](https://coveralls.io/github/rafamel/ts-react)
-[![Dependencies](https://img.shields.io/david/rafamel/ts-react.svg)](https://david-dm.org/rafamel/ts-react)
-[![License](https://img.shields.io/github/license/rafamel/ts-react.svg)](https://github.com/rafamel/ts-react/blob/master/LICENSE) -->
+<!-- [![Build Status](https://img.shields.io/travis/rafamel/react-starter/master.svg)](https://travis-ci.org/rafamel/react-starter)
+[![Coverage](https://img.shields.io/coveralls/rafamel/react-starter/master.svg)](https://coveralls.io/github/rafamel/react-starter)
+[![Dependencies](https://img.shields.io/david/rafamel/react-starter.svg)](https://david-dm.org/rafamel/react-starter)
+[![License](https://img.shields.io/github/license/rafamel/react-starter.svg)](https://github.com/rafamel/react-starter/blob/master/LICENSE)
 
-> A bells & whistles React boilerplate with TypeScript support.
+> A bells & whistles riseup based library starter.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/ts-react) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
+If you find it useful, consider [starring the project](https://github.com/rafamel/react-starter) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way! -->
 
 ## Stack
 
-* Store: *MobX* & *MST*
-* Styles: *Emotion 10*
 * Design: *Material UI*
+* Store: *MobX* & *MST*
+* Styles: *Emotion*
 * Logs: *loglevel*
 
 ### More greatness
