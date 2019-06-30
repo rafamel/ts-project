@@ -8,7 +8,30 @@
   "engines": {
     "node": ">=8"
   },
-  "scripts": {},
+  "scripts": {
+    "commit": "kpo commit --",
+    "semantic": "kpo semantic --",
+    "fix": "kpo fix --",
+    "fix:scripts": "kpo fix:scripts --",
+    "lint": "kpo lint --",
+    "lint:md": "kpo lint:md --",
+    "lint:scripts": "kpo lint:scripts --",
+    "clean": "kpo clean --",
+    "clean:build": "kpo clean:build --",
+    "clean:modules": "kpo clean:modules --",
+    "precommit": "kpo precommit --",
+    "prepublishOnly": "kpo prepublishOnly --",
+    "preversion": "kpo preversion --",
+    "version": "kpo version --",
+    "release": "kpo release --",
+    "test": "kpo test --",
+    "test:coverage": "kpo test:coverage --",
+    "validate": "kpo validate --",
+    "bootstrap": "kpo bootstrap --",
+    "link": "kpo link --",
+    "build": "kpo build --",
+    "postinstall": "kpo postinstall --"
+  },
   "license": "MIT",
   "homepage": "https://github.com/rafamel/riseup",
   "repository": {
@@ -19,9 +42,16 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "devDependencies": {
+    "@riseup/monorepo": "0.0.1",
     "coveralls": "^3.0.3",
+    "husky": "^2.4.1",
     "kpo": "^0.11.0",
     "lerna": "^3.15.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "kpo precommit"
+    }
+  }
 }

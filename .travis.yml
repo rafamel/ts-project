@@ -4,4 +4,4 @@ node_js:
 script:
   - npm run validate
 after_success:
-  - coveralls < coverage/lcov.info
+  - coveralls < packages/coverage/lcov.info
