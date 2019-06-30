@@ -32,6 +32,7 @@ module.exports.scripts = {
         if (fail) throw Error(`Bad @pika/pack configuration for esnext`);
         return {
           ...json,
+          files: json.files.concat(['dist/', 'static/']),
           main: 'dist/index.js',
           types: project.typescript ? 'dist/index.d.ts' : undefined
         };
