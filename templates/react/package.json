@@ -57,6 +57,7 @@
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
     "@types/react-transition-group": "^2.9.1",
+    "caprover": "^1.2.0",
     "coveralls": "^3.0.4",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.1",
@@ -67,7 +68,8 @@
     "node-sass": "^4.12.0",
     "postcss-functions": "^3.0.0",
     "prettier": "^1.18.2",
-    "react-scripts": "^3.0.1"
+    "react-scripts": "^3.0.1",
+    "tarjs-cli": "^0.4.1"
   },
   "dependencies": {
     "@1natsu/handy-media-query": "^1.0.2",
