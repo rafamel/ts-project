@@ -84,6 +84,7 @@
     "promist": "^0.7.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-script-hook": "^1.0.9",
     "react-transition-group": "^4.1.0",
     "slimconf": "^0.9.1",
     "variable-theming": "^1.0.0"
