@@ -8,11 +8,11 @@ export default slim(
     env,
     publicUrl: envs.get('PUBLIC_URL'),
     logger: on.env({
-      defaults: levels.WARN,
+      default: levels.WARN,
       development: levels.TRACE
     }),
     serviceWorker: on.env({
-      defaults: false,
+      default: false,
       production: true
     }),
     manifest: {
