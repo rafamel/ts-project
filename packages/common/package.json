@@ -63,7 +63,7 @@
     "conventional-recommended-bump": "^5.0.0",
     "find-up": "^4.1.0",
     "fs-extra": "^8.0.1",
-    "markdownlint-cli": "^0.16.0",
+    "markdownlint-cli": "^0.17.0",
     "merge-strategies": "^0.1.2",
     "slimconf": "^0.9.1",
     "utility-types": "^3.7.0"
