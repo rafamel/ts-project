@@ -64,7 +64,7 @@
     "@riseup/tooling": "^0.0.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.0",
-    "slimconf": "^0.9.1",
+    "slimconf": "^0.10.0",
     "utility-types": "^3.7.0"
   },
   "devDependencies": {
