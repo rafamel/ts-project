@@ -4,7 +4,7 @@ module.exports = {
       ...pkg,
       devDependencies: {
         ...pkg.devDependencies,
-        husky: '^2.4.1',
+        husky: '^3.0.0',
         coveralls: '^3.0.4'
       },
       husky: {
