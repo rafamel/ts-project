@@ -1,7 +1,7 @@
 import { DeepRequired } from 'utility-types';
 import { bin, ENV_RELEASE } from '@riseup/common';
 import { IOptionsLibrary, IScriptsLibrary } from '~/types';
-import { IScriptsTooling } from '@riseup/tooling';
+import { IScriptsTooling, ENV_BABEL_ESNEXT } from '@riseup/tooling';
 import { rm, ensure, copy, json, series, read, confirm } from 'kpo';
 
 export default function getScripts(
@@ -31,6 +31,7 @@ export default function getScripts(
         throw Error(`Pack requires file .babelrc.js to exist at project root`);
       }),
       bin('@pika/pack', 'pack', {
+        env: { [ENV_BABEL_ESNEXT]: '#' },
         args: ['build', '--out', paths.build, ...args]
       })
     ],
