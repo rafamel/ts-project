@@ -22,7 +22,6 @@ module.exports.scripts = {
       scripts['clean:modules'].bind(this)
     ];
   },
-  preversion: kpo`:stream lint`,
   validate: function() {
     return [
       scripts.validate.bind(this),
