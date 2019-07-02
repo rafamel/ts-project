@@ -1,6 +1,6 @@
 {
   "name": "@riseup/react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Rafa Mel",
   "description": "riseup presets for react",
   "keywords": [
@@ -60,8 +60,8 @@
   },
   "dependencies": {
     "@babel/plugin-syntax-import-meta": "^7.2.0",
-    "@riseup/common": "^0.0.1",
-    "@riseup/tooling": "^0.0.1",
+    "@riseup/common": "^0.0.2",
+    "@riseup/tooling": "^0.0.2",
     "babel-plugin-module-resolver": "^3.2.0",
     "decamelize": "^3.2.0",
     "fs-extra": "^8.1.0",
