@@ -60,7 +60,7 @@
     "chalk": "^2.4.2",
     "commitizen": "^3.1.1",
     "conventional-changelog-cli": "^2.0.21",
-    "conventional-recommended-bump": "^5.0.0",
+    "conventional-recommended-bump": "^6.0.0",
     "find-up": "^4.1.0",
     "fs-extra": "^8.0.1",
     "markdownlint-cli": "^0.17.0",
