@@ -56,7 +56,7 @@
     "@types/loglevel": "^1.5.4",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
-    "@types/react-transition-group": "^2.9.1",
+    "@types/react-transition-group": "^4.0.0",
     "caprover": "^1.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.1",
