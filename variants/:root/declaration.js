@@ -9,7 +9,7 @@ module.exports = {
       },
       husky: {
         hooks: {
-          'pre-commit': 'kpo precommit'
+          'pre-commit': 'kpo pre-commit'
         }
       }
     })

@@ -31,7 +31,7 @@
     "clean": "kpo clean --",
     "clean:build": "kpo clean:build --",
     "clean:modules": "kpo clean:modules --",
-    "precommit": "kpo precommit --",
+    "pre-commit": "kpo pre-commit --",
     "prepublishOnly": "kpo prepublishOnly --",
     "preversion": "kpo preversion --",
     "version": "kpo version --",

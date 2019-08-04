@@ -136,9 +136,9 @@ export default function getScripts(
           ]
         : log`Skipped typedoc build`
     ],
-    precommit: function() {
+    'pre-commit': function() {
       return [
-        common.precommit.bind(this),
+        common['pre-commit'].bind(this),
         (this && this['validate']) || scripts['validate']
       ];
     },

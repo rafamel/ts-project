@@ -86,7 +86,7 @@ export default function getScripts({
     ),
     'clean:modules': remove('./node_modules', { confirm: true }),
     /* Hooks */
-    precommit: () => !vars.commit && Error(`Run commit script`),
+    'pre-commit': () => !vars.commit && Error(`Run commit script`),
     prepublishOnly: () => !vars.release && Error(`Run release script`),
     preversion: () => !vars.semantic && Error(`Run semantic script`),
     version: () => (args = []) => [
@@ -108,7 +108,9 @@ export default function getScripts({
     semantic: () => [
       !vars.semantic && Error(`Run semantic script on monorepo root`)
     ],
-    precommit: () => Error(`Commit hooks should be set on monorepo root`),
+    // TODO: can be safely changed to "precommit" once husky
+    // deprecates running scripts.precommit
+    'pre-commit': () => Error(`Commit hooks should be set on monorepo root`),
     version: () => !vars.semantic && Error(`Run semantic script`)
   };
 
