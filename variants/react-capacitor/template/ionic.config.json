@@ -1,5 +1,5 @@
 {
-  "name": "ts-react-ionic",
+  "name": "react-capacitor",
   "integrations": {
     "capacitor": {}
   },

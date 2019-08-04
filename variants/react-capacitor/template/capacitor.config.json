@@ -1,6 +1,6 @@
 {
-  "appId": "io.react.ionic",
-  "appName": "react-ionic",
+  "appId": "io.capacitor.react",
+  "appName": "react-capacitor",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build"
