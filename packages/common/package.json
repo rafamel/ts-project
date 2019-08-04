@@ -69,6 +69,7 @@
     "utility-types": "^3.7.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
     "kpo": "^0.11.0"
   },
   "peerDependencies": {

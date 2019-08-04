@@ -100,6 +100,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
+    "@types/fs-extra": "^8.0.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.0",
     "jest-cli": "^24.8.0",
