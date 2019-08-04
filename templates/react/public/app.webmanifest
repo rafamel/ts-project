@@ -1,12 +1,17 @@
 {
-  "name": "React Application",
-  "short_name": "ReactApp",
-  "description": "A React Application",
+  "name": "Omny",
+  "short_name": "Omny",
+  "description": "Just healthy snacks",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "128x128",
       "type": "image/x-icon"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "128x128",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
