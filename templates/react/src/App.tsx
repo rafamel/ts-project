@@ -10,8 +10,6 @@ import { StylesProvider } from '@material-ui/styles';
 import store from './store';
 import LoadingBar from './components/LoadingBar';
 import { useObserver } from 'mobx-react-lite';
-import { ContextualProvider } from './utils';
-import { context } from './context';
 
 injectGlobal({ ':root': variable.styles });
 
@@ -19,16 +17,14 @@ export default function App(): JSX.Element {
   return useObserver(() => (
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={mui}>
-        <ContextualProvider value={context}>
-          <LoadingBar active={store.loading.isLoading} />
-          <LoadFadeIn onLoad={store.loading.ends}>
-            <>
-              <TopBar />
-              <Home />
-              <Footer />
-            </>
-          </LoadFadeIn>
-        </ContextualProvider>
+        <LoadingBar active={store.loading.isLoading} />
+        <LoadFadeIn onLoad={store.loading.ends}>
+          <>
+            <TopBar />
+            <Home />
+            <Footer />
+          </>
+        </LoadFadeIn>
       </MuiThemeProvider>
     </StylesProvider>
   ));
