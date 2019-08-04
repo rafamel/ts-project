@@ -55,7 +55,10 @@ export default function getScripts({
     'fix:scripts': kpo`:raise --purge --confirm --fail`,
     /* Lint */
     lint: function() {
-      return [(this && this['lint:md']) || scripts['lint:md']];
+      return [
+        (this && this['lint:md']) || scripts['lint:md'],
+        (this && this['lint:scripts']) || scripts['lint:scripts']
+      ];
     },
     'lint:md': () => async (args = []) => {
       const readme = await fs.pathExists(path.join(paths.root, 'README.md'));
