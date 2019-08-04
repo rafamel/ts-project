@@ -5,15 +5,15 @@ module.exports = {
   theme: {
     colors: {
       transparent: 'transparent',
-      origin: palette('origin'),
       primary: palette('primary'),
-      secondary: palette('secondary'),
-      tertiary: palette('tertiary'),
+      actions: palette('actions'),
       info: palette('info'),
       success: palette('success'),
-      warning: palette('warning'),
-      error: palette('error'),
-      disable: palette('disable')
+      warn: palette('warn'),
+      danger: palette('danger'),
+      disabled: palette('disabled'),
+      dark: palette('dark'),
+      light: palette('light')
     },
     fontFamily: {
       primary: 'var(--typography-font-family-primary)',
@@ -68,8 +68,8 @@ module.exports = {
 function palette(name) {
   return {
     main: `var(--palette-${name}-main)`,
-    light: `var(--palette-${name}-light)`,
-    dark: `var(--palette-${name}-dark)`,
+    tint: `var(--palette-${name}-tint)`,
+    shade: `var(--palette-${name}-shade)`,
     contrast: `var(--palette-${name}-contrast)`,
     accent: `var(--palette-${name}-accent)`
   };
