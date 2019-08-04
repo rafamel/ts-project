@@ -9,16 +9,14 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { StylesProvider } from '@material-ui/styles';
 import store from './store';
 import LoadingBar from './components/LoadingBar';
-import { observer } from 'mobx-react';
+import { useObserver } from 'mobx-react-lite';
 import { Provider } from 'urql';
 import graphql from './graphql';
 
 injectGlobal({ ':root': variable.styles });
 
-export default observer(App);
-
-function App(): JSX.Element {
-  return (
+export default function App(): JSX.Element {
+  return useObserver(() => (
     <Provider value={graphql}>
       <StylesProvider injectFirst>
         <MuiThemeProvider theme={mui}>
@@ -33,5 +31,5 @@ function App(): JSX.Element {
         </MuiThemeProvider>
       </StylesProvider>
     </Provider>
-  );
+  ));
 }

@@ -1,4 +1,4 @@
-import { createClient } from 'urql';
+import { createClient, defaultExchanges } from 'urql';
 import config from '~/config';
 
 export default createClient({
@@ -6,5 +6,5 @@ export default createClient({
   fetchOptions: {
     headers: {}
   },
-  exchanges: []
+  exchanges: defaultExchanges
 });
