@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0](https://github.com/rafamel/riseup/compare/v0.0.2...v0.1.0) (2019-08-04)
+
+
+### Bug Fixes
+
+* **deps:** updates dependencies ([f06ef87](https://github.com/rafamel/riseup/commit/f06ef87))
+* changes precommit script name to pre-commit to avoid husky double runs ([bc9b754](https://github.com/rafamel/riseup/commit/bc9b754))
+* **templates/react:** ensures config breakpoints are numbers ([98ae214](https://github.com/rafamel/riseup/commit/98ae214))
+* **templates/react:** updates dependencies ([f39a67d](https://github.com/rafamel/riseup/commit/f39a67d))
+* **templates/react:** updates dependencies ([a94f452](https://github.com/rafamel/riseup/commit/a94f452))
+* **variants/react-gql:** fixes react-gql ([22567ce](https://github.com/rafamel/riseup/commit/22567ce))
+
+
+### Features
+
+* **templates:** updates to v0.0.2 ([25f2506](https://github.com/rafamel/riseup/commit/25f2506))
+* **templates/react:** adds browser (bowser) util ([5caf0b7](https://github.com/rafamel/riseup/commit/5caf0b7))
+* **templates/react:** improves webmanifest and icons setup ([b6864b0](https://github.com/rafamel/riseup/commit/b6864b0))
+* **tooling:eslint:** disables no-return-await rule ([1b41cc4](https://github.com/rafamel/riseup/commit/1b41cc4))
+* **variants:** substitutes react-ionic with react-capacitor ([445e9f5](https://github.com/rafamel/riseup/commit/445e9f5))
+* **variants/react-tailwind:** updates tailwind configuration to latest react template theme ([67c8394](https://github.com/rafamel/riseup/commit/67c8394))
+
+
+
+
+
 ## [0.0.2](https://github.com/rafamel/riseup/compare/v0.0.1...v0.0.2) (2019-07-02)
 
 

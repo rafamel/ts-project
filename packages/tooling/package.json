@@ -1,6 +1,6 @@
 {
   "name": "@riseup/tooling",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Rafa Mel",
   "description": "A set of riseup shared tooling presets",
   "keywords": [
@@ -72,7 +72,7 @@
     "@babel/plugin-syntax-import-meta": "^7.2.0",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@riseup/common": "0.0.2",
+    "@riseup/common": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "babel-plugin-dynamic-import-node": "^2.2.0",
