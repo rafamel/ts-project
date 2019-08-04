@@ -21,11 +21,11 @@ export default slim(
       description: envs.get('REACT_APP_DESCRIPTION')
     },
     breakpoints: {
-      xs: envs.get('REACT_APP_XS'),
-      sm: envs.get('REACT_APP_SM'),
-      md: envs.get('REACT_APP_MD'),
-      lg: envs.get('REACT_APP_LG'),
-      xl: envs.get('REACT_APP_XL')
+      xs: Number(envs.get('REACT_APP_XS')),
+      sm: Number(envs.get('REACT_APP_SM')),
+      md: Number(envs.get('REACT_APP_MD')),
+      lg: Number(envs.get('REACT_APP_LG')),
+      xl: Number(envs.get('REACT_APP_XL'))
     },
     services: {
       graphql: process.env.REACT_APP_GRAPHQL_ENDPOINT
