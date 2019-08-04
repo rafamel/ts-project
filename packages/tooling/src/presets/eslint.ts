@@ -38,6 +38,7 @@ export default function getEslint({
       /* DISABLED */
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
+      'no-return-await': 0,
       /* WARNINGS */
       'no-warning-comments': [1, { terms: assign.todo, location: 'start' }],
       'no-unused-vars': 1,
