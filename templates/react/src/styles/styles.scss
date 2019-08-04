@@ -1,14 +1,11 @@
 body {
-  background: var(--palette-origin-main);
-  color: var(--palette-origin-contrast);
+  background: var(--palette-light-main);
+  color: var(--palette-light-contrast);
   font-family: var(--typography-font-family-primary);
   font-size: var(--typography-font-size);
   font-weight: var(--typography-font-weight);
   line-height: var(--typography-line-height);
   letter-spacing: var(--typography-letter-spacing);
-  @media (breakpoint(sm)) {
-    font-size: calc(var(--typography-font-size) * 1.15);
-  }
 }
 
 body {

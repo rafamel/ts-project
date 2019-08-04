@@ -4,8 +4,8 @@ import { readableColor, lighten, darken, parseToRgb } from 'polished';
 export interface IPalette {
   main: string;
   contrast: string;
-  light: string;
-  dark: string;
+  tint: string;
+  shade: string;
   accent: string;
 }
 
@@ -37,8 +37,8 @@ export default function palette<T extends IOfType<Partial<IPalette>>>(
     response[name as keyof T] = {
       main,
       contrast,
-      light: palette.light || lighten(0.2, main),
-      dark: palette.dark || darken(0.1, main),
+      tint: palette.tint || lighten(0.2, main),
+      shade: palette.shade || darken(0.1, main),
       accent:
         palette.accent ||
         readableColor(main, darken(0.1, contrast), lighten(0.2, contrast)),
@@ -59,8 +59,8 @@ palette.mui = function muiPlatte<T extends IOfType<IPalette>>(
   for (let [key, value] of entries) {
     response[key] = {
       main: value.main,
-      light: value.light,
-      dark: value.dark,
+      light: value.tint,
+      dark: value.shade,
       contrastText: value.contrast
     };
   }
