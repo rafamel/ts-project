@@ -10,8 +10,6 @@
 
 > A set of *riseup* shared presets.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/riseup/tree/master/packages/common) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Install
 
 [`npm install @riseup/common`](https://www.npmjs.com/package/@riseup/common)

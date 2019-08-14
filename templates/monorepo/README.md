@@ -6,6 +6,4 @@
 
 > A bells & whistles riseup based monorepo starter.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/monorepo-starter) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Packages -->

@@ -10,8 +10,6 @@
 
 > *riseup* presets for react.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/riseup/tree/master/packages/react) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Install
 
 [`npm install @riseup/react`](https://www.npmjs.com/package/@riseup/react)

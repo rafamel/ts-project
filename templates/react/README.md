@@ -5,9 +5,7 @@
 [![Dependencies](https://img.shields.io/david/rafamel/react-starter.svg)](https://david-dm.org/rafamel/react-starter)
 [![License](https://img.shields.io/github/license/rafamel/react-starter.svg)](https://github.com/rafamel/react-starter/blob/master/LICENSE)
 
-> A bells & whistles riseup based library starter.
-
-If you find it useful, consider [starring the project](https://github.com/rafamel/react-starter) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way! -->
+> A bells & whistles riseup based library starter. -->
 
 ## Stack
 

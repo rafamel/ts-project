@@ -23,8 +23,6 @@
 
 > A bells & whistles riseup based library starter.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/library-starter) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Install
 
 [`npm install library-starter`](https://www.npmjs.com/package/library-starter)

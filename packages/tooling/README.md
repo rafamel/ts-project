@@ -10,8 +10,6 @@
 
 > A set of *riseup* shared tooling presets.
 
-If you find it useful, consider [starring the project](https://github.com/rafamel/riseup/tree/master/packages/tooling) 💪 and/or following [its author](https://github.com/rafamel) ❤️ -there's more on the way!
-
 ## Install
 
 [`npm install @riseup/tooling`](https://www.npmjs.com/package/@riseup/tooling)
