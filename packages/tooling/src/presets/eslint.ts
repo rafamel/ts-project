@@ -81,10 +81,11 @@ export default function getEslint({
               ...configs.recommended.rules,
               /* DISABLED */
               '@typescript-eslint/indent': 0,
+              '@typescript-eslint/camelcase': 0,
               '@typescript-eslint/no-explicit-any': 0,
               '@typescript-eslint/no-object-literal-type-assertion': 0,
+              '@typescript-eslint/interface-name-prefix': 0,
               /* WARNINGS */
-              '@typescript-eslint/camelcase': 1,
               '@typescript-eslint/explicit-function-return-type': [
                 1,
                 { allowExpressions: true, allowTypedFunctionExpressions: true }
@@ -98,7 +99,6 @@ export default function getEslint({
                 }
               ],
               /* ERRORS */
-              '@typescript-eslint/interface-name-prefix': [2, 'always'],
               '@typescript-eslint/no-use-before-define': [
                 2,
                 { functions: false }
