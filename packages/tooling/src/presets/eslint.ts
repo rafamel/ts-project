@@ -30,8 +30,6 @@ export default function getEslint({
       impliedStrict: true,
       sourceType: 'module'
     },
-    // TODO: relative plugins resolves on major eslint release:
-    // https://github.com/eslint/eslint/issues/6237
     plugins: ['prettier', 'jest', 'import'],
     globals: {},
     rules: {

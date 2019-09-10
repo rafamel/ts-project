@@ -5,7 +5,7 @@ import { DeepRequired } from 'utility-types';
 import { IScriptsCommon, bin } from '@riseup/common';
 import { extensions } from '~/utils';
 import { series, silent, rm, line, copy, glob, ensure, log } from 'kpo';
-import { ENV_OPTIONS_TOOLING, BUILD_TSCONFIG } from '~/constants';
+import { ENV_OPTIONS_TOOLING, BUILD_TSCONFIG, PACKAGE_ROOT } from '~/constants';
 
 export default function getScripts(
   common: IScriptsCommon,
@@ -92,13 +92,17 @@ export default function getScripts(
           ...['./src', './test'],
           ...['--config', require.resolve('./configure/eslint')],
           ...['--ext', vars.dotcomma],
+          ...['--resolve-plugins-relative-to', PACKAGE_ROOT],
           ...args
         ]
       })
     ],
     'lint:types': () => (args = []) => [
       typescript
-        ? bin('ttypescript', 'ttsc', { args: ['--noEmit', ...args] })
+        ? [
+            bin('ttypescript', 'ttsc', { args: ['--noEmit', ...args] }),
+            log`Successful type checks`
+          ]
         : log`Skipped type checks`
     ],
     /* Test */
