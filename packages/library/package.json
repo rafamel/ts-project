@@ -60,10 +60,14 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
+    "@babel/cli": "^7.5.5",
     "@riseup/common": "^0.2.0",
     "@riseup/tooling": "^0.2.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
+    "eslint": "^6.3.0",
+    "jest-cli": "^24.9.0",
+    "prettier": "^1.18.2",
     "slimconf": "^0.11.0",
     "utility-types": "^3.7.0"
   },
