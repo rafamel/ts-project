@@ -33,6 +33,7 @@ export interface IScriptsTooling extends IScriptsCommon {
   'lint:types': TScriptFn;
   /* Test */
   test: TScriptFn;
+  verify: TScriptFn;
   validate: TScriptFn;
   /* Docs */
   docs: TScriptFn;

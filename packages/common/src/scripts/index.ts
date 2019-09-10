@@ -12,7 +12,7 @@ import {
   ENV_RELEASE,
   ENV_SEMANTIC,
   ENV_COMMITIZEN,
-  ENV_MONOREPO_VALIDATE,
+  ENV_MONOREPO_VERIFY,
   NODE_PATH
 } from '~/constants';
 
@@ -22,7 +22,6 @@ export default function getScripts({
   monorepo
 }: DeepRequired<IOptionsCommon>): IScriptsCommon {
   const vars = {
-    commit: !!process.env[ENV_COMMITIZEN] || !!process.env[ENV_SEMANTIC],
     semantic: !!process.env[ENV_SEMANTIC],
     release: !!process.env[ENV_RELEASE]
   };
@@ -49,17 +48,10 @@ export default function getScripts({
       });
     },
     /* Fix */
-    fix: function() {
-      return [(this && this['fix:scripts']) || scripts['fix:scripts']];
-    },
+    fix: kpo`fix:scripts`,
     'fix:scripts': kpo`:raise --purge --confirm --fail`,
     /* Lint */
-    lint: function() {
-      return [
-        (this && this['lint:md']) || scripts['lint:md'],
-        (this && this['lint:scripts']) || scripts['lint:scripts']
-      ];
-    },
+    lint: kpo`lint:md lint:scripts`,
     'lint:md': () => async (args = []) => {
       const readme = await fs.pathExists(path.join(paths.root, 'README.md'));
       if (!readme) return;
@@ -77,19 +69,13 @@ export default function getScripts({
     },
     'lint:scripts': kpo`:raise --dry --fail`,
     /* Clean */
-    clean: function() {
-      return [
-        (this && this['clean:build']) || scripts['clean:build'],
-        (this && this['clean:modules']) || scripts['clean:modules']
-      ];
-    },
+    clean: kpo`clean:build clean:modules`,
     'clean:build': remove(
       clean.map((x) => (path.isAbsolute(x) ? x : path.join(paths.root, x))),
       { confirm: true }
     ),
     'clean:modules': remove('./node_modules', { confirm: true }),
     /* Hooks */
-    'pre-commit': () => !vars.commit && Error(`Run commit script`),
     prepublishOnly: () => !vars.release && Error(`Run release script`),
     preversion: () => !vars.semantic && Error(`Run semantic script`),
     version: () => (args = []) => [
@@ -103,17 +89,12 @@ export default function getScripts({
 
   const monorepoScripts: Partial<IScriptsCommon> = {
     commit: () => [
-      log`${chalk.bold.yellow('\nWARN:')} Validating only ${paths.root}`,
-      series.env('kpo @root commit --', {
-        [ENV_MONOREPO_VALIDATE]: paths.root
-      })
+      log`${chalk.bold.bold('INFO:')} Verifying ${paths.root}`,
+      series.env('kpo @root commit --', { [ENV_MONOREPO_VERIFY]: paths.root })
     ],
     semantic: () => [
       !vars.semantic && Error(`Run semantic script on monorepo root`)
     ],
-    // TODO: can be safely changed to "precommit" once husky
-    // deprecates running scripts.precommit
-    'pre-commit': () => Error(`Commit hooks should be set on monorepo root`),
     version: () => !vars.semantic && Error(`Run semantic script`)
   };
 

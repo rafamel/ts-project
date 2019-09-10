@@ -2,7 +2,7 @@ import { DeepRequired } from 'utility-types';
 import { bin, ENV_RELEASE } from '@riseup/common';
 import { IOptionsLibrary, IScriptsLibrary } from '~/types';
 import { IScriptsTooling, ENV_BABEL_ESNEXT } from '@riseup/tooling';
-import { rm, ensure, copy, json, series, read, confirm } from 'kpo';
+import { kpo, rm, ensure, copy, json, series, read, confirm } from 'kpo';
 
 export default function getScripts(
   tooling: IScriptsTooling,
@@ -16,14 +16,9 @@ export default function getScripts(
 
   const scripts: IScriptsLibrary = {
     ...tooling,
-    build: function() {
-      return [
-        (this && this['build:pack']) || scripts['build:pack'],
-        (this && this['build:static']) || scripts['build:static'],
-        (this && this['build:transpile']) || scripts['build:transpile'],
-        typescript && ((this && this['build:types']) || scripts['build:types'])
-      ];
-    },
+    build: typescript
+      ? kpo`build:pack build:static build:transpile build:types`
+      : kpo`build:pack build:static build:transpile`,
     'build:pack': () => (args = []) => [
       [rm(paths.build), ensure(paths.build)],
       read('.babelrc.js', ({ raw }) => {
@@ -45,7 +40,7 @@ export default function getScripts(
     ],
     'build:transpile': function() {
       return [
-        tooling['build:transpile'].bind(this),
+        tooling['build:transpile'],
         json(`${paths.build}/package.json`, ({ json }) => {
           return json
             ? Object.assign(json, {
@@ -60,7 +55,7 @@ export default function getScripts(
     },
     'build:types': function() {
       return [
-        tooling['build:types'].bind(this),
+        tooling['build:types'],
         typescript && [
           json(`${paths.build}/package.json`, ({ json }) => {
             return json

@@ -28,7 +28,6 @@ export interface IScriptsCommon {
   'clean:build': TScriptFn;
   'clean:modules': TScriptFn;
   /* Hooks */
-  'pre-commit': TScriptFn;
   prepublishOnly: TScriptFn;
   preversion: TScriptFn;
   version: TScriptFn;

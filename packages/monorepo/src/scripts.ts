@@ -8,7 +8,7 @@ import {
   bin,
   ENV_SEMANTIC,
   ENV_RELEASE,
-  ENV_MONOREPO_VALIDATE,
+  ENV_MONOREPO_VERIFY,
   NODE_PATH
 } from '@riseup/common';
 
@@ -18,7 +18,7 @@ export default function getScripts(
 ): IScriptsMonorepo {
   const vars = {
     semantic: !!process.env[ENV_SEMANTIC],
-    validate: process.env[ENV_MONOREPO_VALIDATE]
+    verify: process.env[ENV_MONOREPO_VERIFY]
   };
 
   const scripts: IScriptsMonorepo = {
@@ -47,12 +47,7 @@ export default function getScripts(
       }),
       ['git push', 'git push --tags']
     ],
-    test: function() {
-      return [
-        kpo`:stream test`,
-        (this && this['test:coverage']) || scripts['test:coverage']
-      ];
-    },
+    test: () => [kpo`:stream test`, kpo`test:coverage`],
     'test:coverage': () => [
       log`Merging packages coverage reports`,
       [rm`coverage`, ensure`coverage`],
@@ -69,34 +64,20 @@ export default function getScripts(
       `,
       rm`coverage/lcov.dump.info`
     ],
-    validate: function() {
-      return [
-        bin('lerna', 'lerna', { args: ['link'] }),
-        vars.validate
-          ? kpo`-d ${vars.validate} validate`
-          : [
-              (this && this['lint']) || scripts['lint'],
-              silent`npm outdated`,
-              kpo`:stream validate`,
-              (this && this['test:coverage']) || scripts['test:coverage']
-            ]
-      ];
-    },
-    'pre-commit': function() {
-      return [
-        common['pre-commit'].bind(this),
-        (this && this['validate']) || scripts['validate']
-      ];
-    },
-    preversion: function() {
-      return [
-        common.preversion.bind(this),
-        (this && this['validate']) || scripts['validate']
-      ];
-    },
-    version: function() {
-      return [!vars.semantic && Error(`Run semantic script`), 'git add .'];
-    }
+    verify: () => [
+      bin('lerna', 'lerna', { args: ['link'] }),
+      vars.verify
+        ? kpo`-d ${vars.verify} verify`
+        : [kpo`lint`, kpo`:stream verify`]
+    ],
+    validate: () => [
+      kpo`lint`,
+      silent`npm outdated`,
+      kpo`:stream validate`,
+      kpo`test:coverage`
+    ],
+    preversion: () => [common.preversion, kpo`validate`],
+    version: () => [!vars.semantic && Error(`Run semantic script`), 'git add .']
   };
 
   return scripts;

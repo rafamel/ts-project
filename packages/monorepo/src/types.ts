@@ -12,6 +12,7 @@ export interface IScriptsMonorepo extends IScriptsCommon {
   release: TScriptFn;
   test: TScriptFn;
   'test:coverage': TScriptFn;
+  verify: TScriptFn;
   validate: TScriptFn;
 }
 

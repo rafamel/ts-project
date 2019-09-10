@@ -4,7 +4,7 @@ import { IOptionsTooling, IScriptsTooling } from '~/types';
 import { DeepRequired } from 'utility-types';
 import { IScriptsCommon, bin } from '@riseup/common';
 import { extensions } from '~/utils';
-import { series, silent, rm, line, copy, glob, ensure, log } from 'kpo';
+import { kpo, series, silent, rm, copy, glob, ensure, log } from 'kpo';
 import { ENV_OPTIONS_TOOLING, BUILD_TSCONFIG, PACKAGE_ROOT } from '~/constants';
 
 export default function getScripts(
@@ -31,8 +31,7 @@ export default function getScripts(
       return [
         rm(options.paths.build),
         ensure(options.paths.build),
-        (this && this['build:transpile']) || scripts['build:transpile'],
-        typescript && ((this && this['build:types']) || scripts['build:types'])
+        typescript ? kpo`build:transpile build:types` : kpo`build:transpile`
       ];
     },
     'build:transpile': () => (args = []) => {
@@ -68,23 +67,13 @@ export default function getScripts(
         : log`Skipped types emit`;
     },
     /* Fix */
-    fix: function() {
-      return [
-        (this && this['fix:code']) || scripts['fix:code'],
-        common.fix.bind(this)
-      ];
-    },
-    'fix:code': () => line`
-      prettier --write ./**/*.{${vars.comma},json,scss}
-    `,
+    fix: () => [common.fix, kpo`fix:code`],
+    'fix:code': () => `prettier --write ./**/*.{${vars.comma},json,scss}`,
     /* Lint */
-    lint: function() {
-      return [
-        (this && this['lint:code']) || scripts['lint:code'],
-        (typescript && (this && this['lint:types'])) || scripts['lint:types'],
-        common.lint.bind(this)
-      ];
-    },
+    lint: () => [
+      typescript ? kpo`lint:code lint:types` : kpo`lint:code`,
+      common.lint
+    ],
     'lint:code': () => (args = []) => [
       bin('eslint', 'eslint', {
         env,
@@ -116,13 +105,8 @@ export default function getScripts(
         ]
       })
     ],
-    validate: function() {
-      return [
-        (this && this['lint']) || scripts['lint'],
-        (this && this['test']) || scripts['test'],
-        silent`npm outdated`
-      ];
-    },
+    verify: () => [kpo`lint`, kpo`test -- --coverage=false`],
+    validate: () => [kpo`lint test`, silent`npm outdated`],
     /* Docs */
     docs: () => (args = []) => [
       typescript
@@ -140,25 +124,14 @@ export default function getScripts(
           ]
         : log`Skipped typedoc build`
     ],
-    'pre-commit': function() {
-      return [
-        common['pre-commit'].bind(this),
-        (this && this['validate']) || scripts['validate']
-      ];
-    },
-    version: function() {
-      return [
-        common.version.bind(this),
-        monorepo ? [] : (this && this['validate']) || scripts['validate'],
-        version.build && ((this && this['build']) || scripts.build),
-        version.docs && typescript
-          ? [
-              (this && this['docs']) || scripts['docs'],
-              series('git add', { args: [paths.docs] })
-            ]
-          : []
-      ];
-    }
+    version: () => [
+      common.version,
+      monorepo ? [] : kpo`validate`,
+      version.build ? kpo`build` : [],
+      version.docs && typescript
+        ? [kpo`docs`, series('git add', { args: [paths.docs] })]
+        : []
+    ]
   };
 
   return scripts;
