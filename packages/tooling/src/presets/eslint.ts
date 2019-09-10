@@ -103,7 +103,10 @@ export default function getEslint({
                 2,
                 { functions: false }
               ],
-              '@typescript-eslint/array-type': [2, 'array-simple']
+              '@typescript-eslint/array-type': [
+                2,
+                { default: 'array-simple', readonly: 'array-simple' }
+              ]
             }
           }
     ]
