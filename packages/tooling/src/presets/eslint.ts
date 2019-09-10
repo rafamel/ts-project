@@ -66,11 +66,12 @@ export default function getEslint({
           'babel/no-invalid-this': 1,
           'babel/semi': 1
         }
-      },
-      /* TYPESCRIPT */
+      }
+    ].concat(
       !typescript
-        ? {}
-        : {
+        ? []
+        : /* TYPESCRIPT */
+          {
             files: [`*.{${ext.ts.join(',')}}`],
             parser: require.resolve('@typescript-eslint/parser'),
             plugins: ['@typescript-eslint'],
@@ -86,7 +87,10 @@ export default function getEslint({
               /* WARNINGS */
               '@typescript-eslint/explicit-function-return-type': [
                 1,
-                { allowExpressions: true, allowTypedFunctionExpressions: true }
+                {
+                  allowExpressions: true,
+                  allowTypedFunctionExpressions: true
+                }
               ],
               '@typescript-eslint/no-unused-vars': [
                 1,
@@ -107,6 +111,6 @@ export default function getEslint({
               ]
             }
           }
-    ]
+    )
   };
 }
