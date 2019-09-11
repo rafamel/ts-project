@@ -22,6 +22,17 @@ export default function getEslint(
             .map((ext) => '.' + ext)
         }
       }
-    }
+    },
+    // TODO: remove once eslint-config-react-app updates and removes
+    // @typescript-eslint/no-angle-bracket-type-assertion (deprecated)
+    overrides: opts.typescript
+      ? [
+          ...tooling.overrides,
+          {
+            files: ['*'],
+            rules: { '@typescript-eslint/no-angle-bracket-type-assertion': 0 }
+          }
+        ]
+      : tooling.overrides
   });
 }
