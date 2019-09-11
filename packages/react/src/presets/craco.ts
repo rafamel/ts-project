@@ -2,7 +2,7 @@
 import { IOfType, IOptionsReact } from '~/types';
 import { DeepRequired } from 'utility-types';
 import { defineEnv } from '~/utils';
-import { IProjectTooling } from '@riseup/tooling';
+import { TOOLING_PACKAGE_ROOT, IProjectTooling } from '@riseup/tooling';
 
 export default function getCraco(
   { server, assign }: DeepRequired<IOptionsReact>,
@@ -25,7 +25,8 @@ export default function getCraco(
         ...options,
         emitWarning: true,
         useEslintrc: true,
-        configFile: require.resolve('@riseup/tooling/dist/configure/eslint')
+        configFile: require.resolve('@riseup/tooling/dist/configure/eslint'),
+        resolvePluginsRelativeTo: TOOLING_PACKAGE_ROOT
       })
     },
     webpack: {

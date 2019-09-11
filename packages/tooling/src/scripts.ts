@@ -5,7 +5,11 @@ import { DeepRequired } from 'utility-types';
 import { IScriptsCommon, bin } from '@riseup/common';
 import { extensions } from '~/utils';
 import { kpo, series, silent, rm, copy, glob, ensure, log } from 'kpo';
-import { ENV_OPTIONS_TOOLING, BUILD_TSCONFIG, PACKAGE_ROOT } from '~/constants';
+import {
+  ENV_OPTIONS_TOOLING,
+  BUILD_TSCONFIG,
+  TOOLING_PACKAGE_ROOT
+} from '~/constants';
 
 export default function getScripts(
   common: IScriptsCommon,
@@ -81,7 +85,7 @@ export default function getScripts(
           ...['./src', './test'],
           ...['--config', require.resolve('./configure/eslint')],
           ...['--ext', vars.dotcomma],
-          ...['--resolve-plugins-relative-to', PACKAGE_ROOT],
+          ...['--resolve-plugins-relative-to', TOOLING_PACKAGE_ROOT],
           ...args
         ]
       })
