@@ -84,6 +84,7 @@ export default function getEslint({
               '@typescript-eslint/no-explicit-any': 0,
               '@typescript-eslint/no-object-literal-type-assertion': 0,
               '@typescript-eslint/interface-name-prefix': 0,
+              '@typescript-eslint/ban-ts-ignore': 0,
               /* WARNINGS */
               '@typescript-eslint/explicit-function-return-type': [
                 1,
