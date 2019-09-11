@@ -59,13 +59,18 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
+    "@babel/cli": "^7.6.0",
     "@babel/plugin-syntax-import-meta": "^7.2.0",
+    "@craco/craco": "^5.4.0",
     "@riseup/common": "^0.2.0",
     "@riseup/tooling": "^0.2.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "decamelize": "^3.2.0",
     "fs-extra": "^8.1.0",
+    "jest-cli": "^24.9.0",
     "merge-strategies": "^0.1.4",
+    "prettier": "^1.18.2",
+    "react-scripts": "^3.1.1",
     "resolve-from": "^5.0.0",
     "serve": "^11.1.0",
     "slimconf": "^0.11.0",
@@ -73,18 +78,14 @@
     "utility-types": "^3.7.0"
   },
   "devDependencies": {
-    "@craco/craco": "^5.4.0",
     "@types/fs-extra": "^8.0.0",
-    "kpo": "^0.11.0",
-    "react-scripts": "^3.1.1"
+    "kpo": "^0.11.0"
   },
   "peerDependencies": {
-    "@craco/craco": "^5.2.3",
     "babel-preset-react-app": "^9.x",
     "eslint-config-react-app": "^5.x",
     "html-webpack-plugin": "^4.0.0-beta.5",
     "kpo": "^0.11.0",
-    "react-dev-utils": "^9.x",
-    "react-scripts": "^3.0.1"
+    "react-dev-utils": "^9.x"
   }
 }
