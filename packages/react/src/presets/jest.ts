@@ -18,17 +18,14 @@ export default function getJest({
 
   assert(config.transform[TRANFORM_KEY]);
   delete config.transform[TRANFORM_KEY];
+  delete config.testMatch;
+  delete config.roots;
 
   return {
     ...config,
+    rootDir: paths.root,
     collectCoverage: true,
     collectCoverageFrom: [`<rootDir>/src/**/*`],
-    testMatch: [
-      ...(config.testMatch || []),
-      ...(config.testMatch || []).map((glob: string) =>
-        glob.replace('/src/', '/test/')
-      )
-    ].filter((x, i, arr) => arr.indexOf(x) === i),
     modulePaths: [`<rootDir>/src`, `<rootDir>/test`],
     transform: {
       ...config.transform,
