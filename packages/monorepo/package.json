@@ -1,6 +1,6 @@
 {
   "name": "@riseup/monorepo",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Rafa Mel",
   "description": "riseup presets for a lerna monorepo root",
   "keywords": [
@@ -60,7 +60,7 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
-    "@riseup/common": "^0.3.0",
+    "@riseup/common": "^0.4.0",
     "lcov-result-merger": "^3.1.0",
     "merge-strategies": "^0.1.4",
     "slimconf": "^0.11.0",
