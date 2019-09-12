@@ -34,9 +34,10 @@ export default function getEslint({
     globals: {},
     rules: {
       /* DISABLED */
+      'no-return-await': 0,
+      'lines-between-class-members': 0,
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
-      'no-return-await': 0,
       /* WARNINGS */
       'no-warning-comments': [1, { terms: assign.todo, location: 'start' }],
       'no-unused-vars': 1,
@@ -109,6 +110,10 @@ export default function getEslint({
               '@typescript-eslint/array-type': [
                 2,
                 { default: 'array-simple', readonly: 'array-simple' }
+              ],
+              '@typescript-eslint/no-inferrable-types': [
+                2,
+                { ignoreParameters: true, ignoreProperties: true }
               ]
             }
           }
