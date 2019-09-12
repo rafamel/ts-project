@@ -19,7 +19,6 @@
     "clean": "kpo clean --",
     "clean:build": "kpo clean:build --",
     "clean:modules": "kpo clean:modules --",
-    "pre-commit": "kpo pre-commit --",
     "prepublishOnly": "kpo prepublishOnly --",
     "preversion": "kpo preversion --",
     "version": "kpo version --",
@@ -28,13 +27,13 @@
     "lint:code": "kpo lint:code --",
     "lint:types": "kpo lint:types --",
     "test": "kpo test --",
+    "verify": "kpo verify --",
     "validate": "kpo validate --",
     "docs": "kpo docs --",
     "start": "kpo start --",
     "serve": "kpo serve --",
     "analyze": "kpo analyze --",
-    "test:watch": "kpo test:watch --",
-    "deploy:caprover": "kpo deploy:caprover --"
+    "test:watch": "kpo test:watch --"
   },
   "license": "MIT",
   "homepage": "https://github.com/rafamel/react-starter",
@@ -46,11 +45,9 @@
     "url": "https://github.com/rafamel/react-starter/issues"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@craco/craco": "^5.2.4",
     "@fullhuman/postcss-purgecss": "^1.2.0",
-    "@riseup/react": "0.2.0",
-    "@riseup/tooling": "0.2.0",
+    "@riseup/react": "0.3.0",
+    "@riseup/tooling": "0.3.0",
     "@types/google-fonts": "^1.0.0",
     "@types/jest": "^24.0.16",
     "@types/loglevel": "^1.5.4",
@@ -61,13 +58,11 @@
     "enzyme-adapter-react-16": "^1.13.1",
     "enzyme-to-json": "^3.4.0",
     "google-fonts": "^1.0.0",
-    "jest-cli": "^24.8.0",
     "kpo": "^0.11.0",
     "node-sass": "^4.12.0",
     "postcss-functions": "^3.0.0",
-    "prettier": "^1.18.2",
     "react-scripts": "^3.0.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.3"
   },
   "dependencies": {
     "@1natsu/handy-media-query": "^1.0.2",

@@ -24,7 +24,7 @@ export function route(lib: string, name: string): string {
     throw Error(`Module ${lib} not found`);
   }
 
-  if (!pkg.bin || !pkg.bin.hasOwnProperty(name)) {
+  if (!pkg.bin || !Object.hasOwnProperty.call(pkg.bin, name)) {
     throw Error(`Executable ${name} not found for ${lib}`);
   }
 

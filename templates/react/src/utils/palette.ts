@@ -27,7 +27,7 @@ export default function palette<T extends IOfType<Partial<IPalette>>>(
   const entries = Object.entries(define);
   const response: { [P in keyof T]?: IExtendedPalette } = {};
 
-  for (let [name, palette] of entries) {
+  for (const [name, palette] of entries) {
     const main = palette.main || '#fafafa';
     const contrast =
       palette.contrast || readableColor(main, '#fafafa', '#2e2e2e');
@@ -56,7 +56,7 @@ palette.mui = function muiPlatte<T extends IOfType<IPalette>>(
   const entries: Array<[keyof T, IPalette]> = Object.entries(palettes);
   const response: { [P in keyof T]?: IMuiPalette } = {};
 
-  for (let [key, value] of entries) {
+  for (const [key, value] of entries) {
     response[key] = {
       main: value.main,
       light: value.tint,

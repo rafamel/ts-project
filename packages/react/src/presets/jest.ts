@@ -8,6 +8,7 @@ export default function getJest({
   paths
 }: DeepRequired<IOptionsReact>): IOfType<any> {
   const testScriptPath = require.resolve('react-scripts/scripts/test');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const config = require('react-scripts/scripts/utils/createJestConfig')(
     (relative: string) => {
       return path.resolve(path.dirname(testScriptPath), '..', relative);

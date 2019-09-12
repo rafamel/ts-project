@@ -1,1 +1,3 @@
-export default function main(): void {}
+export default function main(): null {
+  return null;
+}
