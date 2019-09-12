@@ -24,7 +24,7 @@ export default function getScripts(
     ],
     analyze: () => (args = []) => [
       bin('source-map-explorer', 'source-map-explorer', {
-        args: ['build/static/js/main.*.js --only-mapped', ...args]
+        args: ['build/static/js/main.*.js', '--only-mapped', ...args]
       })
     ],
     test: () => cra(['test', '--watchAll=false'], toolingOptions, options),
