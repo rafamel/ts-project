@@ -6,7 +6,7 @@
   "keywords": [],
   "private": true,
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "scripts": {
     "commit": "kpo commit --",

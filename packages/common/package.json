@@ -13,7 +13,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "main": "pkg/dist/index.js",
   "types": "pkg/dist/index.d.ts",

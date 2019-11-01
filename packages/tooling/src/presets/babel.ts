@@ -13,7 +13,7 @@ export default function getBabel({
         require.resolve('@babel/preset-env'),
         esnext
           ? { modules: false, spec: true, targets: { esmodules: true } }
-          : { targets: { node: '8.0.0' } }
+          : { targets: { node: '12.0.0' } }
       ],
       typescript ? require.resolve('@babel/preset-typescript') : ''
     ].filter(Boolean),
