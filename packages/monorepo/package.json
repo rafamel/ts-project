@@ -64,14 +64,14 @@
     "lcov-result-merger": "^3.1.0",
     "merge-strategies": "^0.1.4",
     "slimconf": "^0.11.0",
-    "utility-types": "^3.7.0"
+    "utility-types": "^3.9.0"
   },
   "devDependencies": {
-    "kpo": "^0.11.0",
-    "lerna": "^3.16.4"
+    "kpo": "^0.11.1",
+    "lerna": "^3.18.3"
   },
   "peerDependencies": {
-    "kpo": "^0.11.0",
+    "kpo": "^0.11.1",
     "lerna": "3.x"
   }
 }

@@ -59,20 +59,20 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "commitizen": "^3.1.2",
-    "conventional-changelog-cli": "^2.0.23",
-    "conventional-recommended-bump": "^6.0.0",
+    "conventional-changelog-cli": "^2.0.25",
+    "conventional-recommended-bump": "^6.0.2",
     "find-up": "^4.1.0",
     "fs-extra": "^8.0.1",
     "markdownlint-cli": "^0.18.0",
     "merge-strategies": "^0.1.4",
     "slimconf": "^0.11.0",
-    "utility-types": "^3.7.0"
+    "utility-types": "^3.9.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
-    "kpo": "^0.11.0"
+    "@types/fs-extra": "^8.0.1",
+    "kpo": "^0.11.1"
   },
   "peerDependencies": {
-    "kpo": "^0.11.0"
+    "kpo": "^0.11.1"
   }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "Omny",
-  "short_name": "Omny",
-  "description": "Just healthy snacks",
+  "name": "React Application",
+  "short_name": "ReactApp",
+  "description": "A react application",
   "icons": [
     {
       "src": "favicon.ico",
