@@ -76,7 +76,7 @@
     "mobx-state-tree": "^3.14.1",
     "normalize.css": "^8.0.1",
     "polished": "^3.4.0",
-    "promist": "^0.7.0",
+    "promist": "^2.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-transition-group": "^4.2.2",
