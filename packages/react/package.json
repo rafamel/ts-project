@@ -64,7 +64,7 @@
     "@craco/craco": "^5.6.1",
     "@riseup/common": "^0.5.0",
     "@riseup/tooling": "^0.5.0",
-    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "decamelize": "^3.2.0",
     "fs-extra": "^8.1.0",
     "jest-cli": "^24.9.0",
