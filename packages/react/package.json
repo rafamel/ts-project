@@ -82,7 +82,7 @@
     "kpo": "^0.11.1"
   },
   "peerDependencies": {
-    "babel-preset-react-app": "^9.x",
+    "babel-preset-react-app": "^10.0.0",
     "eslint-config-react-app": "^5.x",
     "html-webpack-plugin": "^4.0.0-beta.5",
     "kpo": "^0.11.1",
