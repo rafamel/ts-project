@@ -1,6 +1,9 @@
 import { paths } from './paths';
 
 export const defaults = {
+  global: {
+    root: process.cwd()
+  },
   lintmd: {
     include: './',
     exclude: './{node_modules,pkg,build,dist}/**',
