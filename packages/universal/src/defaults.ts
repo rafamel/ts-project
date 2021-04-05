@@ -11,5 +11,13 @@ export const defaults = {
   },
   semantic: {
     preset: 'angular'
+  },
+  changelog: {
+    preset: 'angular',
+    infile: 'CHANGELOG.md',
+    outfile: 'CHANGELOG.md',
+    append: false,
+    releaseCount: undefined,
+    skipUnstable: false
   }
 };
