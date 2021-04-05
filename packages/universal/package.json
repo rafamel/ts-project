@@ -1,0 +1,35 @@
+{
+  "name": "@riseup/universal",
+  "version": "0.5.0",
+  "author": "Rafa Mel",
+  "description": "Riseup shared tasks and configurations",
+  "keywords": [
+    "presets",
+    "starter",
+    "boilerplate",
+    "riseup"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "main": "pkg/dist",
+  "types": "pkg/dist",
+  "scripts": {
+    "lint": "kpo lint --",
+    "build": "kpo build --",
+    "test": "kpo test --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup/packages/universal",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "dependencies": {}
+}
