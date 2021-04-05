@@ -38,6 +38,18 @@
   "bugs": {
     "url": "https://github.com/rafamel/riseup/issues"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@babel/eslint-parser": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.13.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "merge-strategies": "^0.2.0",
+    "type-core": "^0.8.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.14"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.x"
+  }
 }
