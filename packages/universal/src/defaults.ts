@@ -8,5 +8,8 @@ export const defaults = {
   },
   commit: {
     path: paths.commitizen.conventionalChangelog.root
+  },
+  semantic: {
+    preset: 'angular'
   }
 };
