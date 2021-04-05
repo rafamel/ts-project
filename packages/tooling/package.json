@@ -1,0 +1,43 @@
+{
+  "name": "@riseup/tooling",
+  "version": "0.5.0",
+  "author": "Rafa Mel",
+  "description": "Riseup tooling tasks and configurations",
+  "keywords": [
+    "presets",
+    "starter",
+    "boilerplate",
+    "config",
+    "riseup",
+    "tooling",
+    "eslint",
+    "prettier",
+    "babel",
+    "jest",
+    "typescript"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "main": "pkg/dist",
+  "types": "pkg/dist",
+  "scripts": {
+    "lint": "kpo lint --",
+    "build": "kpo build --",
+    "test": "kpo test --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup/packages/tooling",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
