@@ -3,5 +3,8 @@ export const paths = {
     presetEnv: require.resolve('@babel/preset-env'),
     presetTypeScript: require.resolve('@babel/preset-typescript'),
     pluginModuleResolver: require.resolve('babel-plugin-module-resolver')
+  },
+  typescript: {
+    config: require.resolve('../static/tsconfig.json')
   }
 };

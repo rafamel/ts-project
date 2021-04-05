@@ -1,5 +1,6 @@
 export const defaults = {
   global: {
+    root: process.cwd(),
     alias: {}
   },
   transpile: {

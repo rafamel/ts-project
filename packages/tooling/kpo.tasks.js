@@ -51,7 +51,7 @@ module.exports = {
       pika: pika({
         args: {
           nodeOnly: true,
-          assets: []
+          assets: ['static/']
         },
         options: {
           paths: {
