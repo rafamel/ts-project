@@ -5,3 +5,4 @@ export * from './get-typescript';
 export * from './tmp-path';
 export * from './tmp-task';
 export * from './intercept';
+export { constants } from './paths';
