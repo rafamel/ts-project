@@ -1,0 +1,35 @@
+{
+  "name": "@riseup/cli",
+  "version": "0.5.0",
+  "author": "Rafa Mel",
+  "description": "Riseup CLI",
+  "keywords": [
+    "cli",
+    "starter",
+    "boilerplate",
+    "riseup"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "main": "pkg/dist",
+  "types": "pkg/dist",
+  "scripts": {
+    "lint": "kpo lint --",
+    "build": "kpo build --",
+    "test": "kpo test --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup/packages/cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "dependencies": {}
+}
