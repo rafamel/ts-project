@@ -6,6 +6,7 @@ export const paths = {
     babelCli: getBin('@babel/cli', 'babel'),
     babelNode: getBin('@babel/node', 'babel-node'),
     eslint: getBin('eslint', 'eslint'),
+    jest: getBin('jest-cli', 'jest'),
     typescript: require.resolve('ttypescript/lib/tsc')
   },
   riseup: {
