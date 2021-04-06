@@ -1,4 +1,7 @@
 export const paths = {
+  bin: {
+    pika: require.resolve('@pika/pack/dist-node/index.bin')
+  },
   pika: {
     transpile: require.resolve('./configure/pika/plugin-transpile'),
     assets: require.resolve('@pika/plugin-copy-assets'),
