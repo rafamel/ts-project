@@ -1,0 +1,39 @@
+{
+  "name": "@riseup/library",
+  "version": "0.5.0",
+  "author": "Rafa Mel",
+  "description": "Riseup tasks and configurations for libraries",
+  "keywords": [
+    "presets",
+    "starter",
+    "boilerplate",
+    "config",
+    "riseup",
+    "library",
+    "module"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "main": "pkg/dist",
+  "types": "pkg/dist",
+  "scripts": {
+    "lint": "kpo lint --",
+    "build": "kpo build --",
+    "test": "kpo test --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup/packages/library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
