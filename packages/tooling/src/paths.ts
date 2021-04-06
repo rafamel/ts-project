@@ -25,5 +25,8 @@ export const paths = {
     configPrettier: require.resolve('eslint-config-prettier'),
     parserBabel: require.resolve('@babel/eslint-parser'),
     parserTypeScript: require.resolve('@typescript-eslint/parser')
+  },
+  jest: {
+    transformBabel: require.resolve('babel-jest')
   }
 };

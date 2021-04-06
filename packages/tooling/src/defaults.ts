@@ -18,5 +18,8 @@ export const defaults = {
     prettier: true,
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
+  },
+  test: {
+    overrides: {}
   }
 };
