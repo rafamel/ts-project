@@ -3,6 +3,7 @@ import { getBin } from '@riseup/utils';
 export const paths = {
   bin: {
     babelCli: getBin('@babel/cli', 'babel'),
+    babelNode: getBin('@babel/node', 'babel-node'),
     typescript: require.resolve('ttypescript/lib/tsc')
   },
   babel: {
