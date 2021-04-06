@@ -57,6 +57,7 @@
     "kpo": "^0.17.1",
     "merge-strategies": "^0.2.0",
     "type-core": "^0.8.0",
+    "typedoc": "^0.20.35",
     "uuid": "^8.3.2"
   },
   "peerDependencies": {

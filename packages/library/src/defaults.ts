@@ -12,6 +12,8 @@ export const defaults = {
     output: 'dist/'
   },
   docs: {
+    build: true,
+    destination: 'docs/',
     overrides: {}
   }
 };
