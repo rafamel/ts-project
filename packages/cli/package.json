@@ -15,6 +15,9 @@
   "engines": {
     "node": ">=12"
   },
+  "bin": {
+    "riseup": "dist/riseup.js"
+  },
   "main": "pkg/dist",
   "types": "pkg/dist",
   "scripts": {
@@ -31,5 +34,8 @@
   "bugs": {
     "url": "https://github.com/rafamel/riseup/issues"
   },
-  "dependencies": {}
+  "dependencies": {
+    "cli-belt": "^1.0.3",
+    "kpo": "^0.17.1"
+  }
 }
