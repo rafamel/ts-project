@@ -13,6 +13,8 @@ export const defaults = {
     targets: { node: '12.0.0' }
   },
   lint: {
+    dir: ['./'],
+    types: true,
     prettier: true,
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
