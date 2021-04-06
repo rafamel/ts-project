@@ -11,5 +11,10 @@ export const defaults = {
     types: true,
     output: 'dist/',
     targets: { node: '12.0.0' }
+  },
+  lint: {
+    prettier: true,
+    highlight: ['fixme', 'todo', 'refactor'],
+    rules: {}
   }
 };

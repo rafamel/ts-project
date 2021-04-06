@@ -13,5 +13,12 @@ export const paths = {
   },
   typescript: {
     config: require.resolve('../static/tsconfig.json')
+  },
+  eslint: {
+    configStandard: require.resolve('eslint-config-standard'),
+    configImportErrors: require.resolve('eslint-plugin-import/config/errors'),
+    configPrettier: require.resolve('eslint-config-prettier'),
+    parserBabel: require.resolve('@babel/eslint-parser'),
+    parserTypeScript: require.resolve('@typescript-eslint/parser')
   }
 };
