@@ -1,4 +1,7 @@
 export const defaults = {
+  global: {
+    root: process.cwd()
+  },
   build: {
     pack: false,
     assets: [],
@@ -7,5 +10,8 @@ export const defaults = {
   },
   transpile: {
     output: 'dist/'
+  },
+  docs: {
+    overrides: {}
   }
 };
