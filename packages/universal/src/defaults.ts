@@ -10,17 +10,20 @@ export const defaults = {
     overrides: {}
   },
   commit: {
-    path: paths.commitizen.conventionalChangelog.root
+    path: paths.commitizen.path
   },
-  semantic: {
-    preset: 'angular'
-  },
-  changelog: {
-    preset: 'angular',
-    infile: 'CHANGELOG.md',
-    outfile: 'CHANGELOG.md',
-    append: false,
-    releaseCount: undefined,
-    skipUnstable: false
+  release: {
+    publish: false,
+    conventional: {
+      active: true,
+      preset: 'angular',
+      changelog: {
+        file: 'CHANGELOG.md',
+        append: false,
+        releaseCount: undefined,
+        skipUnstable: false
+      }
+    },
+    overrides: {}
   }
 };

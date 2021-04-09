@@ -11,6 +11,9 @@ export const defaults = {
   transpile: {
     output: 'dist/'
   },
+  release: {
+    publish: true
+  },
   docs: {
     build: true,
     destination: 'docs/',

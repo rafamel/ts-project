@@ -5,17 +5,17 @@ import { getConfiguration } from '@riseup/utils';
 import { defaults } from './defaults';
 import {
   configureMarkdownlint,
-  ConfigureMarkdownlintParams
+  configureReleaseit,
+  ConfigureMarkdownlintParams,
+  ConfigureReleaseitParams
 } from './configure';
 import {
   commit,
-  semantic,
-  changelog,
   lintmd,
+  release,
   CommitParams,
-  SemanticParams,
-  ChangelogParams,
-  LintMdParams
+  LintMdParams,
+  ReleaseParams
 } from './tasks';
 
 export interface GlobalUniversalOptions {
@@ -24,21 +24,20 @@ export interface GlobalUniversalOptions {
 
 export interface UniversalOptions {
   global?: GlobalUniversalOptions;
-  commit?: CommitParams;
-  semantic?: SemanticParams;
-  changelog?: ChangelogParams;
   lintmd?: LintMdParams & ConfigureMarkdownlintParams;
+  commit?: CommitParams;
+  release?: ReleaseParams & ConfigureReleaseitParams;
 }
 
 export interface UniversalReconfigure {
+  releaseit?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
   markdownlint?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
 }
 
 export interface UniversalTasks {
   lintmd: Task;
   commit: Task;
-  semantic: Task;
-  changelog: Task;
+  release: Task;
 }
 
 export function universal(
@@ -50,8 +49,7 @@ export function universal(
       global: {},
       lintmd: {},
       commit: {},
-      semantic: {},
-      changelog: {}
+      release: {}
     },
     options || undefined
   );
@@ -61,19 +59,26 @@ export function universal(
   const config = {
     markdownlint: getConfiguration<Serial.Object>(
       reconfigure.markdownlint,
-      () => configureMarkdownlint()
+      () => configureMarkdownlint({ ...opts.global, ...opts.lintmd })
+    ),
+    releaseit: getConfiguration<Serial.Object>(reconfigure.releaseit, () =>
+      configureReleaseit({ ...opts.global, ...opts.release })
     )
   };
 
   const wrap = context.bind(null, { cwd });
   return {
-    commit: wrap(commit({ ...opts.global, ...opts.commit })),
-    semantic: wrap(semantic({ ...opts.global, ...opts.semantic })),
-    changelog: wrap(changelog({ ...opts.global, ...opts.changelog })),
     lintmd: wrap(
       lintmd(
         { ...opts.global, ...opts.lintmd },
         { markdownlint: config.markdownlint }
+      )
+    ),
+    commit: wrap(commit({ ...opts.global, ...opts.commit })),
+    release: wrap(
+      release(
+        { ...opts.global, ...opts.release },
+        { releaseit: config.releaseit }
       )
     )
   };

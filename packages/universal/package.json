@@ -33,15 +33,17 @@
   },
   "dependencies": {
     "@riseup/utils": "0.5.0",
+    "@release-it/conventional-changelog": "^2.0.1",
+    "arg": "^5.0.0",
     "chalk": "^4.1.0",
     "commitizen": "^4.2.3",
-    "conventional-changelog-cli": "^2.1.1",
     "conventional-recommended-bump": "^6.1.0",
     "cz-conventional-changelog": "^3.2.0",
     "ensurism": "^0.6.0",
     "kpo": "^0.18.0",
     "markdownlint-cli": "^0.27.1",
     "merge-strategies": "^0.2.0",
+    "release-it": "^14.5.1",
     "type-core": "^0.8.0"
   }
 }

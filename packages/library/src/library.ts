@@ -1,9 +1,11 @@
 import { Empty, Serial, UnaryFn } from 'type-core';
+import { merge } from 'merge-strategies';
 import { context, Task } from 'kpo';
 import { into } from 'pipettes';
 import path from 'path';
 import { getConfiguration } from '@riseup/utils';
 import {
+  configureReleaseit,
   GlobalUniversalOptions,
   universal,
   UniversalOptions,
@@ -81,12 +83,27 @@ export function library(
         output:
           (opts.transpile && opts.transpile.output) || defaults.transpile.output
       }
+    }),
+    (opts) => ({
+      ...opts,
+      release: merge(
+        {
+          publish: defaults.release.publish,
+          overrides: {
+            npm: { publishPath: opts.build.destination }
+          }
+        },
+        opts.release
+      )
     })
   );
 
   const wrap = context.bind(null, { cwd: opts.global.root });
   return into(
     {
+      releaseit: getConfiguration<Serial.Object>(reconfigure.releaseit, () => {
+        return configureReleaseit({ ...opts.release });
+      }),
       babel: getConfiguration<Serial.Object>(reconfigure.babel, () => {
         return configureBabel({ ...opts.global, ...opts.transpile });
       }),
@@ -109,8 +126,8 @@ export function library(
         return configureTypedoc({ ...opts.global, ...opts.docs });
       })
     }),
-    ({ babel, typescript, pika, typedoc }) => ({
-      ...universal(opts, reconfigure),
+    ({ releaseit, babel, typescript, pika, typedoc }) => ({
+      ...universal(opts, { ...reconfigure, releaseit }),
       ...tooling(opts, { ...reconfigure, babel, typescript }),
       transpile: wrap(
         transpile(
