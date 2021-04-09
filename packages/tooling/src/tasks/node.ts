@@ -26,19 +26,15 @@ export function node(
   );
 
   return tmpTask(config.babel, (file) => {
-    return exec(
-      constants.bin.node,
-      [
-        paths.bin.babelNode,
-        ...['--config-file', file],
-        ...[
-          '--extensions',
-          [...opts.extensions.js, ...opts.extensions.ts]
-            .map((x) => '.' + x)
-            .join(',')
-        ]
-      ],
-      { briefError: true }
-    );
+    return exec(constants.node, [
+      paths.bin.babelNode,
+      ...['--config-file', file],
+      ...[
+        '--extensions',
+        [...opts.extensions.js, ...opts.extensions.ts]
+          .map((x) => '.' + x)
+          .join(',')
+      ]
+    ]);
   });
 }

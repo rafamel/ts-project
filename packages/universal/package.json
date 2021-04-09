@@ -39,7 +39,7 @@
     "conventional-recommended-bump": "^6.1.0",
     "cz-conventional-changelog": "^3.2.0",
     "ensurism": "^0.6.0",
-    "kpo": "^0.17.1",
+    "kpo": "^0.18.0",
     "markdownlint-cli": "^0.27.1",
     "merge-strategies": "^0.2.0",
     "type-core": "^0.8.0"

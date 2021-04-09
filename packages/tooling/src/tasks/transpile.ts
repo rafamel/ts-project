@@ -51,23 +51,19 @@ export function transpile(
         recursive: true
       }),
       tmpTask(config.babel, (file) => {
-        return exec(
-          constants.bin.node,
-          [
-            paths.bin.babelCli,
-            'src',
-            ...['--source-maps', 'inline'],
-            ...['--config-file', file],
-            ...['--out-dir', opts.output],
-            ...[
-              '--extensions',
-              [...opts.extensions.js, ...opts.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ]
-          ],
-          { briefError: true }
-        );
+        return exec(constants.node, [
+          paths.bin.babelCli,
+          'src',
+          ...['--source-maps', 'inline'],
+          ...['--config-file', file],
+          ...['--out-dir', opts.output],
+          ...[
+            '--extensions',
+            [...opts.extensions.js, ...opts.extensions.ts]
+              .map((x) => '.' + x)
+              .join(',')
+          ]
+        ]);
       }),
       create((ctx) => {
         return opts.types && getTypeScript(ctx.cwd)
@@ -81,8 +77,7 @@ export function transpile(
                 [
                   ...['--project', path.resolve(ctx.cwd, path.basename(file))],
                   ...['--outDir', opts.output]
-                ],
-                { briefError: true }
+                ]
               );
             })
           : undefined;

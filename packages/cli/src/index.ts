@@ -1,13 +1,13 @@
 import { loadPackage } from 'cli-belt';
-import { bin } from 'kpo';
+import { cli as _cli } from 'kpo';
 
 export async function cli(): Promise<void> {
   const pkg = await loadPackage(__dirname, { title: false });
 
-  return bin({
+  return _cli({
     bin: 'riseup',
     file: 'riseup.config.js',
-    description: pkg.description || '',
-    version: pkg.version || 'Unknown'
+    version: pkg.version || 'Unknown',
+    description: pkg.description || ''
   });
 }

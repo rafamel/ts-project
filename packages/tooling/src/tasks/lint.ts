@@ -38,28 +38,22 @@ export function lint(
     { args: [] },
     finalize(
       tmpTask(config.eslint, async (file) => {
-        return exec(
-          constants.bin.node,
-          [
-            paths.bin.eslint,
-            ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
-            ...['--config', file],
-            ...[
-              '--ext',
-              [...opts.extensions.js, ...opts.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ],
-            ...['--resolve-plugins-relative-to', paths.riseup.tooling]
+        return exec(constants.node, [
+          paths.bin.eslint,
+          ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
+          ...['--config', file],
+          ...[
+            '--ext',
+            [...opts.extensions.js, ...opts.extensions.ts]
+              .map((x) => '.' + x)
+              .join(',')
           ],
-          { briefError: true }
-        );
+          ...['--resolve-plugins-relative-to', paths.riseup.tooling]
+        ]);
       }),
       create((ctx) => {
         return opts.types && getTypeScript(ctx.cwd)
-          ? exec(constants.bin.node, [paths.bin.typescript, '--noEmit'], {
-              briefError: true
-            })
+          ? exec(constants.node, [paths.bin.typescript, '--noEmit'])
           : undefined;
       })
     )

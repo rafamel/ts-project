@@ -1,9 +1,8 @@
 import { Empty } from 'type-core';
 import { shallow } from 'merge-strategies';
-import { create, series, log, select, exec, context, Task } from 'kpo';
+import { create, series, log, exec, context, Task, confirm } from 'kpo';
 import chalk from 'chalk';
 import bump, { Recommendation, Options } from 'conventional-recommended-bump';
-import { constants } from '@riseup/utils';
 import { defaults } from '../defaults';
 
 export interface SemanticParams extends Options {
@@ -41,18 +40,9 @@ export function semantic(options: SemanticOptions | Empty): Task.Async {
       arg && releaseType !== arg
         ? log('warn', 'Explicit version bump differs from recommended bump')
         : null,
-      select(
-        {
-          message: 'Continue?',
-          default: 'y'
-        },
-        {
-          y: context(
-            { args: [] },
-            exec(constants.bin.npm, ['version', arg || releaseType])
-          ),
-          n: null
-        }
+      confirm(
+        { message: 'Continue?', default: true },
+        context({ args: [] }, exec('npm', ['version', arg || releaseType]))
       )
     );
   });

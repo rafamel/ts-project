@@ -25,7 +25,7 @@ module.exports = async function lint(data, context) {
           ],
           ...['--resolve-plugins-relative-to', pkgPath]
         ],
-        { cwd: data.options.paths.root, briefError: true }
+        { cwd: data.options.paths.root }
       );
     }),
     context

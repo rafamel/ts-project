@@ -42,16 +42,12 @@ export function docs(
         recursive: true
       }),
       tmpTask(config.typedoc, (file) => {
-        return exec(
-          constants.bin.node,
-          [
-            paths.bin.typedoc,
-            'src',
-            ...['--out', opts.destination],
-            ...['--options', file]
-          ],
-          { briefError: true }
-        );
+        return exec(constants.node, [
+          paths.bin.typedoc,
+          'src',
+          ...['--out', opts.destination],
+          ...['--options', file]
+        ]);
       })
     );
   });

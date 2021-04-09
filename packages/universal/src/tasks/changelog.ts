@@ -29,19 +29,15 @@ export function changelog(options: ChangelogOptions | Empty): Task.Async {
     options || undefined
   );
 
-  return exec(
-    constants.bin.node,
-    [
-      paths.bin.changelog,
-      ...(opts.preset ? ['--preset', opts.preset] : []),
-      ...(opts.infile ? ['--infile', opts.infile] : []),
-      ...(opts.outfile ? ['--outfile', opts.outfile] : []),
-      ...(opts.append ? ['--append'] : []),
-      ...(TypeGuard.isEmpty(opts.releaseCount)
-        ? []
-        : ['--release-count', String(opts.releaseCount)]),
-      ...(opts.skipUnstable ? ['--skip-unstable'] : [])
-    ],
-    { briefError: true }
-  );
+  return exec(constants.node, [
+    paths.bin.changelog,
+    ...(opts.preset ? ['--preset', opts.preset] : []),
+    ...(opts.infile ? ['--infile', opts.infile] : []),
+    ...(opts.outfile ? ['--outfile', opts.outfile] : []),
+    ...(opts.append ? ['--append'] : []),
+    ...(TypeGuard.isEmpty(opts.releaseCount)
+      ? []
+      : ['--release-count', String(opts.releaseCount)]),
+    ...(opts.skipUnstable ? ['--skip-unstable'] : [])
+  ]);
 }

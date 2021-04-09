@@ -32,15 +32,11 @@ export function lintmd(
   );
 
   return tmpTask(config.markdownlint, (file) => {
-    return exec(
-      constants.bin.node,
-      [
-        paths.bin.markdownlint,
-        ...['--config', file],
-        ...(opts.exclude ? ['--ignore', opts.exclude] : []),
-        ...[opts.include || './']
-      ],
-      { briefError: true }
-    );
+    return exec(constants.node, [
+      paths.bin.markdownlint,
+      ...['--config', file],
+      ...(opts.exclude ? ['--ignore', opts.exclude] : []),
+      ...[opts.include || './']
+    ]);
   });
 }

@@ -15,8 +15,7 @@ export interface CommitOptions extends CommitParams {}
 export function commit(options: CommitOptions | Empty): Task {
   const opts = shallow({ path: defaults.commit.path }, options || undefined);
 
-  return exec(constants.bin.node, [paths.bin.commitizen], {
-    briefError: true,
+  return exec(constants.node, [paths.bin.commitizen], {
     env: { COMMITIZEN_CONFIG: JSON.stringify(opts) }
   });
 }

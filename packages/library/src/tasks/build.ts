@@ -56,8 +56,7 @@ export function build(
             [
               ...['--out', opts.destination],
               ...['--pipeline', JSON.stringify(config.pika)]
-            ],
-            { briefError: true }
+            ]
           );
         }
       ),
@@ -73,11 +72,9 @@ export function build(
           finalize(
             series(
               custom ? mkdir(dir, { ensure: false }) : null,
-              exec(
-                constants.bin.npm,
-                ['pack', path.resolve(ctx.cwd, opts.destination)],
-                { briefError: false, cwd: dir }
-              ),
+              exec('npm', ['pack', path.resolve(ctx.cwd, opts.destination)], {
+                cwd: dir
+              }),
               custom
                 ? move(
                     path.resolve(dir, '*.tgz'),

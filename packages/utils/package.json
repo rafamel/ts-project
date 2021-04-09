@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "ensurism": "^0.6.0",
-    "kpo": "^0.17.1",
+    "kpo": "^0.18.0",
     "mockery": "^2.1.0",
     "object-hash": "^2.1.1",
     "pipettes": "^0.1.3",

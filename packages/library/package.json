@@ -55,7 +55,7 @@
     "errorish": "^1.0.0",
     "eslint": "^7.23.0",
     "jest-cli": "^26.6.3",
-    "kpo": "^0.17.1",
+    "kpo": "^0.18.0",
     "merge-strategies": "^0.2.0",
     "pipettes": "^0.1.3",
     "type-core": "^0.8.0",

@@ -1,7 +1,5 @@
-import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { into } from 'pipettes';
 
 export const paths = {
   bin: {
@@ -15,15 +13,5 @@ export const paths = {
 
 export const constants = {
   tmp: paths.riseup.tmp,
-  bin: {
-    node: paths.bin.node,
-    npm: into(path.resolve(path.dirname(process.execPath), 'npm'), (npm) => {
-      try {
-        fs.accessSync(npm, fs.constants.F_OK);
-        return npm;
-      } catch (_) {
-        return 'npm';
-      }
-    })
-  }
+  node: paths.bin.node
 };

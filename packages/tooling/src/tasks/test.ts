@@ -9,10 +9,12 @@ export interface TestConfig {
 
 export function test(config: TestConfig): Task.Async {
   return tmpTask(config.jest, async (file) => {
-    return exec(
-      constants.bin.node,
-      [paths.bin.jest, '--config', file, '--rootDir', './'],
-      { briefError: true }
-    );
+    return exec(constants.node, [
+      paths.bin.jest,
+      '--config',
+      file,
+      '--rootDir',
+      './'
+    ]);
   });
 }
