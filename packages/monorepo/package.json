@@ -1,0 +1,38 @@
+{
+  "name": "@riseup/monorepo",
+  "version": "0.5.0",
+  "author": "Rafa Mel",
+  "description": "Riseup tasks and configurations for monorepos",
+  "keywords": [
+    "presets",
+    "starter",
+    "boilerplate",
+    "config",
+    "riseup",
+    "monorepo",
+    "lerna"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "main": "pkg/dist/index.js",
+  "types": "pkg/dist/index.d.ts",
+  "scripts": {
+    "lint": "kpo lint --",
+    "build": "kpo build --",
+    "test": "kpo test --"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rafamel/riseup/packages/monorepo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "dependencies": {}
+}
