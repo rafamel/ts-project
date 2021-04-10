@@ -19,7 +19,7 @@ import { paths } from '../paths';
 import { defaults } from '../defaults';
 
 export interface BuildParams {
-  pack?: boolean | string;
+  tarball?: boolean | string;
   destination?: string;
 }
 
@@ -35,7 +35,7 @@ export function hydrateBuild(
 ): Deep.Required<BuildOptions> {
   return shallow(
     {
-      pack: defaults.build.pack,
+      tarball: defaults.build.tarball,
       destination: defaults.build.destination
     },
     options || undefined
@@ -67,9 +67,9 @@ export function build(
         }
       ),
       create((ctx) => {
-        if (!opts.pack) return;
+        if (!opts.tarball) return;
 
-        const custom = TypeGuard.isString(opts.pack);
+        const custom = TypeGuard.isString(opts.tarball);
         const dir = custom
           ? path.resolve(constants.tmp, uuid())
           : opts.destination;
@@ -84,13 +84,11 @@ export function build(
               custom
                 ? move(
                     path.resolve(dir, '*.tgz'),
-                    path.resolve(opts.destination, String(opts.pack) + '.tgz'),
-                    {
-                      glob: true,
-                      single: true,
-                      strict: true,
-                      exists: 'error'
-                    }
+                    path.resolve(
+                      opts.destination,
+                      String(opts.tarball) + '.tgz'
+                    ),
+                    { glob: true, single: true, strict: true, exists: 'error' }
                   )
                 : null
             ),

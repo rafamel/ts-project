@@ -3,8 +3,8 @@ import { LibraryParams } from './definitions';
 
 export const defaults: Deep.Required<LibraryParams> = {
   build: {
-    pack: false,
     assets: [],
+    tarball: false,
     multitarget: true,
     destination: 'pkg/'
   },
