@@ -1,21 +1,17 @@
-export const defaults = {
-  global: {
-    root: process.cwd()
-  },
+import { Deep } from 'type-core';
+import { LibraryParams } from './definitions';
+
+export const defaults: Deep.Required<LibraryParams> = {
   build: {
     pack: false,
     assets: [],
     multitarget: true,
     destination: 'pkg/'
   },
-  transpile: {
-    output: 'dist/'
-  },
-  release: {
-    publish: true
-  },
   docs: {
     build: true,
+    name: null,
+    version: null,
     destination: 'docs/',
     overrides: {}
   }

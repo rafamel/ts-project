@@ -1,8 +1,9 @@
+import { Deep, Empty, Serial } from 'type-core';
 import { context, copy, exec, mkdir, series, remove, create, Task } from 'kpo';
-import { Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import path from 'path';
 import { getTypeScript, intercept, tmpTask, constants } from '@riseup/utils';
+import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -23,18 +24,24 @@ export interface TranspileConfig {
   typescript: Serial.Object;
 }
 
+export function hydrateTranspile(
+  options: TranspileOptions | Empty
+): Deep.Required<TranspileOptions> {
+  return merge(
+    {
+      ...hydrateToolingGlobal(options),
+      types: defaults.transpile.types,
+      output: defaults.transpile.output
+    },
+    options || undefined
+  );
+}
+
 export function transpile(
   options: TranspileOptions | Empty,
   config: TranspileConfig
 ): Task.Async {
-  const opts = merge(
-    {
-      types: defaults.transpile.types,
-      output: defaults.transpile.output,
-      extensions: defaults.global.extensions
-    },
-    options || undefined
-  );
+  const opts = hydrateTranspile(options);
 
   return context(
     { args: [] },

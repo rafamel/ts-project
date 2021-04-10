@@ -1,4 +1,4 @@
-import { Serial, Empty, TypeGuard } from 'type-core';
+import { Serial, Empty, TypeGuard, Deep } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { v4 as uuid } from 'uuid';
 import path from 'path';
@@ -23,24 +23,30 @@ export interface BuildParams {
   destination?: string;
 }
 
-export interface BuildOptions extends BuildParams {}
+export type BuildOptions = BuildParams;
 
 export interface BuildConfig {
   pika: Serial.Array;
   babel: Serial.Object;
 }
 
-export function build(
-  options: BuildOptions | Empty,
-  config: BuildConfig
-): Task.Async {
-  const opts = shallow(
+export function hydrateBuild(
+  options: BuildOptions | Empty
+): Deep.Required<BuildOptions> {
+  return shallow(
     {
       pack: defaults.build.pack,
       destination: defaults.build.destination
     },
     options || undefined
   );
+}
+
+export function build(
+  options: BuildOptions | Empty,
+  config: BuildConfig
+): Task.Async {
+  const opts = hydrateBuild(options);
 
   return create((ctx) => {
     return series(

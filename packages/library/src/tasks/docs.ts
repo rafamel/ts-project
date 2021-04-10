@@ -1,6 +1,6 @@
 import { mkdir, remove, series, print, create, Task, exec } from 'kpo';
 import { shallow } from 'merge-strategies';
-import { Serial, Empty } from 'type-core';
+import { Serial, Empty, Deep } from 'type-core';
 import path from 'path';
 import { tmpTask, getTypeScript, constants } from '@riseup/utils';
 import { defaults } from '../defaults';
@@ -11,23 +11,29 @@ export interface DocsParams {
   destination?: string;
 }
 
-export interface DocsOptions extends DocsParams {}
+export type DocsOptions = DocsParams;
 
 export interface DocsConfig {
   typedoc: Serial.Object;
 }
 
-export function docs(
-  options: DocsOptions | Empty,
-  config: DocsConfig
-): Task.Async {
-  const opts = shallow(
+export function hydrateDocs(
+  options: DocsOptions | Empty
+): Deep.Required<DocsOptions> {
+  return shallow(
     {
       build: defaults.docs.build,
       destination: defaults.docs.destination
     },
     options || undefined
   );
+}
+
+export function docs(
+  options: DocsOptions | Empty,
+  config: DocsConfig
+): Task.Async {
+  const opts = hydrateDocs(options);
 
   return create((ctx) => {
     if (!opts.build || !getTypeScript(ctx.cwd)) {

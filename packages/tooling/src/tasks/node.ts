@@ -1,8 +1,7 @@
-import { Empty, Serial } from 'type-core';
-import { merge } from 'merge-strategies';
+import { Deep, Empty, Serial } from 'type-core';
 import { exec, Task } from 'kpo';
 import { tmpTask, constants } from '@riseup/utils';
-import { defaults } from '../defaults';
+import { hydrateToolingGlobal } from '../global';
 import { paths } from '../paths';
 
 export interface NodeOptions {
@@ -16,14 +15,17 @@ export interface NodeConfig {
   babel: Serial.Object;
 }
 
+export function hydrateNode(
+  options: NodeOptions | Empty
+): Deep.Required<NodeOptions> {
+  return hydrateToolingGlobal(options);
+}
+
 export function node(
   options: NodeOptions | Empty,
   config: NodeConfig
 ): Task.Async {
-  const opts = merge(
-    { extensions: defaults.global.extensions },
-    options || undefined
-  );
+  const opts = hydrateNode(options);
 
   return tmpTask(config.babel, (file) => {
     return exec(constants.node, [

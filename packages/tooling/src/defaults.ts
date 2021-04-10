@@ -1,6 +1,8 @@
-export const defaults = {
+import { Deep } from 'type-core';
+import { ToolingParams } from './definitions';
+
+export const defaults: Deep.Required<ToolingParams> = {
   global: {
-    root: process.cwd(),
     alias: {},
     extensions: {
       js: ['js', 'jsx'],

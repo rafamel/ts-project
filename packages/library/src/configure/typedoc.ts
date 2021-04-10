@@ -1,31 +1,33 @@
-import { Empty, Serial, TypeGuard } from 'type-core';
+import { Deep, Empty, Serial, TypeGuard } from 'type-core';
 import { deep, shallow } from 'merge-strategies';
 import { getPackage } from '@riseup/utils';
 import { defaults } from '../defaults';
 
 export interface ConfigureTypedocParams {
-  name?: string;
-  version?: string;
+  name?: string | null;
+  version?: string | null;
   overrides?: Serial.Object;
 }
 
-export interface ConfigureTypedocOptions extends ConfigureTypedocParams {
-  root?: string;
+export type ConfigureTypedocOptions = ConfigureTypedocParams;
+
+export function hydrateConfigureTypedoc(
+  options: ConfigureTypedocOptions | Empty
+): Deep.Required<ConfigureTypedocOptions> {
+  return shallow(
+    { name: null, version: null, overrides: defaults.docs.overrides },
+    options || undefined
+  );
 }
 
 export function configureTypedoc(
+  cwd: string,
   options: ConfigureTypedocOptions | Empty
 ): Serial.Object {
-  const opts = shallow(
-    {
-      root: defaults.global.root,
-      overrides: defaults.docs.overrides
-    },
-    options || undefined
-  );
+  const opts = hydrateConfigureTypedoc(options);
 
   if (TypeGuard.isEmpty(opts.name) || TypeGuard.isEmpty(opts.version)) {
-    const pkg = getPackage(opts.root);
+    const pkg = getPackage(cwd);
     if (pkg) {
       opts.name = TypeGuard.isEmpty(opts.name)
         ? (pkg.name as string)

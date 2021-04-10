@@ -1,85 +1,56 @@
-import { Empty, Serial, UnaryFn } from 'type-core';
-import { context, Task } from 'kpo';
-import { shallow } from 'merge-strategies';
+import { Empty, Serial } from 'type-core';
+import { create } from 'kpo';
 import { getConfiguration } from '@riseup/utils';
-import { defaults } from './defaults';
 import {
-  configureMarkdownlint,
-  configureReleaseit,
-  ConfigureMarkdownlintParams,
-  ConfigureReleaseitParams
-} from './configure';
-import {
-  commit,
-  lintmd,
-  release,
-  CommitParams,
-  LintMdParams,
-  ReleaseParams
-} from './tasks';
+  UniversalOptions,
+  UniversalReconfigure,
+  UniversalTasks
+} from './definitions';
+import { configureMarkdownlint, configureReleaseit } from './configure';
+import { commit, lintmd, release } from './tasks';
 
-export interface GlobalUniversalOptions {
-  root?: string;
-}
-
-export interface UniversalOptions {
-  global?: GlobalUniversalOptions;
-  lintmd?: LintMdParams & ConfigureMarkdownlintParams;
-  commit?: CommitParams;
-  release?: ReleaseParams & ConfigureReleaseitParams;
-}
-
-export interface UniversalReconfigure {
-  releaseit?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  markdownlint?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-}
-
-export interface UniversalTasks {
-  lintmd: Task;
-  commit: Task;
-  release: Task;
+export function hydrateUniversal(
+  options: UniversalOptions | Empty
+): Required<UniversalOptions> {
+  return options
+    ? {
+        lintmd: { ...options.lintmd },
+        commit: { ...options.commit },
+        release: { ...options.release }
+      }
+    : { lintmd: {}, commit: {}, release: {} };
 }
 
 export function universal(
   options: UniversalOptions | Empty,
-  reconfigure: UniversalReconfigure = {}
+  reconfigure?: UniversalReconfigure
 ): UniversalTasks {
-  const opts: UniversalOptions = shallow(
-    {
-      global: {},
-      lintmd: {},
-      commit: {},
-      release: {}
+  const opts = hydrateUniversal(options);
+
+  const configure = {
+    markdownlint() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.markdownlint,
+        () => configureMarkdownlint(opts.lintmd)
+      );
     },
-    options || undefined
-  );
-
-  const cwd = (opts.global && opts.global.root) || defaults.global.root;
-
-  const config = {
-    markdownlint: getConfiguration<Serial.Object>(
-      reconfigure.markdownlint,
-      () => configureMarkdownlint({ ...opts.global, ...opts.lintmd })
-    ),
-    releaseit: getConfiguration<Serial.Object>(reconfigure.releaseit, () =>
-      configureReleaseit({ ...opts.global, ...opts.release })
-    )
+    releaseit() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.releaseit,
+        () => configureReleaseit(opts.release)
+      );
+    }
   };
 
-  const wrap = context.bind(null, { cwd });
   return {
-    lintmd: wrap(
-      lintmd(
-        { ...opts.global, ...opts.lintmd },
-        { markdownlint: config.markdownlint }
-      )
-    ),
-    commit: wrap(commit({ ...opts.global, ...opts.commit })),
-    release: wrap(
-      release(
-        { ...opts.global, ...opts.release },
-        { releaseit: config.releaseit }
-      )
-    )
+    lintmd: create(() => {
+      return lintmd(opts.lintmd, { markdownlint: configure.markdownlint() });
+    }),
+    commit: create(() => {
+      return commit(opts.commit);
+    }),
+    release: create(() => {
+      return release(opts.release, { releaseit: configure.releaseit() });
+    })
   };
 }

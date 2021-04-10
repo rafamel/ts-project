@@ -1,5 +1,6 @@
-import { Empty, Members, Serial } from 'type-core';
+import { Deep, Empty, Members, Serial } from 'type-core';
 import { shallow } from 'merge-strategies';
+import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -11,17 +12,22 @@ export interface ConfigureBabelOptions extends ConfigureBabelParams {
   alias?: Members<string>;
 }
 
-export function configureBabel(
+export function hydrateConfigureBabel(
   options: ConfigureBabelOptions | Empty
-): Serial.Object {
-  const opts = shallow(
+): Deep.Required<ConfigureBabelOptions> {
+  return shallow(
     {
-      targets: defaults.transpile.targets,
-      alias: defaults.global.alias
+      ...hydrateToolingGlobal(options),
+      targets: defaults.transpile.targets
     },
     options || undefined
   );
+}
 
+export function configureBabel(
+  options: ConfigureBabelOptions | Empty
+): Serial.Object {
+  const opts = hydrateConfigureBabel(options);
   return {
     presets: [
       [paths.babel.presetEnv, getPresetEnvConfig(opts.targets)],

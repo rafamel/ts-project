@@ -1,4 +1,4 @@
-import { Serial, Empty } from 'type-core';
+import { Serial, Empty, Deep } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { Task, exec } from 'kpo';
 import { tmpTask, constants } from '@riseup/utils';
@@ -12,24 +12,30 @@ export interface LintMdParams {
   exclude?: string;
 }
 
-export interface LintMdOptions extends LintMdParams {}
+export type LintMdOptions = LintMdParams;
 
 export interface LintMdConfig {
   /** See: https://github.com/igorshubovych/markdownlint-cli#configuration */
   markdownlint: Serial.Object;
 }
 
-export function lintmd(
-  options: LintMdOptions | Empty,
-  config: LintMdConfig
-): Task.Async {
-  const opts = shallow(
+export function hydrateLintmd(
+  options: LintMdOptions | Empty
+): Deep.Required<LintMdOptions> {
+  return shallow(
     {
       include: defaults.lintmd.include,
       exclude: defaults.lintmd.exclude
     },
     options || undefined
   );
+}
+
+export function lintmd(
+  options: LintMdOptions | Empty,
+  config: LintMdConfig
+): Task.Async {
+  const opts = hydrateLintmd(options);
 
   return tmpTask(config.markdownlint, (file) => {
     return exec(constants.node, [

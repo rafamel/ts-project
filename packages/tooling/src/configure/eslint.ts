@@ -1,6 +1,7 @@
 import { configs } from '@typescript-eslint/eslint-plugin';
-import { Empty, Members, Serial } from 'type-core';
+import { Deep, Empty, Members, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
+import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -23,20 +24,25 @@ export interface ConfigureEslintConfig {
   prettier?: Serial.Object;
 }
 
+export function hydrateConfigureEslint(
+  options: ConfigureEslintOptions | Empty
+): Deep.Required<ConfigureEslintOptions> {
+  return merge(
+    {
+      ...hydrateToolingGlobal(options),
+      rules: defaults.lint.rules,
+      prettier: defaults.lint.prettier,
+      highlight: defaults.lint.highlight
+    },
+    options || undefined
+  );
+}
+
 export function configureEslint(
   options: ConfigureEslintOptions | Empty,
   config: ConfigureEslintConfig
 ): Serial.Object {
-  const opts = merge(
-    {
-      rules: defaults.lint.rules,
-      prettier: defaults.lint.prettier,
-      highlight: defaults.lint.highlight,
-      alias: defaults.global.alias,
-      extensions: defaults.global.extensions
-    },
-    options || undefined
-  );
+  const opts = hydrateConfigureEslint(options);
 
   return {
     extends: [

@@ -4,15 +4,18 @@ import { Serial } from 'type-core';
 import { run } from 'kpo';
 import path from 'path';
 import { getTypeScript } from '@riseup/utils';
-import { transpile } from '@riseup/tooling';
-import { defaults } from '../../defaults';
+import { hydrateTranspile, transpile } from '@riseup/tooling';
+import { hydrateBuild } from '../../tasks';
 
 export function manifest(
   manifest: Serial.Object,
   { cwd, options: { options } }: BuilderOptions
 ): void {
-  const output = (options && options.output) || defaults.transpile.output;
-  const isTypeScript = Boolean(options.types && getTypeScript(cwd));
+  const opts = { ...hydrateBuild(options), ...hydrateTranspile(options) };
+  const isTypeScript = Boolean(opts.types && getTypeScript(cwd));
+  const output = path.normalize(
+    path.relative(opts.destination, opts.output) + '/'
+  );
 
   manifest.main = output;
   if (isTypeScript) manifest.types = output;
@@ -26,18 +29,8 @@ export async function build({
   cwd,
   options: { options, config }
 }: BuilderOptions): Promise<void> {
-  const output = (options && options.output) || defaults.transpile.output;
-  const destination =
-    (options && options.destination) || defaults.build.destination;
-
   try {
-    await run(
-      transpile(
-        { ...options, output: path.join(destination, output) },
-        { ...config }
-      ),
-      { cwd }
-    );
+    await run(transpile(options, config), { cwd });
   } catch (err) {
     throw capture(err);
   }

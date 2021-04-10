@@ -1,134 +1,103 @@
-import { Empty, Members, Serial, UnaryFn } from 'type-core';
-import { shallow } from 'merge-strategies';
-import { context, Task } from 'kpo';
-import { into } from 'pipettes';
+import { Empty, Serial } from 'type-core';
+import { create } from 'kpo';
 import up from 'find-up';
 import { getConfiguration } from '@riseup/utils';
-import { defaults } from './defaults';
-import {
-  lint,
-  test,
-  node,
-  transpile,
-  LintParams,
-  TranspileParams
-} from './tasks';
+import { lint, test, node, transpile } from './tasks';
 import {
   configureBabel,
-  ConfigureBabelParams,
   configureEslint,
-  ConfigureEslintParams,
   configureJest,
-  ConfigureJestParams,
   configureTypescript,
   reconfigureBabel
 } from './configure';
+import {
+  ToolingOptions,
+  ToolingReconfigure,
+  ToolingTasks
+} from './definitions';
 
-export interface GlobalToolingOptions {
-  root?: string;
-  alias?: Members<string>;
-  extensions?: {
-    js?: string[];
-    ts?: string[];
-  };
-}
-
-export interface ToolingOptions {
-  global?: GlobalToolingOptions;
-  transpile?: TranspileParams & ConfigureBabelParams;
-  lint?: LintParams & ConfigureEslintParams;
-  test?: ConfigureJestParams;
-}
-
-export interface ToolingReconfigure {
-  babel?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  typescript?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  eslint?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  jest?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-}
-
-export interface ToolingTasks {
-  transpile: Task;
-  node: Task;
-  lint: Task;
-  test: Task;
+export function hydrateTooling(
+  options: ToolingOptions | Empty
+): Required<ToolingOptions> {
+  return options
+    ? {
+        global: { ...options.global },
+        transpile: { ...options.global, ...options.transpile },
+        lint: { ...options.global, ...options.lint },
+        test: { ...options.global, ...options.test }
+      }
+    : { global: {}, transpile: {}, lint: {}, test: {} };
 }
 
 export function tooling(
   options: ToolingOptions | Empty,
-  reconfigure: ToolingReconfigure = {}
+  reconfigure?: ToolingReconfigure
 ): ToolingTasks {
-  const opts: ToolingOptions = shallow(
-    {
-      global: {},
-      transpile: {},
-      lint: {},
-      test: {}
-    },
-    options || undefined
-  );
+  const opts = hydrateTooling(options);
 
-  const cwd = (opts.global && opts.global.root) || defaults.global.root;
-  const wrap = context.bind(null, { cwd });
-  return into(
-    {
-      prettier: into(
-        null,
-        () => up.sync('.prettierrc', { cwd, type: 'file' }),
-        (file) => (file ? require(file) : {})
-      ),
-      babel: getConfiguration<Serial.Object>(reconfigure.babel, () => {
-        return configureBabel({ ...opts.global, ...opts.transpile });
-      })
+  const configure = {
+    prettier(cwd: string) {
+      const file = up.sync('.prettierrc', { cwd, type: 'file' });
+      return file ? require(file) : {};
     },
-    (config) => ({
-      ...config,
-      typescript: getConfiguration<Serial.Object>(
-        reconfigure.typescript,
+    babel() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.babel,
+        () => configureBabel(opts.transpile)
+      );
+    },
+    typescript(cwd: string) {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.typescript,
+        () => configureTypescript(cwd)
+      );
+    },
+    eslint(cwd: string) {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.eslint,
         () => {
-          return configureTypescript({ ...opts.global });
+          return configureEslint(opts.lint, {
+            babel: configure.babel(),
+            prettier: configure.prettier(cwd)
+          });
         }
-      ),
-      eslint: getConfiguration<Serial.Object>(reconfigure.eslint, () => {
-        return configureEslint(
-          { ...opts.global, ...opts.lint },
-          { babel: config.babel, prettier: config.prettier }
-        );
-      }),
-      jest: getConfiguration<Serial.Object>(reconfigure.jest, () => {
-        return configureJest(
-          { ...opts.global, ...opts.test },
-          {
+      );
+    },
+    jest() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.jest,
+        () => {
+          return configureJest(opts.test, {
             babel: reconfigureBabel(
               { targets: { node: process.version.slice(1) } },
-              config.babel
+              configure.babel()
             )
-          }
-        );
-      })
+          });
+        }
+      );
+    }
+  };
+
+  return {
+    transpile: create((ctx) => {
+      return transpile(opts.transpile, {
+        babel: configure.babel(),
+        typescript: configure.typescript(ctx.cwd)
+      });
     }),
-    (config) => ({
-      transpile: wrap(
-        transpile(
-          { ...opts.global, ...opts.transpile },
-          { babel: config.babel, typescript: config.typescript }
+    node: create(() => {
+      return node(opts.global, {
+        babel: reconfigureBabel(
+          { targets: { node: process.version.slice(1) } },
+          configure.babel()
         )
-      ),
-      node: wrap(
-        node(
-          { ...opts.global },
-          {
-            babel: reconfigureBabel(
-              { targets: { node: process.version.slice(1) } },
-              config.babel
-            )
-          }
-        )
-      ),
-      lint: wrap(
-        lint({ ...opts.global, ...opts.lint }, { eslint: config.eslint })
-      ),
-      test: wrap(test({ jest: config.jest }))
+      });
+    }),
+    lint: create((ctx) => {
+      return lint(opts.lint, { eslint: configure.eslint(ctx.cwd) });
+    }),
+    test: create(() => {
+      return test({ jest: configure.jest() });
     })
-  );
+  };
 }

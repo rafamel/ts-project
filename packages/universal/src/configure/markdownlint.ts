@@ -1,4 +1,4 @@
-import { Empty, Serial } from 'type-core';
+import { Deep, Empty, Serial } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { defaults } from '../defaults';
 
@@ -6,15 +6,21 @@ export interface ConfigureMarkdownlintParams {
   overrides?: Serial.Object;
 }
 
-export interface ConfigureMarkdownlintOptions {}
+export type ConfigureMarkdownlintOptions = ConfigureMarkdownlintParams;
 
-export function configureMarkdownlint(
+export function hydrateConfigureMarkdownLint(
   options: ConfigureMarkdownlintOptions | Empty
-): Serial.Object {
-  const opts = shallow(
+): Deep.Required<ConfigureMarkdownlintOptions> {
+  return shallow(
     { overrides: defaults.lintmd.overrides },
     options || undefined
   );
+}
+
+export function configureMarkdownlint(
+  options: ConfigureMarkdownlintOptions
+): Serial.Object {
+  const opts = hydrateConfigureMarkdownLint(options);
 
   return shallow(
     {
@@ -24,6 +30,6 @@ export function configureMarkdownlint(
       'fenced-code-language': false,
       'commands-show-output': false
     },
-    opts.overrides || undefined
+    opts.overrides
   );
 }

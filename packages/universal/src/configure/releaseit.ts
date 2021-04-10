@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
-import { merge, shallow } from 'merge-strategies';
-import { Empty, Serial } from 'type-core';
+import { Deep, Empty, Serial, TypeGuard } from 'type-core';
+import { merge } from 'merge-strategies';
 import { defaults } from '../defaults';
 
 export interface ConfigureReleaseitParams {
@@ -11,19 +11,19 @@ export interface ConfigureReleaseitParams {
     changelog?: {
       file?: string;
       append?: boolean;
-      releaseCount?: number;
+      releaseCount?: number | null;
       skipUnstable?: boolean;
     };
   };
   overrides?: Serial.Object;
 }
 
-export interface ConfigureReleaseitOptions extends ConfigureReleaseitParams {}
+export type ConfigureReleaseitOptions = ConfigureReleaseitParams;
 
-export function configureReleaseit(
+export function hydrateConfigureReleaseit(
   options: ConfigureReleaseitOptions | Empty
-): Serial.Object {
-  const opts = merge(
+): Deep.Required<ConfigureReleaseitOptions> {
+  return merge(
     {
       publish: defaults.release.publish,
       conventional: {
@@ -35,9 +35,12 @@ export function configureReleaseit(
     },
     options || undefined
   );
+}
 
-  const overrides = shallow({ hooks: {} }, opts.overrides || {});
-
+export function configureReleaseit(
+  options: ConfigureReleaseitOptions | Empty
+): Serial.Object {
+  const opts = hydrateConfigureReleaseit(options);
   return merge(
     {
       hooks: {},
@@ -75,12 +78,17 @@ export function configureReleaseit(
                 infile: opts.conventional.changelog.file,
                 outfile: opts.conventional.changelog.file,
                 append: opts.conventional.changelog.append,
-                skipUnstable: opts.conventional.changelog.skipUnstable
+                skipUnstable: opts.conventional.changelog.skipUnstable,
+                releaseCount: TypeGuard.isNumber(
+                  opts.conventional.changelog.releaseCount
+                )
+                  ? opts.conventional.changelog.releaseCount
+                  : undefined
               }
             }
           : {})
       }
     },
-    overrides
+    opts.overrides
   );
 }

@@ -1,9 +1,8 @@
+import { Deep } from 'type-core';
+import { UniversalParams } from './definitions';
 import { paths } from './paths';
 
-export const defaults = {
-  global: {
-    root: process.cwd()
-  },
+export const defaults: Deep.Required<UniversalParams> = {
   lintmd: {
     include: './',
     exclude: './{node_modules,pkg,build,dist}/**',
@@ -20,7 +19,7 @@ export const defaults = {
       changelog: {
         file: 'CHANGELOG.md',
         append: false,
-        releaseCount: undefined,
+        releaseCount: null,
         skipUnstable: false
       }
     },

@@ -1,7 +1,8 @@
-import { Empty, Serial } from 'type-core';
+import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { context, exec, finalize, create, Task } from 'kpo';
 import { getTypeScript, tmpTask, constants } from '@riseup/utils';
+import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -21,18 +22,24 @@ export interface LintConfig {
   eslint: Serial.Object;
 }
 
+export function hydrateLint(
+  options: LintOptions | Empty
+): Deep.Required<LintOptions> {
+  return merge(
+    {
+      ...hydrateToolingGlobal(options),
+      dir: defaults.lint.dir,
+      types: defaults.lint.types
+    },
+    options || undefined
+  );
+}
+
 export function lint(
   options: LintOptions | Empty,
   config: LintConfig
 ): Task.Async {
-  const opts = merge(
-    {
-      dir: defaults.lint.dir,
-      types: defaults.lint.types,
-      extensions: defaults.global.extensions
-    },
-    options || undefined
-  );
+  const opts = hydrateLint(options);
 
   return context(
     { args: [] },

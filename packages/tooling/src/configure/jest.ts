@@ -1,9 +1,10 @@
-import { Empty, Serial } from 'type-core';
+import { Deep, Empty, Serial } from 'type-core';
 import { deep, merge } from 'merge-strategies';
+import fs from 'fs';
 import { tmpPath } from '@riseup/utils';
+import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
-import fs from 'fs';
 
 export interface ConfigureJestParams {
   overrides?: Serial.Object;
@@ -20,17 +21,23 @@ export interface ConfigureJestConfig {
   babel: Serial.Object;
 }
 
+export function hydrateConfigureJest(
+  options: ConfigureJestOptions | Empty
+): Deep.Required<ConfigureJestOptions> {
+  return merge(
+    {
+      ...hydrateToolingGlobal(options),
+      overrides: defaults.test.overrides
+    },
+    options || undefined
+  );
+}
+
 export function configureJest(
   options: ConfigureJestOptions | Empty,
   config: ConfigureJestConfig
 ): Serial.Object {
-  const opts = merge(
-    {
-      overrides: defaults.test.overrides,
-      extensions: defaults.global.extensions
-    },
-    options || undefined
-  );
+  const opts = hydrateConfigureJest(options);
 
   const extensions = [...opts.extensions.js, ...opts.extensions.ts];
   const hashPath = tmpPath(config.babel);

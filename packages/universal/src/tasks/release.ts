@@ -1,6 +1,6 @@
 import bump, { Recommendation } from 'conventional-recommended-bump';
 import { create, series, log, confirm, exec, Task } from 'kpo';
-import { Empty, Serial } from 'type-core';
+import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import chalk from 'chalk';
 import arg from 'arg';
@@ -10,22 +10,21 @@ import { paths } from '../paths';
 
 export interface ReleaseParams {
   conventional?: {
+    active?: boolean;
     preset?: string;
-    active?: string;
   };
 }
 
-export interface ReleaseOptions extends ReleaseParams {}
+export type ReleaseOptions = ReleaseParams;
 
 export interface ReleaseConfig {
   releaseit: Serial.Object;
 }
 
-export function release(
-  options: ReleaseOptions | Empty,
-  config: ReleaseConfig
-): Task.Async {
-  const opts: Required<ReleaseOptions> = merge(
+export function hydrateRelease(
+  options: ReleaseOptions | Empty
+): Deep.Required<ReleaseOptions> {
+  return merge(
     {
       conventional: {
         active: defaults.release.conventional.active,
@@ -34,6 +33,13 @@ export function release(
     },
     options || undefined
   );
+}
+
+export function release(
+  options: ReleaseOptions | Empty,
+  config: ReleaseConfig
+): Task.Async {
+  const opts = hydrateRelease(options);
 
   const releaseit = tmpTask(config.releaseit, async (file) => {
     return exec(constants.node, [paths.bin.releaseit, ...['--config', file]]);

@@ -1,146 +1,120 @@
-import { Empty, Serial, UnaryFn } from 'type-core';
+import { Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
-import { context, Task } from 'kpo';
-import { into } from 'pipettes';
+import { create } from 'kpo';
 import path from 'path';
 import { getConfiguration } from '@riseup/utils';
 import {
   configureReleaseit,
-  GlobalUniversalOptions,
+  hydrateUniversal,
   universal,
-  UniversalOptions,
-  UniversalReconfigure,
-  UniversalTasks
+  UniversalOptions
 } from '@riseup/universal';
 import {
-  transpile,
-  GlobalToolingOptions,
-  ToolingOptions,
-  ToolingReconfigure,
-  ToolingTasks,
   configureBabel,
+  hydrateTooling,
   tooling,
-  configureTypescript
+  configureTypescript,
+  hydrateTranspile
 } from '@riseup/tooling';
-import { defaults } from './defaults';
-import { build, docs, BuildParams, DocsParams } from './tasks';
+import { build, docs, hydrateBuild } from './tasks';
+import { configurePika, configureTypedoc } from './configure';
 import {
-  configurePika,
-  configureTypedoc,
-  ConfigurePikaParams,
-  ConfigureTypedocParams
-} from './configure';
+  LibraryOptions,
+  LibraryReconfigure,
+  LibraryTasks
+} from './definitions';
 
-export interface GlobalLibraryOptions
-  extends GlobalUniversalOptions,
-    GlobalToolingOptions {
-  root?: string;
-}
+export function hydrateLibrary(
+  options: LibraryOptions | Empty
+): Required<LibraryOptions> {
+  const universal = hydrateUniversal(options);
+  const tooling = hydrateTooling(options);
+  const library = options
+    ? {
+        build: { ...options.build },
+        docs: { ...options.docs }
+      }
+    : { build: {}, docs: {} };
 
-export interface LibraryOptions extends UniversalOptions, ToolingOptions {
-  global?: GlobalLibraryOptions;
-  build?: BuildParams & ConfigurePikaParams;
-  docs?: DocsParams & ConfigureTypedocParams;
-}
-
-export interface LibraryReconfigure
-  extends UniversalReconfigure,
-    ToolingReconfigure {
-  pika?: Serial.Array | UnaryFn<Serial.Array, Serial.Array>;
-  typedoc?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-}
-
-export interface LibraryTasks extends UniversalTasks, ToolingTasks {
-  build: Task;
-  docs: Task;
+  return {
+    ...merge<UniversalOptions, Required<UniversalOptions>>(
+      {
+        release: {
+          publish: true,
+          overrides: {
+            npm: { publishPath: hydrateBuild(library.build).destination }
+          }
+        }
+      },
+      universal
+    ),
+    ...tooling,
+    transpile: {
+      ...tooling.transpile,
+      output: path.join(
+        hydrateBuild(library.build).destination,
+        hydrateTranspile(tooling.transpile).output
+      )
+    },
+    ...library
+  };
 }
 
 export function library(
   options: LibraryOptions | Empty,
-  reconfigure: LibraryReconfigure = {}
+  reconfigure?: LibraryReconfigure
 ): LibraryTasks {
-  const opts = into(
-    { ...options },
-    (opts: LibraryOptions) => ({
-      ...opts,
-      global: {
-        ...opts.global,
-        root: (opts.global && opts.global.root) || defaults.global.root
-      }
-    }),
-    (opts) => ({
-      ...opts,
-      build: {
-        ...opts.build,
-        destination:
-          (opts.build && opts.build.destination) || defaults.build.destination
-      }
-    }),
-    (opts) => ({
-      ...opts,
-      transpile: {
-        ...opts.transpile,
-        output:
-          (opts.transpile && opts.transpile.output) || defaults.transpile.output
-      }
-    }),
-    (opts) => ({
-      ...opts,
-      release: merge(
-        {
-          publish: defaults.release.publish,
-          overrides: {
-            npm: { publishPath: opts.build.destination }
-          }
-        },
-        opts.release
-      )
-    })
-  );
+  const opts = hydrateLibrary(options);
 
-  const wrap = context.bind(null, { cwd: opts.global.root });
-  return into(
-    {
-      releaseit: getConfiguration<Serial.Object>(reconfigure.releaseit, () => {
-        return configureReleaseit({ ...opts.release });
-      }),
-      babel: getConfiguration<Serial.Object>(reconfigure.babel, () => {
-        return configureBabel({ ...opts.global, ...opts.transpile });
-      }),
-      typescript: getConfiguration<Serial.Object>(
-        reconfigure.typescript,
-        () => {
-          return configureTypescript({ ...opts.global });
-        }
-      )
+  const configure = {
+    babel() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.babel,
+        () => configureBabel(opts.transpile)
+      );
     },
-    (config) => ({
-      ...config,
-      pika: getConfiguration<Serial.Array>(reconfigure.pika, () => {
-        return configurePika(
-          { ...opts.global, ...opts.transpile, ...opts.build },
-          { babel: config.babel, typescript: config.typescript }
-        );
-      }),
-      typedoc: getConfiguration<Serial.Object>(reconfigure.typedoc, () => {
-        return configureTypedoc({ ...opts.global, ...opts.docs });
-      })
+    typescript(cwd: string) {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.typescript,
+        () => configureTypescript(cwd)
+      );
+    },
+    releaseit() {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.releaseit,
+        () => configureReleaseit(opts.release)
+      );
+    },
+    pika(cwd: string) {
+      return getConfiguration<Serial.Array>(
+        reconfigure && reconfigure.pika,
+        () => {
+          return configurePika(
+            { ...opts.transpile, ...opts.build },
+            { babel: configure.babel(), typescript: configure.typescript(cwd) }
+          );
+        }
+      );
+    },
+    typedoc(cwd: string) {
+      return getConfiguration<Serial.Object>(
+        reconfigure && reconfigure.typedoc,
+        () => configureTypedoc(cwd, opts.docs)
+      );
+    }
+  };
+
+  return {
+    ...universal(opts, reconfigure),
+    ...tooling(opts, reconfigure),
+    build: create((ctx) => {
+      return build(opts.build, {
+        pika: configure.pika(ctx.cwd),
+        babel: configure.babel()
+      });
     }),
-    ({ releaseit, babel, typescript, pika, typedoc }) => ({
-      ...universal(opts, { ...reconfigure, releaseit }),
-      ...tooling(opts, { ...reconfigure, babel, typescript }),
-      transpile: wrap(
-        transpile(
-          {
-            ...opts.global,
-            ...opts.transpile,
-            output: path.join(opts.build.destination, opts.transpile.output)
-          },
-          { babel, typescript }
-        )
-      ),
-      build: wrap(build({ ...opts.global, ...opts.build }, { pika, babel })),
-      docs: wrap(docs({ ...opts.global, ...opts.docs }, { typedoc }))
+    docs: create((ctx) => {
+      return docs(opts.docs, { typedoc: configure.typedoc(ctx.cwd) });
     })
-  );
+  };
 }
