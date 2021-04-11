@@ -2,7 +2,12 @@ import { Deep, Empty, Serial } from 'type-core';
 import { context, copy, exec, mkdir, series, remove, create, Task } from 'kpo';
 import { merge } from 'merge-strategies';
 import path from 'path';
-import { getTypeScript, intercept, tmpTask, constants } from '@riseup/utils';
+import {
+  getTypeScriptPath,
+  intercept,
+  tmpTask,
+  constants
+} from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -73,7 +78,7 @@ export function transpile(
         ]);
       }),
       create((ctx) => {
-        return opts.types && getTypeScript(ctx.cwd)
+        return opts.types && getTypeScriptPath(ctx.cwd)
           ? tmpTask(config.typescript, (file) => {
               return intercept(
                 {

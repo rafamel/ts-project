@@ -2,7 +2,7 @@ import { mkdir, remove, series, print, create, Task, exec } from 'kpo';
 import { shallow } from 'merge-strategies';
 import { Serial, Empty, Deep } from 'type-core';
 import path from 'path';
-import { tmpTask, getTypeScript, constants } from '@riseup/utils';
+import { tmpTask, getTypeScriptPath, constants } from '@riseup/utils';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -36,7 +36,7 @@ export function docs(
   const opts = hydrateDocs(options);
 
   return create((ctx) => {
-    if (!opts.build || !getTypeScript(ctx.cwd)) {
+    if (!opts.build || !getTypeScriptPath(ctx.cwd)) {
       return print('Skipped docs build');
     }
 

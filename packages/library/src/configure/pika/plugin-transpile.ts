@@ -3,7 +3,7 @@ import { capture } from 'errorish';
 import { Serial } from 'type-core';
 import { run } from 'kpo';
 import path from 'path';
-import { getTypeScript } from '@riseup/utils';
+import { getTypeScriptPath } from '@riseup/utils';
 import { hydrateTranspile, transpile } from '@riseup/tooling';
 import { hydrateBuild } from '../../tasks';
 
@@ -12,7 +12,7 @@ export function manifest(
   { cwd, options: { options } }: BuilderOptions
 ): void {
   const opts = { ...hydrateBuild(options), ...hydrateTranspile(options) };
-  const isTypeScript = Boolean(opts.types && getTypeScript(cwd));
+  const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
   const output = path.normalize(
     path.relative(opts.destination, opts.output) + '/'
   );

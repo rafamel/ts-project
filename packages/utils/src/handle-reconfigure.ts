@@ -1,6 +1,6 @@
 import { Empty, NullaryFn, TypeGuard, UnaryFn } from 'type-core';
 
-export function getConfiguration<T>(
+export function handleReconfigure<T>(
   reconfigure: T | UnaryFn<T, T> | Empty,
   fetcher: NullaryFn<T>
 ): T {

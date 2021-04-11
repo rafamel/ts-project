@@ -1,7 +1,7 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { context, exec, finalize, create, Task } from 'kpo';
-import { getTypeScript, tmpTask, constants } from '@riseup/utils';
+import { getTypeScriptPath, tmpTask, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -59,7 +59,7 @@ export function lint(
         ]);
       }),
       create((ctx) => {
-        return opts.types && getTypeScript(ctx.cwd)
+        return opts.types && getTypeScriptPath(ctx.cwd)
           ? exec(constants.node, [paths.bin.typescript, '--noEmit'])
           : undefined;
       })

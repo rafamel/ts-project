@@ -1,7 +1,7 @@
 import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
-import { getConfiguration } from '@riseup/utils';
+import { handleReconfigure } from '@riseup/utils';
 import { lint, test, node, transpile } from './tasks';
 import {
   configureBabel,
@@ -41,19 +41,19 @@ export function tooling(
       return file ? require(file) : {};
     },
     babel() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.babel,
         () => configureBabel(opts.transpile)
       );
     },
     typescript(cwd: string) {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.typescript,
         () => configureTypescript(cwd)
       );
     },
     eslint(cwd: string) {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.eslint,
         () => {
           return configureEslint(opts.lint, {
@@ -64,7 +64,7 @@ export function tooling(
       );
     },
     jest() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.jest,
         () => {
           return configureJest(opts.test, {

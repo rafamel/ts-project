@@ -1,6 +1,6 @@
 import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
-import { getConfiguration } from '@riseup/utils';
+import { handleReconfigure } from '@riseup/utils';
 import {
   UniversalOptions,
   UniversalReconfigure,
@@ -29,13 +29,13 @@ export function universal(
 
   const configure = {
     markdownlint() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.markdownlint,
         () => configureMarkdownlint(opts.lintmd)
       );
     },
     releaseit() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.releaseit,
         () => configureReleaseit(opts.release)
       );

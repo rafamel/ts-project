@@ -2,7 +2,7 @@ import { Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { create } from 'kpo';
 import path from 'path';
-import { getConfiguration } from '@riseup/utils';
+import { handleReconfigure } from '@riseup/utils';
 import {
   configureReleaseit,
   hydrateUniversal,
@@ -68,25 +68,25 @@ export function library(
 
   const configure = {
     babel() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.babel,
         () => configureBabel(opts.transpile)
       );
     },
     typescript(cwd: string) {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.typescript,
         () => configureTypescript(cwd)
       );
     },
     releaseit() {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.releaseit,
         () => configureReleaseit(opts.release)
       );
     },
     pika(cwd: string) {
-      return getConfiguration<Serial.Array>(
+      return handleReconfigure<Serial.Array>(
         reconfigure && reconfigure.pika,
         () => {
           return configurePika(
@@ -97,7 +97,7 @@ export function library(
       );
     },
     typedoc(cwd: string) {
-      return getConfiguration<Serial.Object>(
+      return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.typedoc,
         () => configureTypedoc(cwd, opts.docs)
       );
