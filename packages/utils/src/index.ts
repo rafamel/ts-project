@@ -1,4 +1,5 @@
 export * from './get-bin';
+export * from './get-lerna';
 export * from './get-monorepo-root';
 export * from './get-package';
 export * from './get-typescript-path';
