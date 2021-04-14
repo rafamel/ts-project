@@ -15,6 +15,7 @@ export type MonorepoOptions = MonorepoParams & UniversalParams;
 export type MonorepoReconfigure = UniversalReconfigure;
 
 export interface MonorepoTasks extends UniversalTasks {
+  run: Task;
   execute: Task;
   distribute: Task;
 }
