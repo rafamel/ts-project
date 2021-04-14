@@ -4,10 +4,11 @@ import {
   UniversalReconfigure,
   UniversalTasks
 } from '@riseup/universal';
-import { DistributeParams } from './tasks';
+import { CoverageParams, DistributeParams } from './tasks';
 
 export interface MonorepoParams {
   distribute?: DistributeParams;
+  coverage?: CoverageParams;
 }
 
 export type MonorepoOptions = MonorepoParams & UniversalParams;
@@ -17,5 +18,6 @@ export type MonorepoReconfigure = UniversalReconfigure;
 export interface MonorepoTasks extends UniversalTasks {
   run: Task;
   execute: Task;
+  coverage: Task;
   distribute: Task;
 }
