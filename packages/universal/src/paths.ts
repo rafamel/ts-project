@@ -3,7 +3,8 @@ import { getBin } from '@riseup/utils';
 
 export const paths = {
   bin: {
-    releaseit: getBin('release-it', 'release-it'),
+    lerna: getBin('lerna', 'lerna'),
+    changelog: getBin('conventional-changelog-cli', 'conventional-changelog'),
     commitizen: require.resolve('./tasks/commit/commitizen'),
     markdownlint: getBin('markdownlint-cli', 'markdownlint')
   },

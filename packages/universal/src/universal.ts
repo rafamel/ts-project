@@ -6,7 +6,7 @@ import {
   UniversalReconfigure,
   UniversalTasks
 } from './definitions';
-import { configureMarkdownlint, configureReleaseit } from './configure';
+import { configureMarkdownlint } from './configure';
 import { commit, lintmd, release } from './tasks';
 
 export function hydrateUniversal(
@@ -33,12 +33,6 @@ export function universal(
         reconfigure && reconfigure.markdownlint,
         () => configureMarkdownlint(opts.lintmd)
       );
-    },
-    releaseit() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.releaseit,
-        () => configureReleaseit(opts.release)
-      );
     }
   };
 
@@ -50,7 +44,7 @@ export function universal(
       return commit(opts.commit);
     }),
     release: create(() => {
-      return release(opts.release, { releaseit: configure.releaseit() });
+      return release(opts.release);
     })
   };
 }

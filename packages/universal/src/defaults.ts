@@ -12,17 +12,7 @@ export const defaults: Deep.Required<UniversalParams> = {
     path: paths.commitizen.path
   },
   release: {
-    publish: false,
-    conventional: {
-      active: true,
-      preset: 'angular',
-      changelog: {
-        file: 'CHANGELOG.md',
-        append: false,
-        releaseCount: null,
-        skipUnstable: false
-      }
-    },
-    overrides: {}
+    preset: 'angular',
+    changelog: true
   }
 };
