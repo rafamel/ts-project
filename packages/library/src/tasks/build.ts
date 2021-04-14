@@ -11,6 +11,7 @@ import {
   move,
   remove,
   series,
+  progress,
   Task
 } from 'kpo';
 import { tmpTask, constants, intercept } from '@riseup/utils';
@@ -75,24 +76,32 @@ export function build(
           : opts.destination;
         return context(
           { args: [] },
-          finalize(
-            series(
-              custom ? mkdir(dir, { ensure: false }) : null,
-              exec('npm', ['pack', path.resolve(ctx.cwd, opts.destination)], {
-                cwd: dir
-              }),
-              custom
-                ? move(
-                    path.resolve(dir, '*.tgz'),
-                    path.resolve(
-                      opts.destination,
-                      String(opts.tarball) + '.tgz'
-                    ),
-                    { glob: true, single: true, strict: true, exists: 'error' }
-                  )
-                : null
+          progress(
+            finalize(
+              series(
+                custom ? mkdir(dir, { ensure: false }) : null,
+                exec('npm', ['pack', path.resolve(ctx.cwd, opts.destination)], {
+                  cwd: dir
+                }),
+                custom
+                  ? move(
+                      path.resolve(dir, '*.tgz'),
+                      path.resolve(
+                        opts.destination,
+                        String(opts.tarball) + '.tgz'
+                      ),
+                      {
+                        glob: true,
+                        single: true,
+                        strict: true,
+                        exists: 'error'
+                      }
+                    )
+                  : null
+              ),
+              custom ? remove(dir, { strict: true, recursive: true }) : null
             ),
-            custom ? remove(dir, { strict: true, recursive: true }) : null
+            { message: 'Build tarball' }
           )
         );
       })
