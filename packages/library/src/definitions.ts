@@ -1,6 +1,6 @@
 import { Serial, UnaryFn } from 'type-core';
 import { Task } from 'kpo';
-import { BuildParams, DocsParams } from './tasks';
+import { BuildParams, DistributeParams, DocsParams } from './tasks';
 import { ConfigurePikaParams, ConfigureTypedocParams } from './configure';
 import {
   ToolingOptions,
@@ -15,6 +15,7 @@ import {
 
 export interface LibraryParams {
   build?: ConfigurePikaParams & BuildParams;
+  distribute?: DistributeParams;
   docs?: ConfigureTypedocParams & DocsParams;
 }
 
@@ -29,5 +30,6 @@ export interface LibraryReconfigure
 
 export interface LibraryTasks extends UniversalTasks, ToolingTasks {
   build: Task;
+  distribute: Task;
   docs: Task;
 }

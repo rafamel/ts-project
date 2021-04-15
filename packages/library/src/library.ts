@@ -10,13 +10,14 @@ import {
   configureTypescript,
   hydrateTranspile
 } from '@riseup/tooling';
-import { build, docs, hydrateBuild } from './tasks';
+import { build, distribute, docs, hydrateBuild } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
 import {
   LibraryOptions,
   LibraryReconfigure,
   LibraryTasks
 } from './definitions';
+import { defaults } from './defaults';
 
 export function hydrateLibrary(
   options: LibraryOptions | Empty
@@ -26,9 +27,10 @@ export function hydrateLibrary(
   const library = options
     ? {
         build: { ...options.build },
+        distribute: { ...options.distribute },
         docs: { ...options.docs }
       }
-    : { build: {}, docs: {} };
+    : { build: {}, distribute: {}, docs: {} };
 
   return {
     ...universal,
@@ -40,7 +42,14 @@ export function hydrateLibrary(
         hydrateTranspile(tooling.transpile).output
       )
     },
-    ...library
+    ...library,
+    distribute: {
+      ...library.distribute,
+      contents:
+        library.distribute.contents ||
+        library.build.destination ||
+        defaults.distribute.contents
+    }
   };
 }
 
@@ -91,6 +100,7 @@ export function library(
         babel: configure.babel()
       });
     }),
+    distribute: create(() => distribute(opts.distribute)),
     docs: create((ctx) => {
       return docs(opts.docs, { typedoc: configure.typedoc(ctx.cwd) });
     })

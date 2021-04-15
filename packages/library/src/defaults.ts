@@ -8,6 +8,10 @@ export const defaults: Deep.Required<LibraryParams> = {
     multitarget: true,
     destination: 'pkg/'
   },
+  distribute: {
+    push: true,
+    contents: 'pkg/'
+  },
   docs: {
     build: true,
     name: null,
