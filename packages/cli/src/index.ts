@@ -8,6 +8,7 @@ export async function cli(): Promise<void> {
     bin: 'riseup',
     file: 'riseup.config.js',
     version: pkg.version || 'Unknown',
-    description: pkg.description || ''
+    description: pkg.description || '',
+    multitask: false
   });
 }
