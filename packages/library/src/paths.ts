@@ -3,7 +3,7 @@ import { getBin } from '@riseup/utils';
 export const paths = {
   bin: {
     pika: require.resolve('@pika/pack/dist-node/index.bin'),
-    typedoc: getBin('typedoc', 'typedoc')
+    typedoc: getBin('typedoc', 'typedoc', __dirname)
   },
   pika: {
     transpile: require.resolve('./configure/pika/plugin-transpile'),
