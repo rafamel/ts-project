@@ -43,7 +43,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "find-up": "^5.0.0",
     "jest-cli": "^26.6.3",
-    "kpo": "^0.18.0",
+    "kpo": "^0.19.0",
     "lerna": "^4.0.0",
     "mockery": "^2.1.0",
     "object-hash": "^2.1.1",

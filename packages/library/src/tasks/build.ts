@@ -77,6 +77,7 @@ export function build(
         return context(
           { args: [] },
           progress(
+            { message: 'Build tarball' },
             finalize(
               series(
                 custom ? mkdir(dir, { ensure: false }) : null,
@@ -100,8 +101,7 @@ export function build(
                   : null
               ),
               custom ? remove(dir, { strict: true, recursive: true }) : null
-            ),
-            { message: 'Build tarball' }
+            )
           )
         );
       })

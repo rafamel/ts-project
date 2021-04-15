@@ -70,8 +70,9 @@ export function coverage(options: CoverageOptions | Empty): Task.Async {
       remove(tempdir, { glob: false, strict: false, recursive: true })
     );
 
-    return progress(context({ args: [] }, task), {
-      message: 'Compile coverage'
-    });
+    return progress(
+      { message: 'Compile coverage' },
+      context({ args: [] }, task)
+    );
   });
 }

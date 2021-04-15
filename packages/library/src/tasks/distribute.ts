@@ -33,13 +33,13 @@ export function distribute(options: DistributeOptions | Empty): Task.Async {
       confirm(
         { message: 'Continue?', default: true },
         progress(
+          { message: 'Publish package' },
           series(
             exec('npm', ['publish']),
             opts.push
               ? context({ args: [] }, exec('git', ['push', '--follow-tags']))
               : null
-          ),
-          { message: 'Publish package' }
+          )
         )
       )
     )
