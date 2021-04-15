@@ -1,14 +1,8 @@
 import { Empty, Serial } from 'type-core';
-import { merge } from 'merge-strategies';
 import { create } from 'kpo';
 import path from 'path';
 import { handleReconfigure } from '@riseup/utils';
-import {
-  configureReleaseit,
-  hydrateUniversal,
-  universal,
-  UniversalOptions
-} from '@riseup/universal';
+import { hydrateUniversal, universal } from '@riseup/universal';
 import {
   configureBabel,
   hydrateTooling,
@@ -37,17 +31,7 @@ export function hydrateLibrary(
     : { build: {}, docs: {} };
 
   return {
-    ...merge<UniversalOptions, Required<UniversalOptions>>(
-      {
-        release: {
-          publish: true,
-          overrides: {
-            npm: { publishPath: hydrateBuild(library.build).destination }
-          }
-        }
-      },
-      universal
-    ),
+    ...universal,
     ...tooling,
     transpile: {
       ...tooling.transpile,
@@ -77,12 +61,6 @@ export function library(
       return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.typescript,
         () => configureTypescript(cwd)
-      );
-    },
-    releaseit() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.releaseit,
-        () => configureReleaseit(opts.release)
       );
     },
     pika(cwd: string) {
