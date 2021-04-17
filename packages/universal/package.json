@@ -37,6 +37,7 @@
     "cli-belt": "^1.0.3",
     "commitizen": "^4.2.3",
     "common-tags": "^1.8.0",
+    "conventional-changelog-cli": "^2.1.1",
     "conventional-recommended-bump": "^6.1.0",
     "cz-conventional-changelog": "^3.2.0",
     "ensurism": "^0.6.0",
