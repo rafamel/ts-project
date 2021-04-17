@@ -87,15 +87,12 @@ export function build(
                 custom
                   ? move(
                       path.resolve(dir, '*.tgz'),
-                      path.resolve(
-                        opts.destination,
-                        String(opts.tarball) + '.tgz'
-                      ),
+                      path.resolve(ctx.cwd, String(opts.tarball) + '.tgz'),
                       {
                         glob: true,
                         single: true,
                         strict: true,
-                        exists: 'error'
+                        exists: 'overwrite'
                       }
                     )
                   : null
