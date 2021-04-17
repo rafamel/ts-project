@@ -13,9 +13,8 @@ export function manifest(
 ): void {
   const opts = { ...hydrateBuild(options), ...hydrateTranspile(options) };
   const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
-  const output = path.normalize(
-    path.relative(opts.destination, opts.output) + '/'
-  );
+  let output = path.relative(opts.destination, opts.output);
+  if (output[output.length - 1] !== '/') output += '/';
 
   manifest.main = output;
   if (isTypeScript) manifest.types = output;
