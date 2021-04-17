@@ -111,6 +111,9 @@ export function configureEslint(
           ...configs.recommended.rules,
           /* DISABLED */
           'no-use-before-define': 0,
+          'no-redeclare': 0,
+          'import/export': 0,
+          '@typescript-eslint/no-namespace': 0,
           '@typescript-eslint/indent': 0,
           '@typescript-eslint/camelcase': 0,
           '@typescript-eslint/no-explicit-any': 0,
