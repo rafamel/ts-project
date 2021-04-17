@@ -146,6 +146,11 @@ export function configureEslint(
             { ignoreParameters: true, ignoreProperties: true }
           ]
         }
+      },
+      /* USER RULES */
+      {
+        files: ['*'],
+        rules: opts.rules
       }
     ]
   };
