@@ -5,6 +5,14 @@ import { paths } from '../paths';
 export function execute(): Task.Async {
   return create((ctx) => {
     const [cmd, args] = [ctx.args[0], ctx.args.slice(1)];
+
+    if (cmd === '-h' || cmd === '--help') {
+      return context(
+        { args: [] },
+        exec(constants.node, [paths.bin.lerna, 'exec', '--help'])
+      );
+    }
+
     if (cmd.startsWith('-')) {
       throw Error(`Execute first argument must be a command`);
     }
