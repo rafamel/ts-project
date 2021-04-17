@@ -4,9 +4,11 @@ import { LibraryParams } from './definitions';
 export const defaults: Deep.Required<LibraryParams> = {
   build: {
     assets: [],
+    nodev: true,
     tarball: false,
     multitarget: true,
-    destination: 'pkg/'
+    destination: 'pkg/',
+    manifest: {}
   },
   distribute: {
     push: true,

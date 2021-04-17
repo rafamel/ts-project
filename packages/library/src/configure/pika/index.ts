@@ -10,8 +10,10 @@ import { defaults } from '../../defaults';
 
 export interface ConfigurePikaParams {
   assets?: string[];
+  nodev?: boolean;
   multitarget?: boolean;
   destination?: string;
+  manifest?: Serial.Object;
 }
 
 export type ConfigurePikaOptions = ConfigurePikaParams & TranspileOptions;
@@ -26,7 +28,9 @@ export function hydrateConfigurePika(
       ...hydrateTranspile(options),
       assets: defaults.build.assets,
       multitarget: defaults.build.multitarget,
-      destination: defaults.build.destination
+      destination: defaults.build.destination,
+      nodev: defaults.build.nodev,
+      manifest: defaults.build.manifest
     },
     options || undefined
   );
@@ -51,6 +55,7 @@ export function configurePika(
           ],
           [paths.pika.web]
         ]
-      : [])
+      : []),
+    [paths.pika.manifest, opts]
   ];
 }

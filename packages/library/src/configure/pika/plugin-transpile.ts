@@ -1,8 +1,8 @@
-import { BuilderOptions } from '@pika/types';
-import { capture } from 'errorish';
 import { Serial } from 'type-core';
+import { capture } from 'errorish';
 import { run } from 'kpo';
 import path from 'path';
+import { BuilderOptions } from '@pika/types';
 import { getTypeScriptPath } from '@riseup/utils';
 import { hydrateTranspile, transpile } from '@riseup/tooling';
 import { hydrateBuild } from '../../tasks';
@@ -11,7 +11,11 @@ export function manifest(
   manifest: Serial.Object,
   { cwd, options: { options } }: BuilderOptions
 ): void {
-  const opts = { ...hydrateBuild(options), ...hydrateTranspile(options) };
+  const opts = {
+    ...hydrateBuild(options),
+    ...hydrateTranspile(options)
+  };
+
   const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
   let output = path.relative(opts.destination, opts.output);
   if (output[output.length - 1] !== '/') output += '/';
