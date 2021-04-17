@@ -8,5 +8,8 @@ export function getScopeName(cwd: string): string {
   if (TypeGuard.isString(name)) return name;
 
   const root = getMonorepoRoot(cwd);
-  return root ? path.relative(root, cwd) : cwd.split(path.sep).slice(-1)[0];
+
+  return root
+    ? path.relative(root, cwd)
+    : cwd.split(path.win32.sep).slice(-1)[0].split(path.posix.sep).slice(-1)[0];
 }
