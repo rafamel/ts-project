@@ -37,7 +37,7 @@
   "dependencies": {
     "@riseup/universal": "^0.5.0",
     "@riseup/utils": "^0.5.0",
-    "kpo": "^0.19.0",
+    "kpo": "^0.20.0",
     "lcov-result-merger": "^3.1.0",
     "lerna": "^4.0.0",
     "merge-strategies": "^0.2.0",
