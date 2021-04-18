@@ -9,6 +9,10 @@ export async function cli(): Promise<void> {
     file: 'riseup.config.js',
     version: pkg.version || 'Unknown',
     description: pkg.description || '',
-    multitask: true
+    multitask: true,
+    update: {
+      name: pkg.name,
+      version: pkg.version
+    }
   });
 }
