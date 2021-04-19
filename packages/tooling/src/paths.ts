@@ -3,8 +3,9 @@ import { getBin } from '@riseup/utils';
 
 export const paths = {
   bin: {
-    eslint: getBin('eslint', 'eslint', __dirname),
     jest: getBin('jest-cli', 'jest', __dirname),
+    eslint: getBin('eslint', 'eslint', __dirname),
+    prettier: getBin('prettier', 'prettier', __dirname),
     babelNode: getBin('@babel/node', 'babel-node', __dirname),
     typescript: require.resolve('ttypescript/lib/tsc')
   },

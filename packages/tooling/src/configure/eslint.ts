@@ -6,12 +6,12 @@ import { defaults } from '../defaults';
 import { paths } from '../paths';
 
 export interface ConfigureEslintParams {
-  prettier?: boolean;
   highlight?: string[];
   rules?: Serial.Object;
 }
 
 export interface ConfigureEslintOptions extends ConfigureEslintParams {
+  prettier?: boolean;
   alias?: Members<string>;
   extensions?: {
     js?: string[];
@@ -21,7 +21,7 @@ export interface ConfigureEslintOptions extends ConfigureEslintParams {
 
 export interface ConfigureEslintConfig {
   babel: Serial.Object;
-  prettier?: Serial.Object;
+  prettier: Serial.Object | null;
 }
 
 export function hydrateConfigureEslint(
@@ -31,7 +31,6 @@ export function hydrateConfigureEslint(
     {
       ...hydrateToolingGlobal(options),
       rules: defaults.lint.rules,
-      prettier: defaults.lint.prettier,
       highlight: defaults.lint.highlight
     },
     options || undefined

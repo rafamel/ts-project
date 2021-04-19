@@ -3,6 +3,7 @@ import { ToolingParams } from './definitions';
 
 export const defaults: Deep.Required<ToolingParams> = {
   global: {
+    prettier: true,
     alias: {},
     extensions: {
       js: ['js', 'jsx'],
@@ -12,7 +13,6 @@ export const defaults: Deep.Required<ToolingParams> = {
   lint: {
     dir: ['./'],
     types: true,
-    prettier: true,
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
   },

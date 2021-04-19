@@ -2,7 +2,7 @@ import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
 import { handleReconfigure } from '@riseup/utils';
-import { lint, test, node } from './tasks';
+import { node, lint, test } from './tasks';
 import {
   configureBabel,
   configureEslint,
@@ -37,7 +37,7 @@ export function tooling(
   const configure = {
     prettier(cwd: string) {
       const file = up.sync('.prettierrc', { cwd, type: 'file' });
-      return file ? require(file) : {};
+      return file ? require(file) : null;
     },
     babel() {
       return handleReconfigure<Serial.Object>(
