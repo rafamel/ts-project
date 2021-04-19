@@ -11,10 +11,10 @@ export const defaults: Deep.Required<ToolingParams> = {
     }
   },
   fix: {
-    dir: ['./']
+    dir: ['src/', 'test/']
   },
   lint: {
-    dir: ['./'],
+    dir: ['src/', 'test/'],
     types: true,
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
