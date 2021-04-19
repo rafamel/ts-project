@@ -52,7 +52,16 @@ export function build(
   return create((ctx) => {
     return series(
       tmpTask(
-        reconfigureBabel({ targets: { esmodules: true } }, config.babel),
+        reconfigureBabel(
+          {
+            env: {
+              spec: true,
+              modules: false,
+              targets: { esmodules: true }
+            }
+          },
+          config.babel
+        ),
         (file) => {
           return intercept(
             {

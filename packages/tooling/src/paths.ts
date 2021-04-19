@@ -3,10 +3,9 @@ import { getBin } from '@riseup/utils';
 
 export const paths = {
   bin: {
-    babelCli: getBin('@babel/cli', 'babel', __dirname),
-    babelNode: getBin('@babel/node', 'babel-node', __dirname),
     eslint: getBin('eslint', 'eslint', __dirname),
     jest: getBin('jest-cli', 'jest', __dirname),
+    babelNode: getBin('@babel/node', 'babel-node', __dirname),
     typescript: require.resolve('ttypescript/lib/tsc')
   },
   riseup: {

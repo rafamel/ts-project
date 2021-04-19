@@ -1,16 +1,11 @@
 import { Serial, UnaryFn } from 'type-core';
 import { Task } from 'kpo';
-import { LintParams, TranspileParams } from './tasks';
-import {
-  ConfigureBabelParams,
-  ConfigureEslintParams,
-  ConfigureJestParams
-} from './configure';
+import { LintParams } from './tasks';
+import { ConfigureEslintParams, ConfigureJestParams } from './configure';
 import { ToolingGlobal } from './global';
 
 export interface ToolingParams {
   global?: ToolingGlobal;
-  transpile?: ConfigureBabelParams & TranspileParams;
   lint?: ConfigureEslintParams & LintParams;
   test?: ConfigureJestParams;
 }
@@ -25,7 +20,6 @@ export interface ToolingReconfigure {
 }
 
 export interface ToolingTasks {
-  transpile: Task;
   node: Task;
   lint: Task;
   test: Task;

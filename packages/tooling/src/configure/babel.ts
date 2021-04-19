@@ -1,11 +1,10 @@
 import { Deep, Empty, Members, Serial } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { hydrateToolingGlobal } from '../global';
-import { defaults } from '../defaults';
 import { paths } from '../paths';
 
 export interface ConfigureBabelParams {
-  targets?: Serial.Object;
+  env?: Serial.Object | null;
 }
 
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
@@ -18,7 +17,7 @@ export function hydrateConfigureBabel(
   return shallow(
     {
       ...hydrateToolingGlobal(options),
-      targets: defaults.transpile.targets
+      env: { targets: 'defaults' } as any
     },
     options || undefined
   );
@@ -30,7 +29,7 @@ export function configureBabel(
   const opts = hydrateConfigureBabel(options);
   return {
     presets: [
-      [paths.babel.presetEnv, getPresetEnvConfig(opts.targets)],
+      ...(opts.env === null ? [] : [[paths.babel.presetEnv, opts.env]]),
       paths.babel.presetTypeScript
     ],
     plugins: [
@@ -51,9 +50,11 @@ export function reconfigureBabel(
   return {
     ...configuration,
     presets:
-      options && options.targets
+      options && (options.env || options.env === null)
         ? [
-            [paths.babel.presetEnv, getPresetEnvConfig(options.targets)],
+            ...(options.env === null
+              ? []
+              : [[paths.babel.presetEnv, options.env]]),
             ...((configuration as any).presets || []).filter(
               (preset: string | [string, ...any]) => {
                 return !(Array.isArray(preset)
@@ -80,16 +81,4 @@ export function reconfigureBabel(
           ]
         : (configuration as any).plugins || []
   };
-}
-
-function getPresetEnvConfig(targets: Serial.Object): Serial.Object {
-  const esnext = !targets.node && targets.esmodules;
-
-  return esnext
-    ? {
-        modules: false,
-        spec: true,
-        targets
-      }
-    : { targets };
 }

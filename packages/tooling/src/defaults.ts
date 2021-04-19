@@ -9,11 +9,6 @@ export const defaults: Deep.Required<ToolingParams> = {
       ts: ['ts', 'tsx']
     }
   },
-  transpile: {
-    types: true,
-    output: 'dist/',
-    targets: { node: '12.0.0' }
-  },
   lint: {
     dir: ['./'],
     types: true,

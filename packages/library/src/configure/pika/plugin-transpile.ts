@@ -1,24 +1,31 @@
-import { Serial } from 'type-core';
+import { Deep, Serial } from 'type-core';
 import { capture } from 'errorish';
-import { run } from 'kpo';
+import { context, copy, create, exec, mkdir, run, series, Task } from 'kpo';
 import path from 'path';
 import { BuilderOptions } from '@pika/types';
-import { getTypeScriptPath } from '@riseup/utils';
-import { hydrateTranspile, transpile } from '@riseup/tooling';
-import { hydrateBuild } from '../../tasks';
+import { reconfigureBabel } from '@riseup/tooling';
+import {
+  constants,
+  getTypeScriptPath,
+  intercept,
+  tmpTask
+} from '@riseup/utils';
+import { paths } from '../../paths';
+import {
+  ConfigurePikaConfig,
+  ConfigurePikaOptions,
+  hydrateConfigurePika
+} from './index';
+
+const output = 'dist/';
 
 export function manifest(
   manifest: Serial.Object,
   { cwd, options: { options } }: BuilderOptions
 ): void {
-  const opts = {
-    ...hydrateBuild(options),
-    ...hydrateTranspile(options)
-  };
+  const opts = hydrateConfigurePika(options);
 
   const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
-  let output = path.relative(opts.destination, opts.output);
-  if (output[output.length - 1] !== '/') output += '/';
 
   manifest.main = output;
   if (isTypeScript) manifest.types = output;
@@ -33,8 +40,71 @@ export async function build({
   options: { options, config }
 }: BuilderOptions): Promise<void> {
   try {
-    await run(transpile(options, config), { cwd });
+    const task = transpile(output, hydrateConfigurePika(options), config);
+    await run(task, { cwd });
   } catch (err) {
     throw capture(err);
   }
+}
+
+function transpile(
+  dir: string,
+  options: Deep.Required<ConfigurePikaOptions>,
+  config: ConfigurePikaConfig
+): Task.Async {
+  const destination = path.join(options.destination, dir);
+  return context(
+    { args: [] },
+    series(
+      mkdir(destination, { ensure: true }),
+      tmpTask(
+        reconfigureBabel(
+          {
+            env: { targets: options.targets }
+          },
+          config.babel
+        ),
+        (file) => {
+          return exec(constants.node, [
+            paths.bin.babelCli,
+            'src',
+            ...['--source-maps', 'inline'],
+            ...['--config-file', file],
+            ...['--out-dir', destination],
+            ...[
+              '--extensions',
+              [...options.extensions.js, ...options.extensions.ts]
+                .map((x) => '.' + x)
+                .join(',')
+            ]
+          ]);
+        }
+      ),
+      create((ctx) => {
+        return options.types && getTypeScriptPath(ctx.cwd)
+          ? tmpTask(config.typescript, (file) => {
+              return intercept(
+                {
+                  original: path.resolve(ctx.cwd, path.basename(file)),
+                  replacement: file
+                },
+                paths.bin.typescript,
+                [
+                  ...['--project', path.resolve(ctx.cwd, path.basename(file))],
+                  ...['--outDir', destination]
+                ]
+              );
+            })
+          : undefined;
+      }),
+      options.types
+        ? copy('src/**/*.d.ts', destination, {
+            glob: true,
+            single: false,
+            strict: false,
+            exists: 'error'
+          })
+        : null
+    )
+  );
 }

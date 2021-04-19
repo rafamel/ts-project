@@ -1,35 +1,41 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { shallow } from 'merge-strategies';
-import {
-  hydrateTranspile,
-  TranspileConfig,
-  TranspileOptions
-} from '@riseup/tooling';
+import { hydrateToolingGlobal } from '@riseup/tooling';
 import { paths } from '../../paths';
 import { defaults } from '../../defaults';
 
 export interface ConfigurePikaParams {
   assets?: string[];
-  nodev?: boolean;
-  multitarget?: boolean;
+  types?: boolean;
   destination?: string;
+  targets?: Serial.Object;
+  multitarget?: boolean;
   manifest?: Serial.Object;
 }
 
-export type ConfigurePikaOptions = ConfigurePikaParams & TranspileOptions;
+export interface ConfigurePikaOptions extends ConfigurePikaParams {
+  extensions?: {
+    js?: string[];
+    ts?: string[];
+  };
+}
 
-export type ConfigurePikaConfig = TranspileConfig;
+export interface ConfigurePikaConfig {
+  babel: Serial.Object;
+  typescript: Serial.Object;
+}
 
 export function hydrateConfigurePika(
   options: ConfigurePikaOptions | Empty
 ): Deep.Required<ConfigurePikaOptions> {
   return shallow(
     {
-      ...hydrateTranspile(options),
+      ...hydrateToolingGlobal(options),
       assets: defaults.build.assets,
-      multitarget: defaults.build.multitarget,
+      types: defaults.build.types,
       destination: defaults.build.destination,
-      nodev: defaults.build.nodev,
+      targets: defaults.build.targets,
+      multitarget: defaults.build.multitarget,
       manifest: defaults.build.manifest
     },
     options || undefined

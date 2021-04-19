@@ -30,6 +30,6 @@ export interface LibraryReconfigure
 
 export interface LibraryTasks extends UniversalTasks, ToolingTasks {
   build: Task;
-  distribute: Task;
   docs: Task;
+  distribute: Task;
 }

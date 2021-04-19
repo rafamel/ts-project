@@ -2,7 +2,7 @@ import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
 import { handleReconfigure } from '@riseup/utils';
-import { lint, test, node, transpile } from './tasks';
+import { lint, test, node } from './tasks';
 import {
   configureBabel,
   configureEslint,
@@ -22,11 +22,10 @@ export function hydrateTooling(
   return options
     ? {
         global: { ...options.global },
-        transpile: { ...options.global, ...options.transpile },
         lint: { ...options.global, ...options.lint },
         test: { ...options.global, ...options.test }
       }
-    : { global: {}, transpile: {}, lint: {}, test: {} };
+    : { global: {}, lint: {}, test: {} };
 }
 
 export function tooling(
@@ -43,7 +42,7 @@ export function tooling(
     babel() {
       return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.babel,
-        () => configureBabel(opts.transpile)
+        () => configureBabel(opts.global)
       );
     },
     typescript(cwd: string) {
@@ -69,7 +68,11 @@ export function tooling(
         () => {
           return configureJest(opts.test, {
             babel: reconfigureBabel(
-              { targets: { node: process.version.slice(1) } },
+              {
+                env: {
+                  targets: { node: process.version.slice(1) }
+                }
+              },
               configure.babel()
             )
           });
@@ -79,16 +82,14 @@ export function tooling(
   };
 
   return {
-    transpile: create((ctx) => {
-      return transpile(opts.transpile, {
-        babel: configure.babel(),
-        typescript: configure.typescript(ctx.cwd)
-      });
-    }),
     node: create(() => {
       return node(opts.global, {
         babel: reconfigureBabel(
-          { targets: { node: process.version.slice(1) } },
+          {
+            env: {
+              targets: { node: process.version.slice(1) }
+            }
+          },
           configure.babel()
         )
       });

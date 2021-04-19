@@ -1,16 +1,14 @@
 import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
-import path from 'path';
 import { handleReconfigure } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
 import {
   configureBabel,
   hydrateTooling,
   tooling,
-  configureTypescript,
-  hydrateTranspile
+  configureTypescript
 } from '@riseup/tooling';
-import { build, distribute, docs, hydrateBuild } from './tasks';
+import { build, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
 import {
   LibraryOptions,
@@ -26,22 +24,15 @@ export function hydrateLibrary(
   const tooling = hydrateTooling(options);
   const library = options
     ? {
-        build: { ...options.build },
-        distribute: { ...options.distribute },
-        docs: { ...options.docs }
+        build: { ...options.global, ...options.build },
+        docs: { ...options.docs },
+        distribute: { ...options.distribute }
       }
-    : { build: {}, distribute: {}, docs: {} };
+    : { build: {}, docs: {}, distribute: {} };
 
   return {
     ...universal,
     ...tooling,
-    transpile: {
-      ...tooling.transpile,
-      output: path.join(
-        hydrateBuild(library.build).destination,
-        hydrateTranspile(tooling.transpile).output
-      )
-    },
     ...library,
     distribute: {
       ...library.distribute,
@@ -63,7 +54,7 @@ export function library(
     babel() {
       return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.babel,
-        () => configureBabel(opts.transpile)
+        () => configureBabel(opts.global)
       );
     },
     typescript(cwd: string) {
@@ -76,10 +67,10 @@ export function library(
       return handleReconfigure<Serial.Array>(
         reconfigure && reconfigure.pika,
         () => {
-          return configurePika(
-            { ...opts.transpile, ...opts.build },
-            { babel: configure.babel(), typescript: configure.typescript(cwd) }
-          );
+          return configurePika(opts.build, {
+            babel: configure.babel(),
+            typescript: configure.typescript(cwd)
+          });
         }
       );
     },
@@ -100,9 +91,9 @@ export function library(
         babel: configure.babel()
       });
     }),
-    distribute: create(() => distribute(opts.distribute)),
     docs: create((ctx) => {
       return docs(opts.docs, { typedoc: configure.typedoc(ctx.cwd) });
-    })
+    }),
+    distribute: create(() => distribute(opts.distribute))
   };
 }
