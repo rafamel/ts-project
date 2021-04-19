@@ -2,7 +2,7 @@ import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
 import { handleReconfigure } from '@riseup/utils';
-import { node, lint, test } from './tasks';
+import { node, lint, test, fix } from './tasks';
 import {
   configureBabel,
   configureEslint,
@@ -22,10 +22,11 @@ export function hydrateTooling(
   return options
     ? {
         global: { ...options.global },
+        fix: { ...options.global, ...options.fix },
         lint: { ...options.global, ...options.lint },
         test: { ...options.global, ...options.test }
       }
-    : { global: {}, lint: {}, test: {} };
+    : { global: {}, fix: {}, lint: {}, test: {} };
 }
 
 export function tooling(
@@ -51,14 +52,17 @@ export function tooling(
         () => configureTypescript(cwd)
       );
     },
-    eslint(cwd: string) {
+    eslint(cwd: string, highlight: boolean) {
       return handleReconfigure<Serial.Object>(
         reconfigure && reconfigure.eslint,
         () => {
-          return configureEslint(opts.lint, {
-            babel: configure.babel(),
-            prettier: configure.prettier(cwd)
-          });
+          return configureEslint(
+            highlight ? opts.lint : { ...opts.lint, highlight: [] },
+            {
+              babel: configure.babel(),
+              prettier: configure.prettier(cwd)
+            }
+          );
         }
       );
     },
@@ -94,8 +98,11 @@ export function tooling(
         )
       });
     }),
+    fix: create((ctx) => {
+      return fix(opts.fix, { eslint: configure.eslint(ctx.cwd, false) });
+    }),
     lint: create((ctx) => {
-      return lint(opts.lint, { eslint: configure.eslint(ctx.cwd) });
+      return lint(opts.lint, { eslint: configure.eslint(ctx.cwd, true) });
     }),
     test: create(() => {
       return test({ jest: configure.jest() });

@@ -1,11 +1,12 @@
 import { Serial, UnaryFn } from 'type-core';
 import { Task } from 'kpo';
-import { LintParams } from './tasks';
+import { FixParams, LintParams } from './tasks';
 import { ConfigureEslintParams, ConfigureJestParams } from './configure';
 import { ToolingGlobal } from './global';
 
 export interface ToolingParams {
   global?: ToolingGlobal;
+  fix?: FixParams;
   lint?: ConfigureEslintParams & LintParams;
   test?: ConfigureJestParams;
 }
@@ -21,6 +22,7 @@ export interface ToolingReconfigure {
 
 export interface ToolingTasks {
   node: Task;
+  fix: Task;
   lint: Task;
   test: Task;
 }

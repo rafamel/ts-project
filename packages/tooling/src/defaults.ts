@@ -10,6 +10,9 @@ export const defaults: Deep.Required<ToolingParams> = {
       ts: ['ts', 'tsx']
     }
   },
+  fix: {
+    dir: ['./']
+  },
   lint: {
     dir: ['./'],
     types: true,
