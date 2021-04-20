@@ -1,5 +1,6 @@
 import { Deep, Empty, Members, Serial } from 'type-core';
 import { shallow } from 'merge-strategies';
+import path from 'path';
 import { hydrateToolingGlobal } from '../global';
 import { paths } from '../paths';
 
@@ -47,6 +48,11 @@ export function reconfigureBabel(
   options: ConfigureBabelOptions | Empty,
   configuration: Serial.Object
 ): Serial.Object {
+  const presetEnvPartial = [
+    '@babel' + path.posix.sep + 'preset-env',
+    '@babel' + path.win32.sep + 'preset-env'
+  ];
+
   return {
     ...configuration,
     presets:
@@ -57,9 +63,11 @@ export function reconfigureBabel(
               : [[paths.babel.presetEnv, options.env]]),
             ...((configuration as any).presets || []).filter(
               (preset: string | [string, ...any]) => {
-                return !(Array.isArray(preset)
-                  ? preset[0].includes('@babel/preset-env')
-                  : preset.includes('@babel/preset-env'));
+                const str = Array.isArray(preset) ? preset[0] : preset;
+                for (const partial of presetEnvPartial) {
+                  if (str.includes(partial)) return false;
+                }
+                return true;
               }
             )
           ]
@@ -73,9 +81,8 @@ export function reconfigureBabel(
             ],
             ...((configuration as any).plugins || []).filter(
               (plugin: string | [string, ...any]) => {
-                return !(Array.isArray(plugin)
-                  ? plugin[0].includes('babel-plugin-module-resolver')
-                  : plugin.includes('babel-plugin-module-resolver'));
+                const str = Array.isArray(plugin) ? plugin[0] : plugin;
+                return !str.includes('babel-plugin-module-resolver');
               }
             )
           ]

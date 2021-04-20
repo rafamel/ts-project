@@ -46,9 +46,9 @@ export function configureJest(
 
   fs.writeFileSync(
     transformPath,
-    `const bj = require('${paths.jest.transformBabel}');
+    `const bj = require(${JSON.stringify(paths.jest.transformBabel)});
      module.exports = bj.createTransformer({
-       configFile: '${babelPath}'
+       configFile: ${JSON.stringify(babelPath)}
      });`
   );
   fs.writeFileSync(babelPath, JSON.stringify(config.babel));
