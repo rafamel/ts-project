@@ -55,7 +55,7 @@
     "errorish": "^1.0.0",
     "eslint": "^7.23.0",
     "jest-cli": "^26.6.3",
-    "kpo": "^0.20.0",
+    "kpo": "^0.21.0",
     "merge-strategies": "^0.2.0",
     "prettier": "^2.2.1",
     "ttypescript": "^1.5.12",

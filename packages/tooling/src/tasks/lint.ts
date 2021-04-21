@@ -1,6 +1,6 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
-import { context, exec, finalize, create, print, series, Task } from 'kpo';
+import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
 import { getTypeScriptPath, tmpTask, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
@@ -45,40 +45,35 @@ export function lint(
   return context(
     { args: [] },
     finalize(
-      series(
-        print('Checking rules...'),
-        tmpTask(config.eslint, async (file) => {
-          return exec(constants.node, [
-            paths.bin.eslint,
-            ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
-            ...['--config', file],
-            ...[
-              '--ext',
-              [...opts.extensions.js, ...opts.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ],
-            ...['--resolve-plugins-relative-to', paths.riseup.tooling]
-          ]);
-        })
-      ),
-      finalize(
-        create((ctx) => {
-          return opts.types && getTypeScriptPath(ctx.cwd)
-            ? series(
-                print('Checking types...'),
-                exec(constants.node, [paths.bin.typescript, '--noEmit'])
-              )
-            : null;
-        }),
-        opts.prettier
+      tmpTask(config.eslint, async (file) => {
+        return exec(constants.node, [
+          paths.bin.eslint,
+          ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
+          ...['--config', file],
+          ...[
+            '--ext',
+            [...opts.extensions.js, ...opts.extensions.ts]
+              .map((x) => '.' + x)
+              .join(',')
+          ],
+          ...['--resolve-plugins-relative-to', paths.riseup.tooling]
+        ]);
+      }),
+      create((ctx) => {
+        return opts.prettier
           ? exec(constants.node, [
               paths.bin.prettier,
-              '--check',
+              ...['--check', '--ignore-unknown'],
+              ...(isLevelActive('debug', ctx) ? ['--loglevel=warn'] : []),
               ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir])
             ])
-          : null
-      )
+          : null;
+      }),
+      create((ctx) => {
+        return opts.types && getTypeScriptPath(ctx.cwd)
+          ? exec(constants.node, [paths.bin.typescript, '--noEmit'])
+          : null;
+      })
     )
   );
 }

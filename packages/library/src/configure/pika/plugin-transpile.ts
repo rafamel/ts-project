@@ -41,7 +41,7 @@ export async function build({
 }: BuilderOptions): Promise<void> {
   try {
     const task = transpile(output, hydrateConfigurePika(options), config);
-    await run(task, { cwd });
+    await run({ cwd }, task);
   } catch (err) {
     throw capture(err);
   }

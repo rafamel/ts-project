@@ -13,11 +13,11 @@ module.exports = function tmpTask(object, cb) {
     });
 
     return run(
+      ctx,
       finalize(
         series(write(filepath, object), await cb(filepath)),
         remove(filepath, { glob: false, strict: false })
-      ),
-      ctx
+      )
     );
   };
 };

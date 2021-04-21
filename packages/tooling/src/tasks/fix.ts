@@ -1,6 +1,6 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
-import { context, exec, print, series, Task } from 'kpo';
+import { context, exec, Task, silence, finalize } from 'kpo';
 import { tmpTask, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
@@ -42,8 +42,7 @@ export function fix(
 
   return context(
     { args: [] },
-    series(
-      print('Fix rules...'),
+    finalize(
       tmpTask(config.eslint, async (file) => {
         return exec(constants.node, [
           ...[paths.bin.eslint, '--fix'],
@@ -59,11 +58,10 @@ export function fix(
         ]);
       }),
       opts.prettier
-        ? series(
-            print('Fix formatting...'),
+        ? silence(
             exec(constants.node, [
               paths.bin.prettier,
-              '--write',
+              ...['--write', '--ignore-unknown'],
               ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir])
             ])
           )

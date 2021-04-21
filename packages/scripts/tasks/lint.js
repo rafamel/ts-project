@@ -4,6 +4,7 @@ const tmpTask = require('../helpers/tmp-task');
 
 module.exports = async function lint(data, context) {
   return run(
+    context,
     tmpTask(data.config.eslint, async (file) => {
       const pkgPath = await up('package.json', {
         cwd: __dirname,
@@ -27,7 +28,6 @@ module.exports = async function lint(data, context) {
         ],
         { cwd: data.options.paths.root }
       );
-    }),
-    context
+    })
   );
 };
