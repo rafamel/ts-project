@@ -1,4 +1,12 @@
 {
   "version": "0.5.0",
-  "packages": ["utils", "universal", "tooling", "library", "monorepo", "cli"]
+  "packages": [
+    "utils",
+    "universal",
+    "tooling",
+    "library",
+    "react",
+    "monorepo",
+    "cli"
+  ]
 }
