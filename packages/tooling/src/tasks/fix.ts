@@ -43,7 +43,7 @@ export function fix(
   return context(
     { args: [] },
     finalize(
-      tmpTask(config.eslint, async (file) => {
+      tmpTask('json', config.eslint, async (file) => {
         return exec(constants.node, [
           ...[paths.bin.eslint, '--fix'],
           ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),

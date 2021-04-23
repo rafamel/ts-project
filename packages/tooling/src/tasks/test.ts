@@ -8,7 +8,7 @@ export interface TestConfig {
 }
 
 export function test(config: TestConfig): Task.Async {
-  return tmpTask(config.jest, async (file) => {
+  return tmpTask('json', config.jest, async (file) => {
     return exec(constants.node, [
       paths.bin.jest,
       '--config',

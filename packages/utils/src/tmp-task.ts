@@ -4,11 +4,12 @@ import fs from 'fs';
 import { tmpPath } from './tmp-path';
 
 export function tmpTask(
-  object: Serial.Type,
+  ext: string | null,
+  object: Serial.Object | Serial.Array | string,
   cb: UnaryFn<string, Task | Promise<Task>>
 ): Task.Async {
   return create(async (ctx) => {
-    const filepath = tmpPath(null, '.json');
+    const filepath = tmpPath(ext, null);
 
     ctx.cancellation.then(() => {
       try {

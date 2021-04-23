@@ -40,7 +40,7 @@ export function configureJest(
   const opts = hydrateConfigureJest(options);
 
   const extensions = [...opts.extensions.js, ...opts.extensions.ts];
-  const hashPath = tmpPath(config.babel);
+  const hashPath = tmpPath(null, config.babel);
   const transformPath = hashPath + '-transform.js';
   const babelPath = hashPath + '-babel.json';
 

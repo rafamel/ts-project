@@ -27,7 +27,7 @@ export function node(
 ): Task.Async {
   const opts = hydrateNode(options);
 
-  return tmpTask(config.babel, (file) => {
+  return tmpTask('json', config.babel, (file) => {
     return exec(constants.node, [
       paths.bin.babelNode,
       ...['--config-file', file],

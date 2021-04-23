@@ -37,7 +37,7 @@ export function lintmd(
 ): Task.Async {
   const opts = hydrateLintmd(options);
 
-  return tmpTask(config.markdownlint, (file) => {
+  return tmpTask('json', config.markdownlint, (file) => {
     return exec(constants.node, [
       paths.bin.markdownlint,
       ...['--config', file],

@@ -58,6 +58,7 @@ function transpile(
     series(
       mkdir(destination, { ensure: true }),
       tmpTask(
+        'json',
         reconfigureBabel(
           {
             env: { targets: options.targets }
@@ -82,7 +83,7 @@ function transpile(
       ),
       create((ctx) => {
         return options.types && getTypeScriptPath(ctx.cwd)
-          ? tmpTask(config.typescript, (file) => {
+          ? tmpTask('json', config.typescript, (file) => {
               return intercept(
                 {
                   original: path.resolve(ctx.cwd, path.basename(file)),

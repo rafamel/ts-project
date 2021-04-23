@@ -45,7 +45,7 @@ export function lint(
   return context(
     { args: [] },
     finalize(
-      tmpTask(config.eslint, async (file) => {
+      tmpTask('json', config.eslint, async (file) => {
         return exec(constants.node, [
           paths.bin.eslint,
           ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),

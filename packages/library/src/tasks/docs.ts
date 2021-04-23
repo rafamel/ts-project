@@ -47,7 +47,7 @@ export function docs(
         strict: false,
         recursive: true
       }),
-      tmpTask(config.typedoc, (file) => {
+      tmpTask('json', config.typedoc, (file) => {
         return exec(constants.node, [
           paths.bin.typedoc,
           'src',

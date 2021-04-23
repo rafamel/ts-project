@@ -6,8 +6,8 @@ import { Serial } from 'type-core';
 import { paths } from './paths';
 
 export function tmpPath(
-  seed?: Serial.Object | null,
-  ext?: string | null
+  ext: string | null,
+  seed: Serial.Object | null
 ): string {
   try {
     fs.accessSync(paths.riseup.tmp, fs.constants.F_OK);
@@ -26,6 +26,6 @@ export function tmpPath(
           respectFunctionNames: true,
           respectType: true
         })
-      : uuid()) + (ext || '')
+      : uuid()) + (ext ? '.' + ext : '')
   );
 }

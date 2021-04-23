@@ -52,6 +52,7 @@ export function build(
   return create((ctx) => {
     return series(
       tmpTask(
+        'json',
         reconfigureBabel(
           {
             env: {
