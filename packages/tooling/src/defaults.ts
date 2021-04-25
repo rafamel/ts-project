@@ -20,6 +20,13 @@ export const defaults: Deep.Required<ToolingParams> = {
     rules: {}
   },
   test: {
+    verbose: false,
+    require: [],
+    overrides: {}
+  },
+  coverage: {
+    all: true,
+    threshold: 0,
     overrides: {}
   }
 };

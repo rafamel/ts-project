@@ -1,20 +1,28 @@
 import { Serial } from 'type-core';
-import { exec, Task } from 'kpo';
-import { tmpTask, constants } from '@riseup/utils';
+import { create, Task } from 'kpo';
+import path from 'path';
+import { tmpTask, intercept } from '@riseup/utils';
 import { paths } from '../paths';
 
 export interface TestConfig {
-  jest: Serial.Object;
+  ava: Serial.Object;
 }
 
 export function test(config: TestConfig): Task.Async {
-  return tmpTask('json', config.jest, async (file) => {
-    return exec(constants.node, [
-      paths.bin.jest,
-      '--config',
-      file,
-      '--rootDir',
-      './'
-    ]);
+  return create((ctx) => {
+    return tmpTask(
+      'cjs',
+      `module.exports = ${JSON.stringify(config.ava)};`,
+      (file) => {
+        return intercept(
+          {
+            original: path.resolve(ctx.cwd, path.basename(file)),
+            replacement: file
+          },
+          paths.bin.ava,
+          ['--config', path.basename(file)]
+        );
+      }
+    );
   });
 }

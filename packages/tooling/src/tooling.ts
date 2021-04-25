@@ -2,11 +2,12 @@ import { Empty, Serial } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
 import { handleReconfigure } from '@riseup/utils';
-import { node, lint, test, fix } from './tasks';
+import { node, lint, test, fix, coverage } from './tasks';
 import {
+  configureAva,
   configureBabel,
   configureEslint,
-  configureJest,
+  configureNyc,
   configureTypescript,
   reconfigureBabel
 } from './configure';
@@ -24,9 +25,10 @@ export function hydrateTooling(
         global: { ...options.global },
         fix: { ...options.global, ...options.fix },
         lint: { ...options.global, ...options.lint },
-        test: { ...options.global, ...options.test }
+        test: { ...options.global, ...options.test },
+        coverage: { ...options.global, ...options.coverage }
       }
-    : { global: {}, fix: {}, lint: {}, test: {} };
+    : { global: {}, fix: {}, lint: {}, test: {}, coverage: {} };
 }
 
 export function tooling(
@@ -66,17 +68,26 @@ export function tooling(
         }
       );
     },
-    jest() {
+    ava() {
       return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.jest,
+        reconfigure && reconfigure.ava,
         () => {
-          return configureJest(opts.test, {
+          return configureAva(opts.test, {
             babel: reconfigureBabel(
-              {
-                env: {
-                  targets: { node: process.version.slice(1) }
-                }
-              },
+              { env: { targets: { node: process.version.slice(1) } } },
+              configure.babel()
+            )
+          });
+        }
+      );
+    },
+    nyc() {
+      return handleReconfigure<Serial.Object>(
+        reconfigure && reconfigure.nyc,
+        () => {
+          return configureNyc(opts.coverage, {
+            babel: reconfigureBabel(
+              { env: { targets: { node: process.version.slice(1) } } },
               configure.babel()
             )
           });
@@ -90,9 +101,7 @@ export function tooling(
       return node(opts.global, {
         babel: reconfigureBabel(
           {
-            env: {
-              targets: { node: process.version.slice(1) }
-            }
+            env: { targets: { node: process.version.slice(1) } }
           },
           configure.babel()
         )
@@ -105,7 +114,10 @@ export function tooling(
       return lint(opts.lint, { eslint: configure.eslint(ctx.cwd, true) });
     }),
     test: create(() => {
-      return test({ jest: configure.jest() });
+      return test({ ava: configure.ava() });
+    }),
+    coverage: create(() => {
+      return coverage({ ava: configure.ava(), nyc: configure.nyc() });
     })
   };
 }

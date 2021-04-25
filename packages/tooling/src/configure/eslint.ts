@@ -49,15 +49,12 @@ export function configureEslint(
       paths.eslint.configImportErrors,
       paths.eslint.configPrettier
     ],
-    env: {
-      node: true,
-      jest: true
-    },
+    env: { node: true },
     parserOptions: {
       impliedStrict: true,
       sourceType: 'module'
     },
-    plugins: ['prettier', 'jest', 'import'],
+    plugins: ['prettier', 'import'],
     globals: {},
     rules: {
       /* DISABLED */
