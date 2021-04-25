@@ -3,20 +3,20 @@ import path from 'path';
 import hash from 'object-hash';
 import { v4 as uuid } from 'uuid';
 import { Serial } from 'type-core';
-import { paths } from './paths';
+import { constants } from './constants';
 
 export function tmpPath(
   ext: string | null,
   seed: Serial.Object | null
 ): string {
   try {
-    fs.accessSync(paths.riseup.tmp, fs.constants.F_OK);
+    fs.accessSync(constants.tmp, fs.constants.F_OK);
   } catch (err) {
-    if (err) fs.mkdirSync(paths.riseup.tmp);
+    if (err) fs.mkdirSync(constants.tmp);
   }
 
   return path.resolve(
-    paths.riseup.tmp,
+    constants.tmp,
     (seed
       ? hash(seed, {
           excludeValues: false,

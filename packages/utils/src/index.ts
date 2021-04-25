@@ -7,4 +7,4 @@ export * from './handle-reconfigure';
 export * from './tmp-path';
 export * from './tmp-task';
 export * from './intercept';
-export { constants } from './paths';
+export * from './constants';

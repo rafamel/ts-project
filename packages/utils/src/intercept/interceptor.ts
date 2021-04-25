@@ -3,14 +3,15 @@ import fs from 'fs';
 import path from 'path';
 import mockery from 'mockery';
 import { collect } from 'ensurism';
+import { constants } from '../constants';
 
 const env = collect(process.env, ({ ensure }) => ({
-  RISEUP_INCERCEPT_ORIGINAL: ensure('string', { assert: true }),
-  RISEUP_INTERCEPT_REPLACEMENT: ensure('string', { assert: true })
+  [constants.interceptor.env.original]: ensure('string', { assert: true }),
+  [constants.interceptor.env.replacement]: ensure('string', { assert: true })
 }));
 
-const original = path.normalize(env.RISEUP_INCERCEPT_ORIGINAL);
-const replacement = path.normalize(env.RISEUP_INTERCEPT_REPLACEMENT);
+const original = path.normalize(env[constants.interceptor.env.original]);
+const replacement = path.normalize(env[constants.interceptor.env.replacement]);
 
 mockery.enable({
   warnOnReplace: true,

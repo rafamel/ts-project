@@ -1,7 +1,7 @@
 import path from 'path';
 import { Empty } from 'type-core';
 import { create, exec, ExecOptions, Task } from 'kpo';
-import { paths } from '../paths';
+import { constants } from '../constants';
 
 export function intercept(
   files: { original: string; replacement: string },
@@ -11,14 +11,20 @@ export function intercept(
 ): Task.Async {
   return create((ctx) => {
     return exec(
-      paths.bin.node,
-      ['-r', paths.riseup.interceptor, script, ...(args || [])],
+      constants.node,
+      ['-r', constants.interceptor.path, script, ...(args || [])],
       {
         ...Object.assign({}, options || undefined),
         env: {
           ...((options && options.env) || undefined),
-          RISEUP_INCERCEPT_ORIGINAL: path.resolve(ctx.cwd, files.original),
-          RISEUP_INTERCEPT_REPLACEMENT: path.resolve(ctx.cwd, files.replacement)
+          [constants.interceptor.env.original]: path.resolve(
+            ctx.cwd,
+            files.original
+          ),
+          [constants.interceptor.env.replacement]: path.resolve(
+            ctx.cwd,
+            files.replacement
+          )
         }
       }
     );
