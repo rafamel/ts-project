@@ -5,6 +5,7 @@ export * from './get-package';
 export * from './get-typescript-path';
 export * from './handle-reconfigure';
 export * from './tmp-path';
+export * from './tmp-file';
 export * from './tmp-task';
 export * from './intercept';
 export * from './constants';
