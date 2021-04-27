@@ -6,10 +6,10 @@ import {
   ConfigureAvaParams,
   ConfigureNycParams
 } from './configure';
-import { ToolingGlobal } from './global';
+import { ToolingGlobalParams } from './global';
 
 export interface ToolingParams {
-  global?: ToolingGlobal;
+  global?: ToolingGlobalParams;
   fix?: FixParams;
   lint?: ConfigureEslintParams & LintParams;
   test?: ConfigureAvaParams;

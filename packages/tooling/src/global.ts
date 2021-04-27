@@ -2,7 +2,7 @@ import { merge } from 'merge-strategies';
 import { Deep, Empty, Members } from 'type-core';
 import { defaults } from './defaults';
 
-export interface ToolingGlobal {
+export interface ToolingGlobalParams {
   prettier?: boolean;
   alias?: Members<string>;
   extensions?: {
@@ -11,9 +11,11 @@ export interface ToolingGlobal {
   };
 }
 
+export type ToolingGlobalOptions = ToolingGlobalParams;
+
 export function hydrateToolingGlobal(
-  options: ToolingGlobal | Empty
-): Deep.Required<ToolingGlobal> {
+  options: ToolingGlobalOptions | Empty
+): Deep.Required<ToolingGlobalOptions> {
   return merge(
     {
       prettier: defaults.global.prettier,
