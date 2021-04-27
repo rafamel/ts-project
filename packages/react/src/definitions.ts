@@ -26,4 +26,5 @@ export interface ReactTasks extends UniversalTasks, ToolingTasks {
   start: Task;
   build: Task;
   size: Task;
+  analyze: Task;
 }

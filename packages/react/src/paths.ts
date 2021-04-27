@@ -4,7 +4,12 @@ import { getBin } from '@riseup/utils';
 export const paths = {
   bin: {
     craco: getBin('@craco/craco', 'craco', __dirname),
-    sizeLimit: getBin('size-limit', 'size-limit', __dirname)
+    sizeLimit: getBin('size-limit', 'size-limit', __dirname),
+    sourceMapExplorer: getBin(
+      'source-map-explorer',
+      'source-map-explorer',
+      __dirname
+    )
   },
   riseup: {
     react: path.join(__dirname, '../'),
