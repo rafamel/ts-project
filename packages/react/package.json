@@ -42,6 +42,7 @@
     "@babel/register": "^7.13.16",
     "babel-preset-react-app": "^10.0.0",
     "eslint": "^7.25.0",
+    "eslint-config-react-app": "^6.0.0",
     "kpo": "^0.21.0",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
