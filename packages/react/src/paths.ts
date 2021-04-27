@@ -3,9 +3,11 @@ import { getBin } from '@riseup/utils';
 
 export const paths = {
   bin: {
-    craco: getBin('@craco/craco', 'craco', __dirname)
+    craco: getBin('@craco/craco', 'craco', __dirname),
+    sizeLimit: getBin('size-limit', 'size-limit', __dirname)
   },
   riseup: {
+    react: path.join(__dirname, '../'),
     tooling: path.dirname(require.resolve('@riseup/tooling/package.json'))
   },
   craco: {

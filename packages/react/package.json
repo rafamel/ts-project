@@ -41,6 +41,7 @@
     "@babel/node": "^7.13.13",
     "@babel/register": "^7.13.16",
     "@craco/craco": "^6.1.1",
+    "@size-limit/file": "^4.10.2",
     "babel-preset-react-app": "^10.0.0",
     "eslint": "^7.25.0",
     "eslint-config-react-app": "^6.0.0",
@@ -49,6 +50,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "react-scripts": "^4.0.3",
+    "size-limit": "^4.10.2",
     "type-core": "^0.9.0"
   },
   "devDependencies": {

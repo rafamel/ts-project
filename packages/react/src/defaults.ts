@@ -8,5 +8,8 @@ export const defaults: Deep.Required<ReactParams> = {
   start: {
     lint: true,
     server: null
+  },
+  size: {
+    limit: null
   }
 };
