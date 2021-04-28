@@ -43,16 +43,15 @@ export function configureAva(
   const opts = hydrateConfigureAva(options);
   const extensions = [...opts.extensions.js, ...opts.extensions.ts];
 
-  const babel = {
+  const babel = tmpFile('json', {
     ...config.babel,
     ignore: ['node_modules/*'],
     extensions: extensions.map((ext) => '.' + ext)
-  };
-
+  });
   const file = tmpFile(
     'js',
     `require(${JSON.stringify(paths.babel.register)})` +
-      `(JSON.parse('${JSON.stringify(babel)}'));`
+      `(require(${JSON.stringify(babel)}));`
   );
 
   return merge(
