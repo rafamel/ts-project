@@ -9,6 +9,7 @@ export type CracoTaskOptions = CracoConfigOptions;
 
 export interface CracoTaskConfig {
   babel: Serial.Object;
+  typescript: Serial.Object;
   eslint: Serial.Object;
 }
 
@@ -17,31 +18,47 @@ export function cracoTask(
   options: CracoTaskOptions,
   config: CracoTaskConfig
 ): Task.Async {
-  return tmpTask('json', config.babel, (babel) => {
-    return tmpTask('json', config.eslint, (eslint) => {
-      return create((ctx) => {
-        const opts: CracoConfigOptions = {
-          ...options,
-          webpack: options.webpack
-            ? path.resolve(ctx.cwd, options.webpack)
-            : null
-        };
+  return create((ctx) => {
+    const opts: CracoConfigOptions & Serial.Object = {
+      ...options,
+      webpack: options.webpack ? path.resolve(ctx.cwd, options.webpack) : null
+    };
 
-        const files: CracoConfigFiles = {
-          babel,
-          eslint
-        };
+    const tsconfig = {
+      ...config.typescript,
+      include: [path.resolve(ctx.cwd, 'src')],
+      compilerOptions: {
+        ...((config.typescript.compilerOptions as Serial.Object) || {}),
+        noEmit: true
+      }
+    };
 
-        const content =
-          `module.exports = require(${JSON.stringify(paths.craco.config)})` +
-          `.default(JSON.parse('${JSON.stringify(opts)}'),` +
-          `JSON.parse('${JSON.stringify(files)}'));`;
+    return tmpTask('json', opts, (optsfile) => {
+      return tmpTask('json', config.babel, (babel) => {
+        return tmpTask('json', tsconfig, (typescript) => {
+          return tmpTask('json', config.eslint, (eslint) => {
+            const files: CracoConfigFiles = {
+              babel,
+              typescript,
+              eslint
+            };
 
-        return tmpTask('js', content, (file) => {
-          return exec(constants.node, [
-            ...[paths.bin.craco, cmd],
-            ...['--config', file]
-          ]);
+            const content =
+              `module.exports = require(${JSON.stringify(
+                paths.craco.config
+              )})` +
+              '.default(' +
+              `require(${JSON.stringify(optsfile)}),` +
+              `JSON.parse('${JSON.stringify(files)}')` +
+              ');';
+
+            return tmpTask('js', content, (file) => {
+              return exec(constants.node, [
+                ...[paths.bin.craco, cmd],
+                ...['--config', file]
+              ]);
+            });
+          });
         });
       });
     });

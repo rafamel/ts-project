@@ -59,9 +59,11 @@ export function tooling(
         reconfigure && reconfigure.eslint,
         () => {
           return configureEslint(
+            cwd,
             highlight ? opts.lint : { ...opts.lint, highlight: [] },
             {
               babel: configure.babel(),
+              typescript: configure.typescript(cwd),
               prettier: configure.prettier(cwd)
             }
           );
@@ -100,9 +102,7 @@ export function tooling(
     node: create(() => {
       return node(opts.global, {
         babel: reconfigureBabel(
-          {
-            env: { targets: { node: process.version.slice(1) } }
-          },
+          { env: { targets: { node: process.version.slice(1) } } },
           configure.babel()
         )
       });
@@ -111,7 +111,10 @@ export function tooling(
       return fix(opts.fix, { eslint: configure.eslint(ctx.cwd, false) });
     }),
     lint: create((ctx) => {
-      return lint(opts.lint, { eslint: configure.eslint(ctx.cwd, true) });
+      return lint(opts.lint, {
+        eslint: configure.eslint(ctx.cwd, true),
+        typescript: configure.typescript(ctx.cwd)
+      });
     }),
     test: create(() => {
       return test({ ava: configure.ava() });

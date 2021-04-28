@@ -24,7 +24,6 @@ export function manifest(
   { cwd, options: { options } }: BuilderOptions
 ): void {
   const opts = hydrateConfigurePika(options);
-
   const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
 
   manifest.main = output;
@@ -84,14 +83,16 @@ function transpile(
       create((ctx) => {
         return options.types && getTypeScriptPath(ctx.cwd)
           ? tmpTask('json', config.typescript, (file) => {
+              const project = path.resolve(ctx.cwd, path.basename(file));
+
               return intercept(
-                {
-                  original: path.resolve(ctx.cwd, path.basename(file)),
-                  replacement: file
-                },
+                { original: project, replacement: file },
                 paths.bin.typescript,
                 [
-                  ...['--project', path.resolve(ctx.cwd, path.basename(file))],
+                  '--declaration',
+                  '--emitDeclarationOnly',
+                  ...['--noEmit', 'false'],
+                  ...['--project', project],
                   ...['--outDir', destination]
                 ]
               );

@@ -13,6 +13,7 @@ export interface BuildOptions {
 
 export interface BuildConfig {
   babel: Serial.Object;
+  typescript: Serial.Object;
   eslint: Serial.Object;
 }
 

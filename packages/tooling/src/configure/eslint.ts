@@ -1,11 +1,14 @@
-import { configs } from '@typescript-eslint/eslint-plugin';
 import { Deep, Empty, Members, Serial } from 'type-core';
+import { configs } from '@typescript-eslint/eslint-plugin';
 import { merge } from 'merge-strategies';
+import path from 'path';
+import { tmpFile } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
 export interface ConfigureEslintParams {
+  dir?: string | string[];
   highlight?: string[];
   rules?: Serial.Object;
 }
@@ -21,6 +24,7 @@ export interface ConfigureEslintOptions extends ConfigureEslintParams {
 
 export interface ConfigureEslintConfig {
   babel: Serial.Object;
+  typescript: Serial.Object;
   prettier: Serial.Object | null;
 }
 
@@ -30,6 +34,7 @@ export function hydrateConfigureEslint(
   return merge(
     {
       ...hydrateToolingGlobal(options),
+      dir: defaults.lint.dir,
       rules: defaults.lint.rules,
       highlight: defaults.lint.highlight
     },
@@ -38,10 +43,16 @@ export function hydrateConfigureEslint(
 }
 
 export function configureEslint(
+  cwd: string,
   options: ConfigureEslintOptions | Empty,
   config: ConfigureEslintConfig
 ): Serial.Object {
   const opts = hydrateConfigureEslint(options);
+  const dir = Array.isArray(opts.dir) ? opts.dir : [opts.dir];
+  const tsconfig = tmpFile('json', {
+    ...config.typescript,
+    include: dir.map((x) => path.resolve(cwd, x))
+  });
 
   return {
     extends: [
@@ -101,6 +112,10 @@ export function configureEslint(
       {
         files: [`*.{${opts.extensions.ts.join(',')}}`],
         parser: paths.eslint.parserTypeScript,
+        parserOptions: {
+          project: tsconfig,
+          tsconfigRootDir: cwd
+        },
         plugins: ['@typescript-eslint'],
         // Overrides don't allow for extends
         rules: {

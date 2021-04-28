@@ -6,10 +6,9 @@ export function configureTypescript(cwd: string): Serial.Object {
   const file = getTypeScriptPath(cwd) || paths.typescript.config;
   return {
     extends: file,
-    include: ['./src/**/*'],
+    exclude: ['node_modules'],
     compilerOptions: {
-      declaration: true,
-      emitDeclarationOnly: true
+      baseUrl: cwd
     }
   };
 }

@@ -1,7 +1,13 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
-import { getTypeScriptPath, tmpTask, constants } from '@riseup/utils';
+import path from 'path';
+import {
+  getTypeScriptPath,
+  tmpTask,
+  constants,
+  intercept
+} from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -21,6 +27,7 @@ export interface LintOptions extends LintParams {
 
 export interface LintConfig {
   eslint: Serial.Object;
+  typescript: Serial.Object;
 }
 
 export function hydrateLint(
@@ -70,9 +77,28 @@ export function lint(
           : null;
       }),
       create((ctx) => {
-        return opts.types && getTypeScriptPath(ctx.cwd)
-          ? exec(constants.node, [paths.bin.typescript, '--noEmit'])
-          : null;
+        if (!opts.types || !getTypeScriptPath(ctx.cwd)) {
+          return null;
+        }
+
+        const dir = Array.isArray(opts.dir) ? opts.dir : [opts.dir];
+        const tsconfig = {
+          ...config.typescript,
+          include: dir.map((x) => path.resolve(ctx.cwd, x))
+        };
+
+        return tmpTask('json', tsconfig, (file) => {
+          const project = path.resolve(ctx.cwd, path.basename(file));
+
+          return intercept(
+            { original: project, replacement: file },
+            paths.bin.typescript,
+            [
+              ...['--noEmit', '--emitDeclarationOnly', 'false'],
+              ...['--project', project]
+            ]
+          );
+        });
       })
     )
   );

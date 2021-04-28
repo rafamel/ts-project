@@ -22,6 +22,7 @@ export interface StartOptions extends StartParams {
 
 export interface StartConfig {
   babel: Serial.Object;
+  typescript: Serial.Object;
   eslint: Serial.Object;
 }
 

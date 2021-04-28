@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Members, Serial, TypeGuard } from 'type-core';
+import { Members, Serial } from 'type-core';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { addHook } from 'pirates';
 import { paths } from '../../paths';
 
 export interface CracoConfigOptions {
@@ -14,13 +16,29 @@ export interface CracoConfigOptions {
 
 export interface CracoConfigFiles {
   babel: string;
+  typescript: string;
   eslint: string;
 }
+
+let setupChecksDeactivated = false;
 
 export default function cracoConfig(
   options: CracoConfigOptions,
   files: CracoConfigFiles
 ): Members {
+  if (!setupChecksDeactivated) {
+    setupChecksDeactivated = true;
+    addHook((_code, _filename) => 'module.exports = () => undefined;', {
+      exts: ['.js'],
+      ignoreNodeModules: false,
+      matcher: (filename) => {
+        return filename.endsWith(
+          'react-scripts/scripts/utils/verifyTypeScriptSetup.js'
+        );
+      }
+    });
+  }
+
   const extensions = [...options.extensions.js, ...options.extensions.ts];
 
   return {
@@ -31,14 +49,8 @@ export default function cracoConfig(
         return {
           ...babel,
           ...options,
-          plugins: [...(babel.plugins || []), ...(options.plugins || [])],
-          presets: [
-            ...(options.presets || []),
-            ...(babel.presets || []).filter((x: string | any[]) => {
-              const str = TypeGuard.isString(x) ? x : x[0];
-              return !str.includes('babel-preset-react-app');
-            })
-          ]
+          presets: [...(options.presets || []), ...(babel.presets || [])],
+          plugins: [...(options.plugins || []), ...(babel.plugins || [])]
         };
       }
     },
@@ -63,9 +75,17 @@ export default function cracoConfig(
         return fn({
           ...config,
           resolve: {
-            ...config.resolve,
+            ...(config.resolve || {}),
             extensions: ['json', ...extensions].map((x) => '.' + x)
-          }
+          },
+          plugins: (config.plugins || []).map((plugin: any) => {
+            return plugin.constructor.name === 'ForkTsCheckerWebpackPlugin'
+              ? new ForkTsCheckerWebpackPlugin({
+                  ...(plugin.options || {}),
+                  tsconfig: files.typescript
+                })
+              : plugin;
+          })
         });
       }
     }

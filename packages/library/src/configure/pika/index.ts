@@ -47,10 +47,17 @@ export function configurePika(
   config: ConfigurePikaConfig
 ): Serial.Array {
   const opts = hydrateConfigurePika(options);
+  const configuration = {
+    ...config,
+    typescript: {
+      ...config.typescript,
+      include: ['src']
+    }
+  };
 
   return [
     ...[
-      [paths.pika.transpile, { options: opts, config: { ...config } }],
+      [paths.pika.transpile, { options: opts, config: configuration }],
       [paths.pika.assets, { files: opts.assets }]
     ],
     ...(opts.multitarget
