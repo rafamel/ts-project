@@ -18,7 +18,7 @@ export const paths = {
     presetEnv: require.resolve('@babel/preset-env'),
     presetTypeScript: require.resolve('@babel/preset-typescript'),
     pluginModuleResolver: require.resolve('babel-plugin-module-resolver'),
-    pluginIstanbul: require.resolve('babel-plugin-istanbul')
+    pluginModuleNameMapper: require.resolve('babel-plugin-module-name-mapper')
   },
   typescript: {
     config: require.resolve('../static/tsconfig.json')

@@ -45,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "@zerollup/ts-transform-paths": "^1.7.18",
-    "babel-plugin-istanbul": "^6.0.0",
+    "babel-plugin-module-name-mapper": "^1.2.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",
