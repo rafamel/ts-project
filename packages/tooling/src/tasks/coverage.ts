@@ -34,6 +34,7 @@ export function coverage(config: CoverageConfig): Task.Async {
               ],
               {
                 env: {
+                  NODE_ENV: ctx.env.NODE_ENV || 'test',
                   [constants.interceptor.env.original]: avadest,
                   [constants.interceptor.env.replacement]: avafile
                 }

@@ -1,5 +1,5 @@
 import { Deep, Empty, Serial } from 'type-core';
-import { exec, Task } from 'kpo';
+import { create, exec, Task } from 'kpo';
 import { tmpTask, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { paths } from '../paths';
@@ -27,16 +27,22 @@ export function node(
 ): Task.Async {
   const opts = hydrateNode(options);
 
-  return tmpTask('json', config.babel, (file) => {
-    return exec(constants.node, [
-      paths.bin.babelNode,
-      ...['--config-file', file],
-      ...[
-        '--extensions',
-        [...opts.extensions.js, ...opts.extensions.ts]
-          .map((x) => '.' + x)
-          .join(',')
-      ]
-    ]);
+  return create((ctx) => {
+    return tmpTask('json', config.babel, (file) => {
+      return exec(
+        constants.node,
+        [
+          paths.bin.babelNode,
+          ...['--config-file', file],
+          ...[
+            '--extensions',
+            [...opts.extensions.js, ...opts.extensions.ts]
+              .map((x) => '.' + x)
+              .join(',')
+          ]
+        ],
+        { env: { NODE_ENV: ctx.env.NODE_ENV || 'development' } }
+      );
+    });
   });
 }

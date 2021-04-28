@@ -20,7 +20,8 @@ export function test(config: TestConfig): Task.Async {
             replacement: file
           },
           paths.bin.ava,
-          ['--config', path.basename(file)]
+          ['--config', path.basename(file)],
+          { env: { NODE_ENV: ctx.env.NODE_ENV || 'test' } }
         );
       }
     );
