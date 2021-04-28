@@ -3,7 +3,7 @@ import { capture } from 'errorish';
 import { context, copy, create, exec, mkdir, run, series, Task } from 'kpo';
 import path from 'path';
 import { BuilderOptions } from '@pika/types';
-import { reconfigureBabel } from '@riseup/tooling';
+import { reconfigureBabelEnv } from '@riseup/tooling';
 import {
   constants,
   getTypeScriptPath,
@@ -58,12 +58,7 @@ function transpile(
       mkdir(destination, { ensure: true }),
       tmpTask(
         'json',
-        reconfigureBabel(
-          {
-            env: { targets: options.targets }
-          },
-          config.babel
-        ),
+        reconfigureBabelEnv({ targets: options.targets }, config.babel),
         (file) => {
           return exec(constants.node, [
             paths.bin.babelCli,

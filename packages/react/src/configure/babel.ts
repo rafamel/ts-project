@@ -1,9 +1,9 @@
 import { Serial } from 'type-core';
-import { reconfigureBabel } from '@riseup/tooling';
+import { reconfigureBabelEnv } from '@riseup/tooling';
 import { paths } from '../paths';
 
 export function reconfigureBabelReact(babel: Serial.Object): Serial.Object {
-  const rc = reconfigureBabel({ env: null }, babel);
+  const rc = reconfigureBabelEnv({ env: null }, babel);
 
   return {
     ...rc,

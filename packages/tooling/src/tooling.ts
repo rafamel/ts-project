@@ -9,7 +9,7 @@ import {
   configureEslint,
   configureNyc,
   configureTypescript,
-  reconfigureBabel
+  reconfigureBabelEnv
 } from './configure';
 import {
   ToolingOptions,
@@ -75,8 +75,8 @@ export function tooling(
         reconfigure && reconfigure.ava,
         () => {
           return configureAva(opts.test, {
-            babel: reconfigureBabel(
-              { env: { targets: { node: process.version.slice(1) } } },
+            babel: reconfigureBabelEnv(
+              { targets: { node: process.version.slice(1) } },
               configure.babel()
             )
           });
@@ -88,8 +88,8 @@ export function tooling(
         reconfigure && reconfigure.nyc,
         () => {
           return configureNyc(opts.coverage, {
-            babel: reconfigureBabel(
-              { env: { targets: { node: process.version.slice(1) } } },
+            babel: reconfigureBabelEnv(
+              { targets: { node: process.version.slice(1) } },
               configure.babel()
             )
           });
@@ -101,8 +101,8 @@ export function tooling(
   return {
     node: create(() => {
       return node(opts.global, {
-        babel: reconfigureBabel(
-          { env: { targets: { node: process.version.slice(1) } } },
+        babel: reconfigureBabelEnv(
+          { targets: { node: process.version.slice(1) } },
           configure.babel()
         )
       });

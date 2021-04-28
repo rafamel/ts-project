@@ -15,7 +15,7 @@ import {
   Task
 } from 'kpo';
 import { tmpTask, constants, intercept } from '@riseup/utils';
-import { reconfigureBabel } from '@riseup/tooling';
+import { reconfigureBabelEnv } from '@riseup/tooling';
 import { paths } from '../paths';
 import { defaults } from '../defaults';
 
@@ -53,13 +53,11 @@ export function build(
     return series(
       tmpTask(
         'json',
-        reconfigureBabel(
+        reconfigureBabelEnv(
           {
-            env: {
-              spec: true,
-              modules: false,
-              targets: { esmodules: true }
-            }
+            spec: true,
+            modules: false,
+            targets: { esmodules: true }
           },
           config.babel
         ),
