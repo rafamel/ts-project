@@ -25,5 +25,8 @@ export const paths = {
   },
   eslint: {
     configReactApp: require.resolve('eslint-config-react-app')
+  },
+  ava: {
+    globalJsdomRegister: require.resolve('global-jsdom/register')
   }
 };
