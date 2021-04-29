@@ -1,7 +1,7 @@
-import { Empty, Serial } from 'type-core';
+import { Empty } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
-import { handleReconfigure } from '@riseup/utils';
+import { handleReconfigure, Riseup } from '@riseup/utils';
 import { node, lint, test, fix, coverage } from './tasks';
 import {
   configureAva,
@@ -38,89 +38,85 @@ export function tooling(
   const opts = hydrateTooling(options);
 
   const configure = {
-    prettier(cwd: string) {
-      const file = up.sync('.prettierrc', { cwd, type: 'file' });
+    prettier(context: Riseup.Context) {
+      const file = up.sync('.prettierrc', {
+        cwd: context.cwd,
+        type: 'file'
+      });
       return file ? require(file) : null;
     },
-    babel() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.babel,
-        () => configureBabel(opts.global)
-      );
+    babel(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
+        return reconfigureBabelEnv(
+          { targets: { node: process.version.slice(1) } },
+          configureBabel(opts.global)
+        );
+      });
     },
-    typescript(cwd: string) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.typescript,
-        () => configureTypescript(cwd)
-      );
-    },
-    eslint(cwd: string, highlight: boolean) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.eslint,
+    typescript(context: Riseup.Context) {
+      return handleReconfigure(
+        context,
+        { ...reconfigure },
+        'typescript',
         () => {
-          return configureEslint(
-            cwd,
-            highlight ? opts.lint : { ...opts.lint, highlight: [] },
-            {
-              babel: configure.babel(),
-              typescript: configure.typescript(cwd),
-              prettier: configure.prettier(cwd)
-            }
-          );
+          return configureTypescript(context.cwd);
         }
       );
     },
-    ava() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.ava,
-        () => {
-          return configureAva(opts.test, {
-            babel: reconfigureBabelEnv(
-              { targets: { node: process.version.slice(1) } },
-              configure.babel()
-            )
-          });
-        }
-      );
+    eslint(context: Riseup.Context, highlight: boolean) {
+      return handleReconfigure(context, { ...reconfigure }, 'eslint', () => {
+        return configureEslint(
+          context.cwd,
+          highlight ? opts.lint : { ...opts.lint, highlight: [] },
+          {
+            babel: configure.babel(context),
+            typescript: configure.typescript(context),
+            prettier: configure.prettier(context)
+          }
+        );
+      });
     },
-    nyc() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.nyc,
-        () => {
-          return configureNyc(opts.coverage, {
-            babel: reconfigureBabelEnv(
-              { targets: { node: process.version.slice(1) } },
-              configure.babel()
-            )
-          });
-        }
-      );
+    ava(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'ava', () => {
+        return configureAva(opts.test, {
+          babel: configure.babel(context)
+        });
+      });
+    },
+    nyc(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'nyc', () => {
+        return configureNyc(opts.coverage, {
+          babel: configure.babel(context)
+        });
+      });
     }
   };
 
   return {
-    node: create(() => {
+    node: create(({ cwd }) => {
       return node(opts.global, {
-        babel: reconfigureBabelEnv(
-          { targets: { node: process.version.slice(1) } },
-          configure.babel()
-        )
+        babel: configure.babel({ cwd, task: 'node' })
       });
     }),
-    fix: create((ctx) => {
-      return fix(opts.fix, { eslint: configure.eslint(ctx.cwd, false) });
+    fix: create(({ cwd }) => {
+      return fix(opts.fix, {
+        eslint: configure.eslint({ cwd, task: 'fix' }, false)
+      });
     }),
-    lint: create((ctx) => {
+    lint: create(({ cwd }) => {
       return lint(opts.lint, {
-        eslint: configure.eslint(ctx.cwd, true),
-        typescript: configure.typescript(ctx.cwd)
+        eslint: configure.eslint({ cwd, task: 'lint' }, true),
+        typescript: configure.typescript({ cwd, task: 'lint' })
       });
     }),
-    test: create(() => {
-      return test({ ava: configure.ava() });
+    test: create(({ cwd }) => {
+      return test({ ava: configure.ava({ cwd, task: 'test' }) });
     }),
-    coverage: create(() => {
-      return coverage({ ava: configure.ava(), nyc: configure.nyc() });
+    coverage: create(({ cwd }) => {
+      return coverage({
+        ava: configure.ava({ cwd, task: 'coverage' }),
+        nyc: configure.nyc({ cwd, task: 'coverage' })
+      });
     })
   };
 }

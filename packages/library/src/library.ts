@@ -1,12 +1,13 @@
-import { Empty, Serial } from 'type-core';
+import { Empty } from 'type-core';
 import { create } from 'kpo';
-import { handleReconfigure } from '@riseup/utils';
+import { handleReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
 import {
   configureBabel,
   hydrateTooling,
   tooling,
-  configureTypescript
+  configureTypescript,
+  reconfigureBabelEnv
 } from '@riseup/tooling';
 import { build, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
@@ -51,48 +52,56 @@ export function library(
   const opts = hydrateLibrary(options);
 
   const configure = {
-    babel() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.babel,
-        () => configureBabel(opts.global)
-      );
+    babel(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
+        return reconfigureBabelEnv(
+          {
+            spec: true,
+            modules: false,
+            targets: { esmodules: true }
+          },
+          configureBabel(opts.global)
+        );
+      });
     },
-    typescript(cwd: string) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.typescript,
-        () => configureTypescript(cwd)
-      );
-    },
-    pika(cwd: string) {
-      return handleReconfigure<Serial.Array>(
-        reconfigure && reconfigure.pika,
+    typescript(context: Riseup.Context) {
+      return handleReconfigure(
+        context,
+        { ...reconfigure },
+        'typescript',
         () => {
-          return configurePika(opts.build, {
-            babel: configure.babel(),
-            typescript: configure.typescript(cwd)
-          });
+          return configureTypescript(context.cwd);
         }
       );
     },
-    typedoc(cwd: string) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.typedoc,
-        () => configureTypedoc(cwd, opts.docs)
-      );
+    pika(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'pika', () => {
+        return configurePika(opts.build, {
+          babel: configure.babel(context),
+          typescript: configure.typescript(context)
+        });
+      });
+    },
+    typedoc(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'typedoc', () => {
+        return configureTypedoc(context.cwd, opts.docs);
+      });
     }
   };
 
   return {
     ...universal(opts, reconfigure),
     ...tooling(opts, reconfigure),
-    build: create((ctx) => {
+    build: create(({ cwd }) => {
       return build(opts.build, {
-        pika: configure.pika(ctx.cwd),
-        babel: configure.babel()
+        pika: configure.pika({ cwd, task: 'build' }),
+        babel: configure.babel({ cwd, task: 'build' })
       });
     }),
-    docs: create((ctx) => {
-      return docs(opts.docs, { typedoc: configure.typedoc(ctx.cwd) });
+    docs: create(({ cwd }) => {
+      return docs(opts.docs, {
+        typedoc: configure.typedoc({ cwd, task: 'docs' })
+      });
     }),
     distribute: create(() => distribute(opts.distribute))
   };

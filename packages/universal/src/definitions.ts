@@ -1,5 +1,6 @@
-import { Serial, UnaryFn } from 'type-core';
+import { Serial } from 'type-core';
 import { Task } from 'kpo';
+import { Riseup } from '@riseup/utils';
 import { ConfigureMarkdownlintParams } from './configure';
 import { CommitParams, LintMdParams, ReleaseParams } from './tasks';
 
@@ -12,7 +13,7 @@ export interface UniversalParams {
 export type UniversalOptions = UniversalParams;
 
 export interface UniversalReconfigure {
-  markdownlint?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
+  markdownlint?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
 }
 
 export interface UniversalTasks {

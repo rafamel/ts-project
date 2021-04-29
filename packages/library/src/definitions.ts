@@ -1,7 +1,8 @@
-import { Serial, UnaryFn } from 'type-core';
+import { Serial } from 'type-core';
 import { Task } from 'kpo';
 import { BuildParams, DistributeParams, DocsParams } from './tasks';
 import { ConfigurePikaParams, ConfigureTypedocParams } from './configure';
+import { Riseup } from '@riseup/utils';
 import {
   ToolingOptions,
   ToolingReconfigure,
@@ -24,8 +25,8 @@ export type LibraryOptions = LibraryParams & UniversalOptions & ToolingOptions;
 export interface LibraryReconfigure
   extends UniversalReconfigure,
     ToolingReconfigure {
-  pika?: Serial.Array | UnaryFn<Serial.Array, Serial.Array>;
-  typedoc?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
+  pika?: Serial.Array | Riseup.Reconfigure<Serial.Array>;
+  typedoc?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
 }
 
 export interface LibraryTasks extends UniversalTasks, ToolingTasks {

@@ -9,3 +9,4 @@ export * from './tmp-file';
 export * from './tmp-task';
 export * from './intercept';
 export * from './constants';
+export * from './definitions';

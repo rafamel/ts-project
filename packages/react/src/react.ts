@@ -1,7 +1,7 @@
-import { Empty, Serial } from 'type-core';
+import { Empty } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
-import { handleReconfigure } from '@riseup/utils';
+import { handleReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
 import {
   configureBabel,
@@ -47,39 +47,37 @@ export function react(
   const opts = hydrateReact(options);
 
   const configure = {
-    prettier(cwd: string) {
-      const file = up.sync('.prettierrc', { cwd, type: 'file' });
+    prettier(context: Riseup.Context) {
+      const file = up.sync('.prettierrc', {
+        cwd: context.cwd,
+        type: 'file'
+      });
       return file ? require(file) : null;
     },
-    babel() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.babel,
-        () => reconfigureBabelReact(configureBabel(opts.global))
-      );
+    babel(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
+        return reconfigureBabelReact(configureBabel(opts.global));
+      });
     },
-    typescript(cwd: string) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.babel,
-        () => configureTypescript(cwd)
-      );
+    typescript(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
+        return configureTypescript(context.cwd);
+      });
     },
-    eslint(cwd: string) {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.eslint,
-        () => {
-          return reconfigureEslintReact(
-            configureEslint(
-              cwd,
-              { ...opts.global, ...opts.lint },
-              {
-                babel: configure.babel(),
-                typescript: configure.typescript(cwd),
-                prettier: configure.prettier(cwd)
-              }
-            )
-          );
-        }
-      );
+    eslint(context: Riseup.Context) {
+      return handleReconfigure(context, { ...reconfigure }, 'eslint', () => {
+        return reconfigureEslintReact(
+          configureEslint(
+            context.cwd,
+            { ...opts.global, ...opts.lint },
+            {
+              babel: configure.babel(context),
+              typescript: configure.typescript(context),
+              prettier: configure.prettier(context)
+            }
+          )
+        );
+      });
     }
   };
 
@@ -87,34 +85,34 @@ export function react(
     ...universal(opts, reconfigure),
     ...tooling(opts, {
       ...reconfigure,
-      babel(config) {
-        return handleReconfigure(reconfigure && reconfigure.babel, () => {
+      babel(config, context) {
+        return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
           return reconfigureBabelReact(config);
         });
       },
-      eslint(config) {
-        return handleReconfigure(reconfigure && reconfigure.eslint, () => {
+      eslint(config, context) {
+        return handleReconfigure(context, { ...reconfigure }, 'eslint', () => {
           return reconfigureEslintReact(config);
         });
       },
-      ava(config) {
-        return handleReconfigure(reconfigure && reconfigure.ava, () => {
+      ava(config, context) {
+        return handleReconfigure(context, { ...reconfigure }, 'ava', () => {
           return reconfigureAvaReact(config);
         });
       }
     }),
-    start: create((ctx) => {
+    start: create(({ cwd }) => {
       return start(opts.start, {
-        babel: configure.babel(),
-        typescript: configure.typescript(ctx.cwd),
-        eslint: configure.eslint(ctx.cwd)
+        babel: configure.babel({ cwd, task: 'start' }),
+        typescript: configure.typescript({ cwd, task: 'start' }),
+        eslint: configure.eslint({ cwd, task: 'start' })
       });
     }),
-    build: create((ctx) => {
+    build: create(({ cwd }) => {
       return build(opts.global, {
-        babel: configure.babel(),
-        typescript: configure.typescript(ctx.cwd),
-        eslint: configure.eslint(ctx.cwd)
+        babel: configure.babel({ cwd, task: 'build' }),
+        typescript: configure.typescript({ cwd, task: 'build' }),
+        eslint: configure.eslint({ cwd, task: 'build' })
       });
     }),
     size: create(() => {

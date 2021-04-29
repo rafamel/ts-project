@@ -1,5 +1,6 @@
-import { Serial, UnaryFn } from 'type-core';
+import { Serial } from 'type-core';
 import { Task } from 'kpo';
+import { Riseup } from '@riseup/utils';
 import { FixParams, LintParams } from './tasks';
 import {
   ConfigureEslintParams,
@@ -19,11 +20,11 @@ export interface ToolingParams {
 export type ToolingOptions = ToolingParams;
 
 export interface ToolingReconfigure {
-  babel?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  typescript?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  eslint?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  ava?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-  nyc?: Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
+  babel?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
+  typescript?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
+  eslint?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
+  ava?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
+  nyc?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
 }
 
 export interface ToolingTasks {

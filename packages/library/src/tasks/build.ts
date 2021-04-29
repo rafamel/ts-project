@@ -15,7 +15,6 @@ import {
   Task
 } from 'kpo';
 import { tmpTask, constants, intercept } from '@riseup/utils';
-import { reconfigureBabelEnv } from '@riseup/tooling';
 import { paths } from '../paths';
 import { defaults } from '../defaults';
 
@@ -51,30 +50,19 @@ export function build(
 
   return create((ctx) => {
     return series(
-      tmpTask(
-        'json',
-        reconfigureBabelEnv(
+      tmpTask('json', config.babel, (file) => {
+        return intercept(
           {
-            spec: true,
-            modules: false,
-            targets: { esmodules: true }
+            original: path.resolve(ctx.cwd, '.babelrc.json'),
+            replacement: file
           },
-          config.babel
-        ),
-        (file) => {
-          return intercept(
-            {
-              original: path.resolve(ctx.cwd, '.babelrc.json'),
-              replacement: file
-            },
-            paths.bin.pika,
-            [
-              ...['--out', opts.destination],
-              ...['--pipeline', JSON.stringify(config.pika)]
-            ]
-          );
-        }
-      ),
+          paths.bin.pika,
+          [
+            ...['--out', opts.destination],
+            ...['--pipeline', JSON.stringify(config.pika)]
+          ]
+        );
+      }),
       create((ctx) => {
         if (!opts.tarball) return;
 

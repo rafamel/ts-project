@@ -1,6 +1,6 @@
-import { Empty, Serial } from 'type-core';
+import { Empty } from 'type-core';
 import { create } from 'kpo';
-import { handleReconfigure } from '@riseup/utils';
+import { handleReconfigure, Riseup } from '@riseup/utils';
 import {
   UniversalOptions,
   UniversalReconfigure,
@@ -28,17 +28,21 @@ export function universal(
   const opts = hydrateUniversal(options);
 
   const configure = {
-    markdownlint() {
-      return handleReconfigure<Serial.Object>(
-        reconfigure && reconfigure.markdownlint,
+    markdownlint(context: Riseup.Context) {
+      return handleReconfigure(
+        context,
+        { ...reconfigure },
+        'markdownlint',
         () => configureMarkdownlint(opts.lintmd)
       );
     }
   };
 
   return {
-    lintmd: create(() => {
-      return lintmd(opts.lintmd, { markdownlint: configure.markdownlint() });
+    lintmd: create(({ cwd }) => {
+      return lintmd(opts.lintmd, {
+        markdownlint: configure.markdownlint({ cwd, task: 'lintmd' })
+      });
     }),
     commit: create(() => {
       return commit(opts.commit);
