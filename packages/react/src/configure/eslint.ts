@@ -18,7 +18,7 @@ export function reconfigureEslintReact(eslint: Serial.Object): Serial.Object {
         ...resolver,
         alias: {
           ...alias,
-          extensions: 'json,jpg,jpeg,png,gif,bmp,html,css,scss'
+          extensions: 'json,jpg,jpeg,png,gif,bmp,svg,css,scss,sass,less'
             .split(',')
             .map((ext) => '.' + ext)
             .concat((alias.extensions as string[]) || [])

@@ -19,7 +19,9 @@ export const paths = {
     config: require.resolve('./tasks/helpers/craco-config')
   },
   babel: {
-    presetReactApp: require.resolve('babel-preset-react-app')
+    presetReactApp: require.resolve('babel-preset-react-app'),
+    mapperImage: require.resolve('./configure/babel/mapper-image'),
+    mapperStyle: require.resolve('./configure/babel/mapper-style')
   },
   eslint: {
     configReactApp: require.resolve('eslint-config-react-app')
