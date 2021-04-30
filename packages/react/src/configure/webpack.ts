@@ -1,27 +1,31 @@
-import { Members, TypeGuard, UnaryFn } from 'type-core';
+import { Dictionary, TypeGuard, UnaryFn } from 'type-core';
 import { overrideStyle } from '@craco/craco/lib/features/webpack/style/style';
 
 export interface ReconfigureWebpackStyle {
   css?: {
     /* See: https://github.com/webpack-contrib/css-loader */
-    options?: Members | UnaryFn<Members, Members>;
+    options?: Dictionary | UnaryFn<Dictionary, Dictionary>;
   };
   sass?: {
     /* See: https://github.com/webpack-contrib/sass-loader */
-    options?: Members | UnaryFn<Members, Members>;
+    options?: Dictionary | UnaryFn<Dictionary, Dictionary>;
   };
   postcss?: {
-    env?: { autoprefixer?: Members; stage?: Members; features?: Members };
+    env?: {
+      autoprefixer?: Dictionary;
+      stage?: Dictionary;
+      features?: Dictionary;
+    };
     plugins?: any[];
     /* See: https://github.com/postcss/postcss-loader */
-    options?: Members | UnaryFn<Members, Members>;
+    options?: Dictionary | UnaryFn<Dictionary, Dictionary>;
   };
 }
 
 export function reconfigureWebpackStyles(
   style: ReconfigureWebpackStyle,
-  webpack: Members
-): Members {
+  webpack: Dictionary
+): Dictionary {
   const { css, sass, postcss } = style;
   const { options: cssOptions } = css || {};
   const { options: sassOptions } = sass || {};
@@ -34,14 +38,14 @@ export function reconfigureWebpackStyles(
           loaderOptions: TypeGuard.isEmpty(cssOptions)
             ? <T>(x: T): T => x
             : TypeGuard.isFunction(cssOptions)
-            ? (x: Members): Members => cssOptions(x)
+            ? (x: Dictionary): Dictionary => cssOptions(x)
             : cssOptions
         },
         sass: {
           loaderOptions: TypeGuard.isEmpty(sassOptions)
             ? <T>(x: T): T => x
             : TypeGuard.isFunction(sassOptions)
-            ? (x: Members): Members => sassOptions(x)
+            ? (x: Dictionary): Dictionary => sassOptions(x)
             : sassOptions
         },
         postcss: {
@@ -50,7 +54,7 @@ export function reconfigureWebpackStyles(
           loaderOptions: TypeGuard.isEmpty(postcssOptions)
             ? <T>(x: T): T => x
             : TypeGuard.isFunction(postcssOptions)
-            ? (x: Members): Members => postcssOptions(x)
+            ? (x: Dictionary): Dictionary => postcssOptions(x)
             : postcssOptions
         }
       }
@@ -62,8 +66,8 @@ export function reconfigureWebpackStyles(
 
 export function reconfigureWebpackAddPlugins(
   plugins: any[],
-  webpack: Members
-): Members {
+  webpack: Dictionary
+): Dictionary {
   return {
     ...webpack,
     plugins: [...(webpack.plugins || []), ...plugins]

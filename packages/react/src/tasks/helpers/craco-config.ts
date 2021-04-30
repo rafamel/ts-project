@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Members, Serial } from 'type-core';
+import { Dictionary, Serial } from 'type-core';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import { addHook } from 'pirates';
 import { paths } from '../../paths';
@@ -25,7 +25,7 @@ let setupChecksDeactivated = false;
 export default function cracoConfig(
   options: CracoConfigOptions,
   files: CracoConfigFiles
-): Members {
+): Dictionary {
   if (!setupChecksDeactivated) {
     setupChecksDeactivated = true;
     addHook((_code, _filename) => 'module.exports = () => undefined;', {
@@ -44,7 +44,7 @@ export default function cracoConfig(
   return {
     ...(options.server ? { devServer: options.server } : {}),
     babel: {
-      loaderOptions: (options: Members) => {
+      loaderOptions: (options: Dictionary) => {
         const babel = require(files.babel);
         return {
           ...babel,
@@ -57,7 +57,7 @@ export default function cracoConfig(
     eslint: {
       enable: options.lint,
       mode: 'file',
-      pluginOptions: (options: Members) => ({
+      pluginOptions: (options: Dictionary) => ({
         ...options,
         extensions,
         emitWarning: true,
@@ -67,7 +67,7 @@ export default function cracoConfig(
       })
     },
     webpack: {
-      configure(config: Members) {
+      configure(config: Dictionary) {
         const fn = options.webpack
           ? require(options.webpack)
           : <T>(x: T): T => x;

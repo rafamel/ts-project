@@ -1,4 +1,4 @@
-import { Deep, Empty, Members, Serial } from 'type-core';
+import { Deep, Empty, Dictionary, Serial } from 'type-core';
 import { configs } from '@typescript-eslint/eslint-plugin';
 import { merge } from 'merge-strategies';
 import path from 'path';
@@ -15,7 +15,7 @@ export interface ConfigureEslintParams {
 
 export interface ConfigureEslintOptions extends ConfigureEslintParams {
   prettier?: boolean;
-  alias?: Members<string>;
+  alias?: Dictionary<string>;
   extensions?: {
     js?: string[];
     ts?: string[];

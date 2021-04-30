@@ -1,4 +1,4 @@
-import { Deep, Empty, Members, Serial, TypeGuard, UnaryFn } from 'type-core';
+import { Deep, Empty, Dictionary, Serial, TypeGuard, UnaryFn } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { hydrateToolingGlobal } from '../global';
 import { paths } from '../paths';
@@ -8,7 +8,7 @@ export interface ConfigureBabelParams {
 }
 
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
-  alias?: Members<string>;
+  alias?: Dictionary<string>;
 }
 
 export function hydrateConfigureBabel(
@@ -55,7 +55,7 @@ export function reconfigureBabelEnv(
 }
 
 export function reconfigureBabelAlias(
-  alias: Members<string> | UnaryFn<Members<string>, Members<string>>,
+  alias: Dictionary<string> | UnaryFn<Dictionary<string>, Dictionary<string>>,
   babel: Serial.Object
 ): Serial.Object {
   return reconfigureBabelModifyHelper(
@@ -79,7 +79,7 @@ export function reconfigureBabelAlias(
 }
 
 export function reconfigureBabelModuleMapper(
-  maps: Members<string> | UnaryFn<Members<string>, Members<string>>,
+  maps: Dictionary<string> | UnaryFn<Dictionary<string>, Dictionary<string>>,
   babel: Serial.Object
 ): Serial.Object {
   return reconfigureBabelModifyHelper(

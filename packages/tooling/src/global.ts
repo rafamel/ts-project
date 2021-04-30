@@ -1,10 +1,10 @@
 import { merge } from 'merge-strategies';
-import { Deep, Empty, Members } from 'type-core';
+import { Deep, Empty, Dictionary } from 'type-core';
 import { defaults } from './defaults';
 
 export interface ToolingGlobalParams {
   prettier?: boolean;
-  alias?: Members<string>;
+  alias?: Dictionary<string>;
   extensions?: {
     js?: string[];
     ts?: string[];

@@ -1,15 +1,15 @@
-import { Empty, Members, NullaryFn, Serial, TypeGuard } from 'type-core';
+import { Empty, Dictionary, NullaryFn, Serial, TypeGuard } from 'type-core';
 import { Riseup } from './definitions';
 
 export type HandleReconfigureResponse<
-  T extends Members<Riseup.Reconfigure<any> | Serial.Type>,
+  T extends Dictionary<Riseup.Reconfigure<any> | Serial.Type>,
   K extends keyof T
 > =
-  | Exclude<T[K], undefined | Riseup.Reconfigure<any>>
-  | ReturnType<Exclude<T[K], undefined | Serial.Type>>;
+  | Exclude<T[K], Empty | Riseup.Reconfigure<any>>
+  | ReturnType<Exclude<T[K], Empty | Serial.Type>>;
 
 export function handleReconfigure<
-  T extends Members<Riseup.Reconfigure<any> | Serial.Type>,
+  T extends Dictionary<Riseup.Reconfigure<any> | Serial.Type>,
   K extends keyof T
 >(
   context: Riseup.Context,
