@@ -1,18 +1,16 @@
 import { Empty } from 'type-core';
 import { create } from 'kpo';
-import up from 'find-up';
-import { handleReconfigure, Riseup } from '@riseup/utils';
+import { extract, withReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
-import {
-  configureBabel,
-  configureEslint,
-  configureTypescript,
-  hydrateTooling,
-  tooling
-} from '@riseup/tooling';
+import { hydrateTooling, tooling } from '@riseup/tooling';
 import { start, build, analyze, size } from './tasks';
 import { hydrateReactGlobal } from './global';
-import { ReactOptions, ReactReconfigure, ReactTasks } from './definitions';
+import {
+  ReactConfigure,
+  ReactOptions,
+  ReactReconfigure,
+  ReactTasks
+} from './definitions';
 import {
   reconfigureAvaReact,
   reconfigureBabelReact,
@@ -42,65 +40,41 @@ export function hydrateReact(
 
 export function react(
   options: ReactOptions | Empty,
-  reconfigure?: ReactReconfigure
+  reconfigure: ReactReconfigure | Empty,
+  fetcher: Riseup.Fetcher<ReactConfigure> | Empty
 ): ReactTasks {
   const opts = hydrateReact(options);
 
-  const configure = {
-    prettier(context: Riseup.Context) {
-      const file = up.sync('.prettierrc', {
-        cwd: context.cwd,
-        type: 'file'
-      });
-      return file ? require(file) : null;
-    },
+  const deps = {
+    universal: extract(universal, opts, reconfigure),
+    tooling: extract(tooling, opts, {
+      ...reconfigure,
+      babel: (config) => reconfigureBabelReact(config),
+      eslint: (config) => reconfigureEslintReact(config),
+      ava: (config) => reconfigureAvaReact(config)
+    })
+  };
+
+  let configure: ReactConfigure = {
+    ...deps.universal.configure,
+    ...deps.tooling.configure,
     babel(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
-        return reconfigureBabelReact(configureBabel(opts.global));
-      });
-    },
-    typescript(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
-        return configureTypescript(context.cwd);
-      });
+      return reconfigureBabelReact(deps.tooling.configure.babel(context));
     },
     eslint(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'eslint', () => {
-        return reconfigureEslintReact(
-          configureEslint(
-            context.cwd,
-            { ...opts.global, ...opts.lint },
-            {
-              babel: configure.babel(context),
-              typescript: configure.typescript(context),
-              prettier: configure.prettier(context)
-            }
-          )
-        );
-      });
+      return reconfigureEslintReact(deps.tooling.configure.eslint(context));
+    },
+    ava(context: Riseup.Context) {
+      return reconfigureAvaReact(deps.tooling.configure.ava(context));
     }
   };
 
+  if (fetcher) fetcher(configure);
+  configure = withReconfigure(configure, reconfigure);
+
   return {
-    ...universal(opts, reconfigure),
-    ...tooling(opts, {
-      ...reconfigure,
-      babel(config, context) {
-        return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
-          return reconfigureBabelReact(config);
-        });
-      },
-      eslint(config, context) {
-        return handleReconfigure(context, { ...reconfigure }, 'eslint', () => {
-          return reconfigureEslintReact(config);
-        });
-      },
-      ava(config, context) {
-        return handleReconfigure(context, { ...reconfigure }, 'ava', () => {
-          return reconfigureAvaReact(config);
-        });
-      }
-    }),
+    ...deps.universal.tasks,
+    ...deps.tooling.tasks,
     start: create(({ cwd }) => {
       return start(opts.start, {
         babel: configure.babel({ cwd, task: 'start' }),
@@ -115,11 +89,7 @@ export function react(
         eslint: configure.eslint({ cwd, task: 'build' })
       });
     }),
-    size: create(() => {
-      return size(opts.size);
-    }),
-    analyze: create(() => {
-      return analyze();
-    })
+    size: create(() => size(opts.size)),
+    analyze: create(() => analyze())
   };
 }

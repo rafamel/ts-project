@@ -1,10 +1,12 @@
 import { Task } from 'kpo';
 import {
+  ToolingConfigure,
   ToolingOptions,
   ToolingReconfigure,
   ToolingTasks
 } from '@riseup/tooling';
 import {
+  UniversalConfigure,
   UniversalOptions,
   UniversalReconfigure,
   UniversalTasks
@@ -22,9 +24,12 @@ export type ReactOptions = ReactParams & UniversalOptions & ToolingOptions;
 
 export type ReactReconfigure = UniversalReconfigure & ToolingReconfigure;
 
-export interface ReactTasks extends UniversalTasks, ToolingTasks {
-  start: Task;
-  build: Task;
-  size: Task;
-  analyze: Task;
-}
+export type ReactConfigure = UniversalConfigure & ToolingConfigure;
+
+export type ReactTasks = UniversalTasks &
+  ToolingTasks & {
+    start: Task;
+    build: Task;
+    size: Task;
+    analyze: Task;
+  };

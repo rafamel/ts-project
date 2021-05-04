@@ -1,17 +1,12 @@
 import { Empty } from 'type-core';
 import { create } from 'kpo';
-import { handleReconfigure, Riseup } from '@riseup/utils';
+import { extract, Riseup, withReconfigure } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
-import {
-  configureBabel,
-  hydrateTooling,
-  tooling,
-  configureTypescript,
-  reconfigureBabelEnv
-} from '@riseup/tooling';
+import { hydrateTooling, tooling, reconfigureBabelEnv } from '@riseup/tooling';
 import { build, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
 import {
+  LibraryConfigure,
   LibraryOptions,
   LibraryReconfigure,
   LibraryTasks
@@ -47,55 +42,47 @@ export function hydrateLibrary(
 
 export function library(
   options: LibraryOptions | Empty,
-  reconfigure?: LibraryReconfigure
+  reconfigure: LibraryReconfigure | Empty,
+  fetcher: Riseup.Fetcher<LibraryConfigure> | Empty
 ): LibraryTasks {
   const opts = hydrateLibrary(options);
 
-  const configure = {
-    babel(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'babel', () => {
-        return reconfigureBabelEnv(
+  const deps = {
+    universal: extract(universal, opts, reconfigure),
+    tooling: extract(tooling, opts, reconfigure)
+  };
+
+  let configure: LibraryConfigure = {
+    ...deps.universal.configure,
+    ...deps.tooling.configure,
+    pika(context: Riseup.Context) {
+      return configurePika(opts.build, {
+        babel: deps.tooling.configure.babel(context),
+        typescript: deps.tooling.configure.typescript(context)
+      });
+    },
+    typedoc(context: Riseup.Context) {
+      return configureTypedoc(context.cwd, opts.docs);
+    }
+  };
+
+  if (fetcher) fetcher(configure);
+  configure = withReconfigure(configure, reconfigure);
+
+  return {
+    ...deps.universal.tasks,
+    ...deps.tooling.tasks,
+    build: create(({ cwd }) => {
+      return build(opts.build, {
+        pika: configure.pika({ cwd, task: 'build' }),
+        babel: reconfigureBabelEnv(
           {
             spec: true,
             modules: false,
             targets: { esmodules: true }
           },
-          configureBabel(opts.global)
-        );
-      });
-    },
-    typescript(context: Riseup.Context) {
-      return handleReconfigure(
-        context,
-        { ...reconfigure },
-        'typescript',
-        () => {
-          return configureTypescript(context.cwd);
-        }
-      );
-    },
-    pika(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'pika', () => {
-        return configurePika(opts.build, {
-          babel: configure.babel(context),
-          typescript: configure.typescript(context)
-        });
-      });
-    },
-    typedoc(context: Riseup.Context) {
-      return handleReconfigure(context, { ...reconfigure }, 'typedoc', () => {
-        return configureTypedoc(context.cwd, opts.docs);
-      });
-    }
-  };
-
-  return {
-    ...universal(opts, reconfigure),
-    ...tooling(opts, reconfigure),
-    build: create(({ cwd }) => {
-      return build(opts.build, {
-        pika: configure.pika({ cwd, task: 'build' }),
-        babel: configure.babel({ cwd, task: 'build' })
+          configure.babel({ cwd, task: 'build' })
+        )
       });
     }),
     docs: create(({ cwd }) => {

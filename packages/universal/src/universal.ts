@@ -1,7 +1,8 @@
 import { Empty } from 'type-core';
 import { create } from 'kpo';
-import { handleReconfigure, Riseup } from '@riseup/utils';
+import { Riseup, withReconfigure } from '@riseup/utils';
 import {
+  UniversalConfigure,
   UniversalOptions,
   UniversalReconfigure,
   UniversalTasks
@@ -23,20 +24,19 @@ export function hydrateUniversal(
 
 export function universal(
   options: UniversalOptions | Empty,
-  reconfigure?: UniversalReconfigure
+  reconfigure: UniversalReconfigure | Empty,
+  fetcher: Riseup.Fetcher<UniversalConfigure> | Empty
 ): UniversalTasks {
   const opts = hydrateUniversal(options);
 
-  const configure = {
-    markdownlint(context: Riseup.Context) {
-      return handleReconfigure(
-        context,
-        { ...reconfigure },
-        'markdownlint',
-        () => configureMarkdownlint(opts.lintmd)
-      );
+  let configure: UniversalConfigure = {
+    markdownlint() {
+      return configureMarkdownlint(opts.lintmd);
     }
   };
+
+  if (fetcher) fetcher(configure);
+  configure = withReconfigure(configure, reconfigure);
 
   return {
     lintmd: create(({ cwd }) => {
@@ -44,11 +44,7 @@ export function universal(
         markdownlint: configure.markdownlint({ cwd, task: 'lintmd' })
       });
     }),
-    commit: create(() => {
-      return commit(opts.commit);
-    }),
-    release: create(() => {
-      return release(opts.release);
-    })
+    commit: create(() => commit(opts.commit)),
+    release: create(() => release(opts.release))
   };
 }

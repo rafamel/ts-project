@@ -12,12 +12,16 @@ export interface UniversalParams {
 
 export type UniversalOptions = UniversalParams;
 
-export interface UniversalReconfigure {
+export type UniversalReconfigure = {
   markdownlint?: Serial.Object | Riseup.Reconfigure<Serial.Object>;
-}
+};
 
-export interface UniversalTasks {
+export type UniversalConfigure = {
+  markdownlint: Riseup.Configure<Serial.Object>;
+};
+
+export type UniversalTasks = {
   lintmd: Task;
   commit: Task;
   release: Task;
-}
+};
