@@ -67,12 +67,21 @@ export function lint(
         ]);
       }),
       create((ctx) => {
+        const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
+          (dir) => {
+            return dir.endsWith(path.posix.sep)
+              ? dir.slice(0, dir.lastIndexOf(path.posix.sep))
+              : dir.endsWith(path.win32.sep)
+              ? dir.slice(0, dir.lastIndexOf(path.win32.sep))
+              : dir;
+          }
+        );
         return opts.prettier
           ? exec(constants.node, [
               paths.bin.prettier,
               ...['--check', '--ignore-unknown'],
-              ...(isLevelActive('debug', ctx) ? ['--loglevel=warn'] : []),
-              ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir])
+              ...(isLevelActive('debug', ctx) ? [] : ['--loglevel=warn']),
+              ...dirs
             ])
           : null;
       }),

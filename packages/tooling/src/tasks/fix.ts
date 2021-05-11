@@ -1,6 +1,7 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
-import { context, exec, Task, silence, finalize } from 'kpo';
+import { context, exec, Task, silence, finalize, create } from 'kpo';
+import path from 'path';
 import { tmpTask, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { defaults } from '../defaults';
@@ -58,13 +59,24 @@ export function fix(
         ]);
       }),
       opts.prettier
-        ? silence(
-            exec(constants.node, [
-              paths.bin.prettier,
-              ...['--write', '--ignore-unknown'],
-              ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir])
-            ])
-          )
+        ? create(() => {
+            const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
+              (dir) => {
+                return dir.endsWith(path.posix.sep)
+                  ? dir.slice(0, dir.lastIndexOf(path.posix.sep))
+                  : dir.endsWith(path.win32.sep)
+                  ? dir.slice(0, dir.lastIndexOf(path.win32.sep))
+                  : dir;
+              }
+            );
+            return silence(
+              exec(constants.node, [
+                paths.bin.prettier,
+                ...['--write', '--ignore-unknown'],
+                ...dirs
+              ])
+            );
+          })
         : null
     )
   );
