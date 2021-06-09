@@ -1,5 +1,6 @@
 import { Task } from 'kpo';
 import {
+  UniversalConfigure,
   UniversalParams,
   UniversalReconfigure,
   UniversalTasks
@@ -15,7 +16,10 @@ export type MonorepoOptions = MonorepoParams & UniversalParams;
 
 export type MonorepoReconfigure = UniversalReconfigure;
 
+export type MonorepoConfigure = UniversalConfigure;
+
 export type MonorepoTasks = UniversalTasks & {
+  link: Task;
   run: Task;
   execute: Task;
   coverage: Task;
