@@ -1,4 +1,4 @@
-import { Task, exec, create, context } from 'kpo';
+import { Task, exec, create, context, series, log } from 'kpo';
 import { constants } from '@riseup/utils';
 import { paths } from '../paths';
 
@@ -19,16 +19,19 @@ export function execute(): Task.Async {
 
     return context(
       { args: [] },
-      exec(constants.node, [
-        paths.bin.lerna,
-        'exec',
-        constants.node,
-        paths.bin.execute,
-        cmd,
-        ...['--concurrency', '1'],
-        ...['--loglevel', 'silent'],
-        ...args
-      ])
+      series(
+        exec(constants.node, [
+          paths.bin.lerna,
+          'exec',
+          constants.node,
+          paths.bin.execute,
+          cmd,
+          ...['--concurrency', '1'],
+          ...['--loglevel', 'silent'],
+          ...args
+        ]),
+        log('success', 'Serial execute: ' + cmd)
+      )
     );
   });
 }
