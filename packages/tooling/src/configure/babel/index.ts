@@ -1,7 +1,7 @@
 import { Deep, Empty, Dictionary, Serial, TypeGuard, UnaryFn } from 'type-core';
-import { shallow } from 'merge-strategies';
-import { hydrateToolingGlobal } from '../global';
-import { paths } from '../paths';
+import { merge } from 'merge-strategies';
+import { hydrateToolingGlobal } from '../../global';
+import { paths } from '../../paths';
 
 export interface ConfigureBabelParams {
   env?: Serial.Object | null;
@@ -9,12 +9,16 @@ export interface ConfigureBabelParams {
 
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
   alias?: Dictionary<string>;
+  extensions?: {
+    assets?: string[];
+    styles?: string[];
+  };
 }
 
 export function hydrateConfigureBabel(
   options: ConfigureBabelOptions | Empty
 ): Deep.Required<ConfigureBabelOptions> {
-  return shallow(
+  return merge(
     {
       ...hydrateToolingGlobal(options),
       env: { targets: 'defaults' } as any
@@ -34,7 +38,25 @@ export function configureBabel(
     ],
     plugins: [
       [paths.babel.pluginModuleResolver, { alias: opts.alias }],
-      [paths.babel.pluginModuleNameMapper, { moduleNameMapper: {} }]
+      [
+        paths.babel.pluginModuleNameMapper,
+        {
+          moduleNameMapper: {
+            ...(opts.extensions.assets.length
+              ? {
+                  ['^.+\\.(' + opts.extensions.assets.join('|') + ')$']:
+                    paths.babel.mapperAsset
+                }
+              : {}),
+            ...(opts.extensions.styles.length
+              ? {
+                  ['^.+\\.(' + opts.extensions.styles.join('|') + ')$']:
+                    paths.babel.mapperStyle
+                }
+              : {})
+          }
+        }
+      ]
     ]
   };
 }

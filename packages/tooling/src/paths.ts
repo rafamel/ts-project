@@ -18,7 +18,9 @@ export const paths = {
     presetEnv: require.resolve('@babel/preset-env'),
     presetTypeScript: require.resolve('@babel/preset-typescript'),
     pluginModuleResolver: require.resolve('babel-plugin-module-resolver'),
-    pluginModuleNameMapper: require.resolve('babel-plugin-module-name-mapper')
+    pluginModuleNameMapper: require.resolve('babel-plugin-module-name-mapper'),
+    mapperAsset: require.resolve('./configure/babel/mapper-asset'),
+    mapperStyle: require.resolve('./configure/babel/mapper-style')
   },
   typescript: {
     config: require.resolve('../static/tsconfig.json')

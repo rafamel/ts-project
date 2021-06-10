@@ -8,6 +8,8 @@ export interface ToolingGlobalParams {
   extensions?: {
     js?: string[];
     ts?: string[];
+    assets?: string[];
+    styles?: string[];
   };
 }
 

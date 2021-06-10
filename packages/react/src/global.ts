@@ -5,6 +5,10 @@ import { hydrateToolingGlobal, ToolingGlobalOptions } from '@riseup/tooling';
 
 export interface ReactGlobalParams {
   webpack?: string | null;
+  extensions?: {
+    assets?: string[];
+    styles?: string[];
+  };
 }
 
 export type ReactGlobalOptions = ReactGlobalParams & ToolingGlobalOptions;
@@ -12,10 +16,15 @@ export type ReactGlobalOptions = ReactGlobalParams & ToolingGlobalOptions;
 export function hydrateReactGlobal(
   options: ReactGlobalOptions | Empty
 ): Deep.Required<ReactGlobalOptions> {
+  const toolingGlobal = hydrateToolingGlobal(options);
   return merge(
     {
-      ...hydrateToolingGlobal(options),
-      webpack: defaults.global.webpack
+      ...toolingGlobal,
+      webpack: defaults.global.webpack,
+      extensions: {
+        ...toolingGlobal.extensions,
+        ...defaults.global.extensions
+      }
     },
     options || undefined
   );

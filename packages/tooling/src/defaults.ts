@@ -7,7 +7,9 @@ export const defaults: Deep.Required<ToolingParams> = {
     alias: {},
     extensions: {
       js: ['js', 'jsx', 'cjs', 'mjs'],
-      ts: ['ts', 'tsx']
+      ts: ['ts', 'tsx'],
+      assets: [],
+      styles: []
     }
   },
   fix: {

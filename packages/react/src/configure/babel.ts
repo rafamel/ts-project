@@ -1,19 +1,9 @@
 import { Serial } from 'type-core';
-import {
-  reconfigureBabelEnv,
-  reconfigureBabelModuleMapper
-} from '@riseup/tooling';
-import { paths } from '../../paths';
+import { reconfigureBabelEnv } from '@riseup/tooling';
+import { paths } from '../paths';
 
 export function reconfigureBabelReact(babel: Serial.Object): Serial.Object {
-  const config = reconfigureBabelModuleMapper(
-    (maps) => ({
-      ...maps,
-      '^.+\\.(jpg|jpeg|png|gif|bmp|svg)$': paths.babel.mapperImage,
-      '^.+\\.(css|scss|sass|less)$': paths.babel.mapperStyle
-    }),
-    reconfigureBabelEnv(null, babel)
-  );
+  const config = reconfigureBabelEnv(null, babel);
 
   return {
     ...config,
