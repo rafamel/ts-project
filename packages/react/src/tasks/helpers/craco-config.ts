@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Dictionary, Serial } from 'type-core';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import { addHook } from 'pirates';
 import { paths } from '../../paths';
 
@@ -80,7 +79,7 @@ export default function cracoConfig(
           },
           plugins: (config.plugins || []).map((plugin: any) => {
             return plugin.constructor.name === 'ForkTsCheckerWebpackPlugin'
-              ? new ForkTsCheckerWebpackPlugin({
+              ? new plugin.constructor({
                   ...(plugin.options || {}),
                   tsconfig: files.typescript
                 })

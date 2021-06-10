@@ -45,7 +45,6 @@
     "babel-preset-react-app": "^10.0.0",
     "eslint": "^7.25.0",
     "eslint-config-react-app": "^6.0.0",
-    "fork-ts-checker-webpack-plugin": "^6.2.5",
     "global-jsdom": "^8.1.0",
     "jsdom": "^16.5.3",
     "kpo": "^0.21.0",
