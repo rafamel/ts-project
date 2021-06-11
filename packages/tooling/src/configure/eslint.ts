@@ -71,8 +71,11 @@ export function configureEslint(
     globals: {},
     rules: {
       /* DISABLED */
+      camelcase: 0,
+      'no-redeclare': 0,
+      'import/export': 0,
       'no-return-await': 0,
-      'lines-between-class-members': 0,
+      'no-use-before-define': 0,
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
       /* WARNINGS */
@@ -80,6 +83,7 @@ export function configureEslint(
       'no-unused-vars': 1,
       'no-console': 1,
       /* ERRORS */
+      'lines-between-class-members': [1, 'never'],
       // Prettier
       'prettier/prettier': opts.prettier
         ? config.prettier
@@ -106,8 +110,12 @@ export function configureEslint(
         files: [`*.{${opts.extensions.js.join(',')}}`],
         parser: paths.eslint.parserBabel,
         plugins: ['babel'],
-        parserOptions: { babelOptions: config.babel },
+        parserOptions: {
+          requireConfigFile: false,
+          babelOptions: config.babel
+        },
         rules: {
+          /* WARNINGS */
           'babel/no-invalid-this': 1,
           'babel/semi': 1
         }
@@ -124,11 +132,13 @@ export function configureEslint(
         // Overrides don't allow for extends
         rules: {
           ...configs.recommended.rules,
+          /* FIXES */
+          // See: https://github.com/eslint/typescript-eslint-parser/issues/437
+          'no-undef': 0,
+          // Very prone to expose parser bugs and already
+          // covered by noUnusedLocals and noUnusedParameters
+          '@typescript-eslint/no-unused-vars': 0,
           /* DISABLED */
-          'no-use-before-define': 0,
-          'no-redeclare': 0,
-          'import/export': 0,
-          '@typescript-eslint/no-namespace': 0,
           '@typescript-eslint/indent': 0,
           '@typescript-eslint/camelcase': 0,
           '@typescript-eslint/no-explicit-any': 0,
@@ -137,6 +147,7 @@ export function configureEslint(
           '@typescript-eslint/ban-ts-ignore': 0,
           '@typescript-eslint/no-empty-function': 0,
           '@typescript-eslint/no-empty-interface': 0,
+          '@typescript-eslint/explicit-module-boundary-types': 0,
           /* WARNINGS */
           '@typescript-eslint/explicit-function-return-type': [
             1,
@@ -145,19 +156,15 @@ export function configureEslint(
               allowTypedFunctionExpressions: true
             }
           ],
-          '@typescript-eslint/no-unused-vars': [
-            1,
-            {
-              args: 'after-used',
-              argsIgnorePattern: '_.*',
-              ignoreRestSiblings: true
-            }
-          ],
           /* ERRORS */
           '@typescript-eslint/no-use-before-define': [2, { functions: false }],
           '@typescript-eslint/array-type': [
             2,
             { default: 'array-simple', readonly: 'array-simple' }
+          ],
+          '@typescript-eslint/no-namespace': [
+            2,
+            { allowDeclarations: true, allowDefinitionFiles: true }
           ],
           '@typescript-eslint/no-inferrable-types': [
             2,
