@@ -1,3 +1,5 @@
-test(`doesn't throw`, () => {
-  expect(() => null).not.toThrow();
+import test from 'ava';
+
+test(`description`, (t) => {
+  t.pass();
 });

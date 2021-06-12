@@ -1,8 +1,13 @@
 {
   "name": "@riseup/react",
+  "description": "Riseup tasks and configurations for React",
   "version": "0.5.0",
   "author": "Rafa Mel",
-  "description": "Riseup tasks and configurations for React",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "presets",
     "starter",
@@ -11,20 +16,26 @@
     "riseup",
     "react"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "main": "pkg/dist",
+  "types": "pkg/dist",
   "engines": {
     "node": ">=12"
   },
-  "main": "pkg/dist/index.js",
-  "types": "pkg/dist/index.d.ts",
   "scripts": {
-    "lint": "kpo lint --",
+    "node": "kpo node --",
     "build": "kpo build --",
-    "test": "kpo test --"
+    "docs": "kpo docs --",
+    "fix": "kpo fix --",
+    "lint": "kpo lint --",
+    "test": "kpo test --",
+    "coverage": "kpo coverage --",
+    "commit": "kpo commit --",
+    "release": "kpo release --",
+    "distribute": "kpo distribute --",
+    "validate": "kpo validate --",
+    "prepublishOnly": "kpo prepublishOnly --",
+    "version": "kpo version --"
   },
-  "license": "MIT",
   "homepage": "https://github.com/rafamel/riseup/packages/react",
   "repository": {
     "type": "git",
