@@ -8,7 +8,7 @@ import {
   MonorepoReconfigure,
   MonorepoTasks
 } from './definitions';
-import { link, run, execute, coverage, distribute } from './tasks';
+import { run, execute, coverage, distribute } from './tasks';
 
 export function hydrateMonorepo(
   options: MonorepoOptions | Empty
@@ -50,7 +50,6 @@ export function monorepo(
 
   return {
     ...deps.universal.tasks,
-    link: create(() => link()),
     run: create(() => run()),
     execute: create(() => execute()),
     coverage: create(() => coverage(opts.coverage)),
