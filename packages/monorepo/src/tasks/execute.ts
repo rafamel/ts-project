@@ -28,6 +28,7 @@ export function execute(): Task.Async {
           cmd,
           ...['--concurrency', '1'],
           ...['--loglevel', 'silent'],
+          '--',
           ...args
         ]),
         log('success', 'Serial execute: ' + cmd)
