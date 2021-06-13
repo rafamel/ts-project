@@ -1,49 +1,45 @@
 {
-  "name": "monorepo-starter",
+  "name": "monorepo-template",
+  "description": "Riseup monorepo template",
   "version": "0.0.0",
   "author": "Rafa Mel",
-  "description": "A bells & whistles riseup based monorepo starter",
-  "keywords": [],
+  "license": "MIT",
   "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "keywords": [],
   "engines": {
     "node": ">=12"
   },
   "scripts": {
-    "commit": "kpo commit --",
-    "semantic": "kpo semantic --",
-    "fix": "kpo fix --",
-    "fix:scripts": "kpo fix:scripts --",
+    "run": "kpo run --",
+    "execute": "kpo execute --",
+    "build": "kpo build --",
     "lint": "kpo lint --",
-    "lint:md": "kpo lint:md --",
-    "lint:scripts": "kpo lint:scripts --",
-    "clean": "kpo clean --",
-    "clean:build": "kpo clean:build --",
-    "clean:modules": "kpo clean:modules --",
-    "prepublishOnly": "kpo prepublishOnly --",
-    "preversion": "kpo preversion --",
-    "version": "kpo version --",
+    "coverage": "kpo coverage --",
+    "commit": "kpo commit --",
     "release": "kpo release --",
-    "test": "kpo test --",
-    "test:coverage": "kpo test:coverage --",
-    "verify": "kpo verify --",
+    "distribute": "kpo distribute --",
     "validate": "kpo validate --",
-    "bootstrap": "kpo bootstrap --",
-    "link": "kpo link --",
-    "postinstall": "kpo postinstall --"
+    "prepare": "kpo prepare --"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/rafamel/monorepo-starter",
+  "homepage": "https://github.com/rafamel/monorepo-template",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafamel/monorepo-starter"
+    "url": "https://github.com/rafamel/monorepo-template"
   },
   "bugs": {
-    "url": "https://github.com/rafamel/monorepo-starter/issues"
+    "url": "https://github.com/rafamel/monorepo-template/issues"
   },
   "devDependencies": {
-    "@riseup/monorepo": "^0.5.0",
-    "kpo": "^0.11.1",
-    "lerna": "^3.15.0"
+    "@riseup/monorepo": "file:../../deps/riseup-monorepo.tgz",
+    "@riseup/universal": "file:../../deps/riseup-universal.tgz",
+    "@riseup/utils": "file:../../deps/riseup-utils.tgz",
+    "kpo": "^0.21.0",
+    "lerna": "^4.0.0"
   },
-  "dependencies": {}
+  "simple-git-hooks": {
+    "pre-commit": "kpo validate"
+  }
 }

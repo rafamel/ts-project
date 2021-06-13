@@ -1,5 +1,6 @@
-describe(`- Main`, () => {
-  test(`Doesn't throw`, () => {
-    expect(() => {}).not.toThrow();
-  });
+import { test } from '@jest/globals';
+import assert from 'assert';
+
+test(`description`, () => {
+  assert.ok(true);
 });
