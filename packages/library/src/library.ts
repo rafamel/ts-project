@@ -1,5 +1,6 @@
 import { Empty } from 'type-core';
 import { create } from 'kpo';
+import path from 'path';
 import { extract, Riseup, withReconfigure } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
 import { hydrateTooling, tooling, reconfigureBabelEnv } from '@riseup/tooling';
@@ -30,6 +31,16 @@ export function hydrateLibrary(
     ...universal,
     ...tooling,
     ...library,
+    test: {
+      ...tooling.test,
+      ignore: [
+        ...(tooling.test.ignore || []),
+        path.join(
+          '<rootDir>',
+          library.build.destination || defaults.build.destination
+        )
+      ]
+    },
     distribute: {
       ...library.distribute,
       contents:

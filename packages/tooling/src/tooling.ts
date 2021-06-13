@@ -2,12 +2,11 @@ import { Empty } from 'type-core';
 import { create } from 'kpo';
 import up from 'find-up';
 import { withReconfigure, Riseup } from '@riseup/utils';
-import { node, lint, test, fix, coverage } from './tasks';
+import { node, lint, test, fix } from './tasks';
 import {
-  configureAva,
   configureBabel,
   configureEslint,
-  configureNyc,
+  configureJest,
   configureTypescript,
   reconfigureBabelEnv
 } from './configure';
@@ -26,10 +25,9 @@ export function hydrateTooling(
         global: { ...options.global },
         fix: { ...options.global, ...options.fix },
         lint: { ...options.global, ...options.lint },
-        test: { ...options.global, ...options.test },
-        coverage: { ...options.global, ...options.coverage }
+        test: { ...options.global, ...options.test }
       }
-    : { global: {}, fix: {}, lint: {}, test: {}, coverage: {} };
+    : { global: {}, fix: {}, lint: {}, test: {} };
 }
 
 export function tooling(
@@ -64,11 +62,8 @@ export function tooling(
         }
       );
     },
-    ava(context: Riseup.Context) {
-      return configureAva(opts.test, { babel: configure.babel(context) });
-    },
-    nyc(context: Riseup.Context) {
-      return configureNyc(opts.coverage, { babel: configure.babel(context) });
+    jest(context: Riseup.Context) {
+      return configureJest(opts.test, { babel: configure.babel(context) });
     }
   };
 
@@ -93,13 +88,7 @@ export function tooling(
       });
     }),
     test: create(({ cwd }) => {
-      return test({ ava: configure.ava({ cwd, task: 'test' }) });
-    }),
-    coverage: create(({ cwd }) => {
-      return coverage({
-        ava: configure.ava({ cwd, task: 'coverage' }),
-        nyc: configure.nyc({ cwd, task: 'coverage' })
-      });
+      return test({ jest: configure.jest({ cwd, task: 'test' }) });
     })
   };
 }

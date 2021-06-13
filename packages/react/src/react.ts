@@ -12,9 +12,9 @@ import {
   ReactTasks
 } from './definitions';
 import {
-  reconfigureAvaReact,
   reconfigureBabelReact,
-  reconfigureEslintReact
+  reconfigureEslintReact,
+  reconfigureJestReact
 } from './configure';
 
 export function hydrateReact(
@@ -34,7 +34,15 @@ export function hydrateReact(
     ...universal,
     ...tooling,
     ...react,
-    global
+    global,
+    test: {
+      ...tooling.test,
+      ignore: [
+        ...(tooling.test.ignore || []),
+        '<rootDir>/build',
+        '<rootDir>/public'
+      ]
+    }
   };
 }
 
@@ -51,7 +59,7 @@ export function react(
       ...reconfigure,
       babel: (config) => reconfigureBabelReact(config),
       eslint: (config) => reconfigureEslintReact(config),
-      ava: (config) => reconfigureAvaReact(config)
+      jest: (config) => reconfigureJestReact(config)
     })
   };
 
@@ -66,8 +74,8 @@ export function react(
     eslint(context: Riseup.Context) {
       return reconfigureEslintReact(deps.tooling.configure.eslint(context));
     },
-    ava(context: Riseup.Context) {
-      return reconfigureAvaReact(deps.tooling.configure.ava(context));
+    jest(context: Riseup.Context) {
+      return reconfigureJestReact(deps.tooling.configure.jest(context));
     }
   };
 
