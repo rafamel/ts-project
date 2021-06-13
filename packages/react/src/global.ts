@@ -5,7 +5,7 @@ import { hydrateToolingGlobal, ToolingGlobalOptions } from '@riseup/tooling';
 
 export interface ReactGlobalParams {
   webpack?: string | null;
-  extensions?: {
+  transforms?: {
     assets?: string[];
     styles?: string[];
   };
@@ -21,9 +21,9 @@ export function hydrateReactGlobal(
     {
       ...toolingGlobal,
       webpack: defaults.global.webpack,
-      extensions: {
-        ...toolingGlobal.extensions,
-        ...defaults.global.extensions
+      transforms: {
+        ...toolingGlobal.transforms,
+        ...defaults.global.transforms
       }
     },
     options || undefined

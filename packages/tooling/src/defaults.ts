@@ -5,11 +5,13 @@ export const defaults: Deep.Required<ToolingParams> = {
   global: {
     prettier: true,
     alias: {},
-    extensions: {
-      js: ['js', 'jsx', 'cjs', 'mjs'],
-      ts: ['ts', 'tsx'],
+    transforms: {
       assets: [],
       styles: []
+    },
+    extensions: {
+      js: ['js', 'jsx', 'cjs', 'mjs'],
+      ts: ['ts', 'tsx']
     }
   },
   fix: {

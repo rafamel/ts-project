@@ -2,7 +2,12 @@ import { Empty } from 'type-core';
 import { create } from 'kpo';
 import { extract, withReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
-import { hydrateTooling, reconfigureBabelEnv, tooling } from '@riseup/tooling';
+import {
+  hydrateTooling,
+  reconfigureBabelEnv,
+  reconfigureBabelTransforms,
+  tooling
+} from '@riseup/tooling';
 import { start, build, analyze, size } from './tasks';
 import { hydrateReactGlobal } from './global';
 import {
@@ -68,7 +73,13 @@ export function react(
     ...deps.tooling.configure,
     babel(context: Riseup.Context) {
       return ['start', 'build'].includes(context.task)
-        ? reconfigureBabelEnv(null, deps.tooling.configure.babel(context))
+        ? reconfigureBabelEnv(
+            null,
+            reconfigureBabelTransforms(
+              null,
+              deps.tooling.configure.babel(context)
+            )
+          )
         : reconfigureBabelReact(deps.tooling.configure.babel(context));
     },
     eslint(context: Riseup.Context) {

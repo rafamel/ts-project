@@ -4,7 +4,7 @@ import { ReactParams } from './definitions';
 export const defaults: Deep.Required<ReactParams> = {
   global: {
     webpack: null,
-    extensions: {
+    transforms: {
       assets: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'],
       styles: ['css', 'scss', 'sass', 'less']
     }

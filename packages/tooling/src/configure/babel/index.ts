@@ -9,7 +9,7 @@ export interface ConfigureBabelParams {
 
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
   alias?: Dictionary<string>;
-  extensions?: {
+  transforms?: {
     assets?: string[];
     styles?: string[];
   };
@@ -40,22 +40,7 @@ export function configureBabel(
       [paths.babel.pluginModuleResolver, { alias: opts.alias }],
       [
         paths.babel.pluginModuleNameMapper,
-        {
-          moduleNameMapper: {
-            ...(opts.extensions.assets.length
-              ? {
-                  ['^.+\\.(' + opts.extensions.assets.join('|') + ')$']:
-                    paths.babel.mapperAsset
-                }
-              : {}),
-            ...(opts.extensions.styles.length
-              ? {
-                  ['^.+\\.(' + opts.extensions.styles.join('|') + ')$']:
-                    paths.babel.mapperStyle
-                }
-              : {})
-          }
-        }
+        { moduleNameMapper: createTransformsMapperHelper(opts.transforms) }
       ]
     ]
   };
@@ -70,7 +55,10 @@ export function reconfigureBabelEnv(
     'first',
     (str) => str === paths.babel.presetEnv,
     () => {
-      return TypeGuard.isEmpty(env) ? null : [paths.babel.presetEnv, env];
+      const opts = hydrateConfigureBabel({ env });
+      return TypeGuard.isEmpty(opts.env)
+        ? null
+        : [paths.babel.presetEnv, opts.env];
     },
     babel
   );
@@ -86,18 +74,44 @@ export function reconfigureBabelAlias(
     (str) => str === paths.babel.pluginModuleResolver,
     (item) => {
       const options = Array.isArray(item) ? item[1] || {} : {};
+      const opts = hydrateConfigureBabel({
+        alias: TypeGuard.isFunction(alias)
+          ? alias(options.alias || {}) || {}
+          : alias || {}
+      });
       return [
         paths.babel.pluginModuleResolver,
         {
           ...options,
-          alias: TypeGuard.isFunction(alias)
-            ? alias(options.alias || {}) || {}
-            : alias || {}
+          alias: opts.alias
         }
       ];
     },
     babel
   );
+}
+
+export function reconfigureBabelTransforms(
+  transforms: { assets?: string[]; styles?: string[] } | null,
+  babel: Serial.Object
+): Serial.Object {
+  return reconfigureBabelModuleMapper((maps) => {
+    const clean = Object.entries(maps).reduce((acc, [key, value]) => {
+      return value === paths.babel.mapperAsset ||
+        value === paths.babel.mapperStyle
+        ? acc
+        : { ...acc, [key]: value };
+    }, {});
+
+    return transforms
+      ? {
+          ...clean,
+          ...createTransformsMapperHelper(
+            hydrateConfigureBabel({ transforms }).transforms
+          )
+        }
+      : clean;
+  }, babel);
 }
 
 export function reconfigureBabelModuleMapper(
@@ -122,6 +136,26 @@ export function reconfigureBabelModuleMapper(
     },
     babel
   );
+}
+
+function createTransformsMapperHelper(transforms: {
+  assets: string[];
+  styles: string[];
+}): Serial.Object {
+  return {
+    ...(transforms.assets.length
+      ? {
+          ['^.+\\.(' + transforms.assets.join('|') + ')$']:
+            paths.babel.mapperAsset
+        }
+      : {}),
+    ...(transforms.styles.length
+      ? {
+          ['^.+\\.(' + transforms.styles.join('|') + ')$']:
+            paths.babel.mapperStyle
+        }
+      : {})
+  };
 }
 
 function reconfigureBabelModifyHelper(

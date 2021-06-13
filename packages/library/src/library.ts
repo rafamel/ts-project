@@ -3,7 +3,12 @@ import { create } from 'kpo';
 import path from 'path';
 import { extract, Riseup, withReconfigure } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
-import { hydrateTooling, tooling, reconfigureBabelEnv } from '@riseup/tooling';
+import {
+  hydrateTooling,
+  tooling,
+  reconfigureBabelEnv,
+  reconfigureBabelTransforms
+} from '@riseup/tooling';
 import { build, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
 import {
@@ -66,6 +71,14 @@ export function library(
   let configure: LibraryConfigure = {
     ...deps.universal.configure,
     ...deps.tooling.configure,
+    babel(context: Riseup.Context) {
+      return context.task === 'build'
+        ? reconfigureBabelTransforms(
+            null,
+            deps.tooling.configure.babel(context)
+          )
+        : deps.tooling.configure.babel(context);
+    },
     pika(context: Riseup.Context) {
       return configurePika(opts.build, {
         babel: deps.tooling.configure.babel(context),

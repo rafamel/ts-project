@@ -5,11 +5,13 @@ import { defaults } from './defaults';
 export interface ToolingGlobalParams {
   prettier?: boolean;
   alias?: Dictionary<string>;
+  transforms?: {
+    assets?: string[];
+    styles?: string[];
+  };
   extensions?: {
     js?: string[];
     ts?: string[];
-    assets?: string[];
-    styles?: string[];
   };
 }
 
@@ -22,6 +24,7 @@ export function hydrateToolingGlobal(
     {
       prettier: defaults.global.prettier,
       alias: defaults.global.alias,
+      transforms: defaults.global.transforms,
       extensions: defaults.global.extensions
     },
     options || undefined
