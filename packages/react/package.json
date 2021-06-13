@@ -4,7 +4,7 @@
   "version": "0.5.0",
   "author": "Rafa Mel",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
