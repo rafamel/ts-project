@@ -29,7 +29,6 @@
     "fix": "kpo fix --",
     "lint": "kpo lint --",
     "test": "kpo test --",
-    "coverage": "kpo coverage --",
     "commit": "kpo commit --",
     "release": "kpo release --",
     "distribute": "kpo distribute --",

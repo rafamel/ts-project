@@ -1,5 +1,6 @@
-import test from 'ava';
+import { test } from '@jest/globals';
+import assert from 'assert';
 
-test(`description`, (t) => {
-  t.pass();
+test(`description`, () => {
+  assert.ok(true);
 });

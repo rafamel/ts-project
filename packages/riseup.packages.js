@@ -37,11 +37,9 @@ module.exports = library(
     },
     test: {
       verbose: false,
+      ignore: [],
       require: [],
-      overrides: {}
-    },
-    coverage: {
-      all: true,
+      coverage: 'all',
       threshold: 0,
       overrides: {}
     },
