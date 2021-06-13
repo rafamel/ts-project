@@ -33,7 +33,6 @@
     "release": "kpo release --",
     "distribute": "kpo distribute --",
     "validate": "kpo validate --",
-    "prepublishOnly": "kpo prepublishOnly --",
     "version": "kpo version --"
   },
   "homepage": "https://github.com/rafamel/riseup/packages/cli",

@@ -1,4 +1,13 @@
-const { recreate, lift, exec, catches, series, create, log } = require('kpo');
+const {
+  recreate,
+  context,
+  create,
+  series,
+  lift,
+  exec,
+  catches,
+  log
+} = require('kpo');
 const riseup = require('./riseup.packages');
 
 const tasks = {
@@ -13,7 +22,7 @@ const tasks = {
       : riseup.test;
   }),
   commit: riseup.commit,
-  release: riseup.release,
+  release: context({ args: ['--no-verify'] }, riseup.release),
   distribute: riseup.distribute,
   validate: series(
     create(() => tasks.lint),
@@ -22,7 +31,6 @@ const tasks = {
     catches({ level: 'silent' }, exec('npm', ['outdated']))
   ),
   /* Hooks */
-  prepublishOnly: create(() => tasks.validate),
   version: series(
     create(() => tasks.validate),
     create(() => tasks.build),

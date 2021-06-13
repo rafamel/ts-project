@@ -1,7 +1,5 @@
 const { library } = require('@riseup/library');
 
-let some;
-
 module.exports = library(
   {
     global: {
@@ -56,15 +54,9 @@ module.exports = library(
     babel: (config) => config,
     typescript: (config) => config,
     eslint: (config) => config,
-    ava: (config) => config,
-    nyc: (config) => config,
+    jest: (config) => config,
     pika: (config) => config,
     typedoc: (config) => config,
     markdownlint: (config) => config
-  },
-  (s) => {
-    some = s.babel({ cwd: process.cwd(), task: 'any' });
   }
 );
-
-module.exports.some = some;

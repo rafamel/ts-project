@@ -1,11 +1,11 @@
 const {
   recreate,
+  context,
+  create,
+  series,
   lift,
   exec,
-  catches,
-  series,
-  context,
-  create
+  catches
 } = require('kpo');
 const riseup = require('./riseup.config');
 
@@ -23,19 +23,22 @@ const tasks = {
   ),
   coverage: riseup.coverage,
   commit: riseup.commit,
-  release: riseup.release,
+  release: context({ args: ['--no-verify'] }, riseup.release),
   distribute: riseup.distribute,
   validate: series(
     context({ args: ['validate'] }, riseup.run),
-    create(() => riseup.coverage),
-    lift({ purge: true, mode: 'audit' }, () => tasks),
-    catches({ level: 'silent' }, exec('npm', ['outdated']))
+    create(() => tasks.version)
   ),
   /* Hooks */
-  prepare: series(
+  postinstall: series(
     catches(null, exec('simple-git-hooks')),
     exec('lerna', ['bootstrap', '--ci']),
     create(() => tasks.build)
+  ),
+  version: series(
+    create(() => tasks.coverage),
+    lift({ purge: true, mode: 'audit' }, () => tasks),
+    catches({ level: 'silent' }, exec('npm', ['outdated']))
   )
 };
 

@@ -16,20 +16,23 @@ const tasks = {
   lint: riseup.lintmd,
   coverage: riseup.coverage,
   commit: riseup.commit,
-  release: riseup.release,
+  release: context({ args: ['--no-verify'] }, riseup.release),
   distribute: riseup.distribute,
   validate: series(
     context({ args: ['validate'] }, riseup.run),
+    create(() => tasks.version)
+  ),
+  /* Hooks */
+  postinstall: series(
+    catches(null, exec('simple-git-hooks')),
+    exec('lerna', ['bootstrap', '--ci']),
+    create(() => tasks.build)
+  ),
+  version: series(
     create(() => tasks.lint),
     create(() => tasks.coverage),
     lift({ purge: true, mode: 'audit' }, () => tasks),
     catches({ level: 'silent' }, exec('npm', ['outdated']))
-  ),
-  /* Hooks */
-  prepare: series(
-    catches(null, exec('simple-git-hooks')),
-    exec('lerna', ['bootstrap', '--ci']),
-    create(() => tasks.build)
   )
 };
 

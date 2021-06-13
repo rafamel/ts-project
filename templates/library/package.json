@@ -26,7 +26,6 @@
     "distribute": "kpo distribute --",
     "validate": "kpo validate --",
     "prepare": "kpo prepare --",
-    "prepublishOnly": "kpo prepublishOnly --",
     "version": "kpo version --"
   },
   "homepage": "https://github.com/rafamel/library-template",
