@@ -1,4 +1,12 @@
-const { recreate, create, series, lift, exec, catches } = require('kpo');
+const {
+  recreate,
+  create,
+  series,
+  lift,
+  exec,
+  catches,
+  context
+} = require('kpo');
 const riseup = require('./riseup.config');
 
 const tasks = {

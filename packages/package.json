@@ -33,11 +33,8 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/library": "file:../deps/riseup-library.tgz",
-    "@riseup/monorepo": "file:../deps/riseup-monorepo.tgz",
-    "@riseup/tooling": "file:../deps/riseup-tooling.tgz",
-    "@riseup/universal": "file:../deps/riseup-universal.tgz",
-    "@riseup/utils": "file:../deps/riseup-utils.tgz",
+    "@riseup/library": "^0.6.0",
+    "@riseup/monorepo": "^0.6.0",
     "kpo": "^0.21.0",
     "lerna": "^4.0.0",
     "simple-git-hooks": "^2.4.1",

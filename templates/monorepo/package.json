@@ -34,9 +34,7 @@
     "url": "https://github.com/rafamel/monorepo-template/issues"
   },
   "devDependencies": {
-    "@riseup/monorepo": "file:../../deps/riseup-monorepo.tgz",
-    "@riseup/universal": "file:../../deps/riseup-universal.tgz",
-    "@riseup/utils": "file:../../deps/riseup-utils.tgz",
+    "@riseup/monorepo": "^0.6.0",
     "kpo": "^0.21.0",
     "lerna": "^4.0.0"
   },

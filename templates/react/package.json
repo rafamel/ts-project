@@ -48,10 +48,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/react": "file:../../deps/riseup-react.tgz",
-    "@riseup/tooling": "file:../../deps/riseup-tooling.tgz",
-    "@riseup/universal": "file:../../deps/riseup-universal.tgz",
-    "@riseup/utils": "file:../../deps/riseup-utils.tgz",
+    "@riseup/react": "^0.6.0",
     "@testing-library/dom": "^7.30.4",
     "@testing-library/react": "^11.2.6",
     "@types/react": "^17.0.11",
