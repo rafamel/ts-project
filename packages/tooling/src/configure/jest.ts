@@ -108,7 +108,7 @@ export function configureJest(
       ...(opts.coverage === 'all'
         ? {
             collectCoverageFrom: [
-              `<rootDir>/src/*.{${extensions.join(',')}}`,
+              `<rootDir>/src/**/*.{${extensions.join(',')}}`,
               '!**/node_modules/**',
               '!**/__mocks__/**',
               '!**/@types/**',
