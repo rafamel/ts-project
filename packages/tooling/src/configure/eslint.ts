@@ -16,7 +16,7 @@ export interface ConfigureEslintParams {
 export interface ConfigureEslintOptions extends ConfigureEslintParams {
   prettier?: boolean;
   alias?: Dictionary<string>;
-  transforms?: {
+  stubs?: {
     assets?: string[];
     styles?: string[];
   };
@@ -100,8 +100,8 @@ export function configureEslint(
           extensions: ['json']
             .concat(opts.extensions.js)
             .concat(opts.extensions.ts)
-            .concat(opts.transforms.assets)
-            .concat(opts.transforms.styles)
+            .concat(opts.stubs.assets)
+            .concat(opts.stubs.styles)
             .map((x) => (x[0] === '.' ? x : '.' + x))
         }
       }

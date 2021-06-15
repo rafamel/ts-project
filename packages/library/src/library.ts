@@ -7,7 +7,7 @@ import {
   hydrateTooling,
   tooling,
   reconfigureBabelEnv,
-  reconfigureBabelTransforms
+  reconfigureBabelStubs
 } from '@riseup/tooling';
 import { build, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
@@ -73,10 +73,7 @@ export function library(
     ...deps.tooling.configure,
     babel(context: Riseup.Context) {
       return context.task === 'build'
-        ? reconfigureBabelTransforms(
-            null,
-            deps.tooling.configure.babel(context)
-          )
+        ? reconfigureBabelStubs(null, deps.tooling.configure.babel(context))
         : deps.tooling.configure.babel(context);
     },
     pika(context: Riseup.Context) {

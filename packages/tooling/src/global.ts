@@ -5,7 +5,7 @@ import { defaults } from './defaults';
 export interface ToolingGlobalParams {
   prettier?: boolean;
   alias?: Dictionary<string>;
-  transforms?: {
+  stubs?: {
     assets?: string[];
     styles?: string[];
   };
@@ -24,7 +24,7 @@ export function hydrateToolingGlobal(
     {
       prettier: defaults.global.prettier,
       alias: defaults.global.alias,
-      transforms: defaults.global.transforms,
+      stubs: defaults.global.stubs,
       extensions: defaults.global.extensions
     },
     options || undefined

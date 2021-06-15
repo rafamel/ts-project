@@ -5,7 +5,7 @@ export const defaults: Deep.Required<ToolingParams> = {
   global: {
     prettier: true,
     alias: {},
-    transforms: {
+    stubs: {
       assets: [],
       styles: []
     },

@@ -5,7 +5,7 @@ import { hydrateToolingGlobal, ToolingGlobalOptions } from '@riseup/tooling';
 
 export interface NextGlobalParams {
   telemetry?: boolean;
-  transforms?: {
+  stubs?: {
     assets?: string[];
     styles?: string[];
   };
@@ -21,9 +21,9 @@ export function hydrateNextGlobal(
     {
       ...toolingGlobal,
       telemetry: defaults.global.telemetry,
-      transforms: {
-        ...toolingGlobal.transforms,
-        ...defaults.global.transforms
+      stubs: {
+        ...toolingGlobal.stubs,
+        ...defaults.global.stubs
       }
     },
     options || undefined

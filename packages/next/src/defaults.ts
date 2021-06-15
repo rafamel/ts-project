@@ -4,7 +4,7 @@ import { NextParams } from './definitions';
 export const defaults: Deep.Required<NextParams> = {
   global: {
     telemetry: false,
-    transforms: {
+    stubs: {
       assets: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'ttf', 'eot'],
       styles: ['css', 'scss', 'sass', 'less']
     }

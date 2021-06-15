@@ -9,7 +9,7 @@ export interface ConfigureBabelParams {
 
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
   alias?: Dictionary<string>;
-  transforms?: {
+  stubs?: {
     assets?: string[];
     styles?: string[];
   };
@@ -40,7 +40,7 @@ export function configureBabel(
       [paths.babel.pluginModuleResolver, { alias: opts.alias }],
       [
         paths.babel.pluginModuleNameMapper,
-        { moduleNameMapper: createTransformsMapperHelper(opts.transforms) }
+        { moduleNameMapper: createStubsMapperHelper(opts.stubs) }
       ]
     ]
   };
@@ -91,8 +91,8 @@ export function reconfigureBabelAlias(
   );
 }
 
-export function reconfigureBabelTransforms(
-  transforms: { assets?: string[]; styles?: string[] } | null,
+export function reconfigureBabelStubs(
+  stubs: { assets?: string[]; styles?: string[] } | null,
   babel: Serial.Object
 ): Serial.Object {
   return reconfigureBabelModuleMapper((maps) => {
@@ -103,12 +103,10 @@ export function reconfigureBabelTransforms(
         : { ...acc, [key]: value };
     }, {});
 
-    return transforms
+    return stubs
       ? {
           ...clean,
-          ...createTransformsMapperHelper(
-            hydrateConfigureBabel({ transforms }).transforms
-          )
+          ...createStubsMapperHelper(hydrateConfigureBabel({ stubs }).stubs)
         }
       : clean;
   }, babel);
@@ -138,21 +136,19 @@ export function reconfigureBabelModuleMapper(
   );
 }
 
-function createTransformsMapperHelper(transforms: {
+function createStubsMapperHelper(stubs: {
   assets: string[];
   styles: string[];
 }): Serial.Object {
   return {
-    ...(transforms.assets.length
+    ...(stubs.assets.length
       ? {
-          ['^.+\\.(' + transforms.assets.join('|') + ')$']:
-            paths.babel.mapperAsset
+          ['^.+\\.(' + stubs.assets.join('|') + ')$']: paths.babel.mapperAsset
         }
       : {}),
-    ...(transforms.styles.length
+    ...(stubs.styles.length
       ? {
-          ['^.+\\.(' + transforms.styles.join('|') + ')$']:
-            paths.babel.mapperStyle
+          ['^.+\\.(' + stubs.styles.join('|') + ')$']: paths.babel.mapperStyle
         }
       : {})
   };

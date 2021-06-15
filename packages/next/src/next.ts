@@ -4,7 +4,7 @@ import { extract, withReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
 import {
   hydrateTooling,
-  reconfigureBabelTransforms,
+  reconfigureBabelStubs,
   tooling
 } from '@riseup/tooling';
 import { start, build, analyze, size, dev, exportTask } from './tasks';
@@ -72,7 +72,7 @@ export function next(
         deps.tooling.configure.babel(context)
       );
       return ['dev', 'build'].includes(context.task)
-        ? reconfigureBabelTransforms(null, config)
+        ? reconfigureBabelStubs(null, config)
         : config;
     },
     eslint(context: Riseup.Context) {
