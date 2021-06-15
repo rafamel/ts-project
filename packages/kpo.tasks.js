@@ -16,9 +16,9 @@ const tasks = {
     exec('kpo', ['build'], { cwd: './utils' }),
     exec('kpo', ['build'], { cwd: './universal' }),
     exec('kpo', ['build'], { cwd: './tooling' }),
-    exec('kpo', ['build'], { cwd: './react' }),
     exec('kpo', ['build'], { cwd: './monorepo' }),
     exec('kpo', ['build'], { cwd: './library' }),
+    exec('kpo', ['build'], { cwd: './next' }),
     exec('kpo', ['build'], { cwd: './cli' })
   ),
   coverage: riseup.coverage,

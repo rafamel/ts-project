@@ -41,7 +41,7 @@ export function size(options: SizeOptions | Empty): Task.Async {
     return exec(
       constants.node,
       [paths.bin.sizeLimit, ...['--limit', opts.limit], ...files],
-      { cwd: paths.riseup.react }
+      { cwd: paths.riseup.next }
     );
   });
 }

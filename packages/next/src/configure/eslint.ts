@@ -1,7 +1,7 @@
 import { Serial } from 'type-core';
 import { paths } from '../paths';
 
-export function reconfigureEslintReact(eslint: Serial.Object): Serial.Object {
+export function reconfigureEslintNext(eslint: Serial.Object): Serial.Object {
   return {
     ...eslint,
     extends: [

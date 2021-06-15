@@ -1,4 +1,4 @@
 export * from './configure';
 export * from './tasks';
 export * from './definitions';
-export * from './react';
+export * from './next';

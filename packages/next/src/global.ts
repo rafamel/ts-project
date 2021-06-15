@@ -3,24 +3,24 @@ import { merge } from 'merge-strategies';
 import { defaults } from './defaults';
 import { hydrateToolingGlobal, ToolingGlobalOptions } from '@riseup/tooling';
 
-export interface ReactGlobalParams {
-  webpack?: string | null;
+export interface NextGlobalParams {
+  telemetry?: boolean;
   transforms?: {
     assets?: string[];
     styles?: string[];
   };
 }
 
-export type ReactGlobalOptions = ReactGlobalParams & ToolingGlobalOptions;
+export type NextGlobalOptions = NextGlobalParams & ToolingGlobalOptions;
 
-export function hydrateReactGlobal(
-  options: ReactGlobalOptions | Empty
-): Deep.Required<ReactGlobalOptions> {
+export function hydrateNextGlobal(
+  options: NextGlobalOptions | Empty
+): Deep.Required<NextGlobalOptions> {
   const toolingGlobal = hydrateToolingGlobal(options);
   return merge(
     {
       ...toolingGlobal,
-      webpack: defaults.global.webpack,
+      telemetry: defaults.global.telemetry,
       transforms: {
         ...toolingGlobal.transforms,
         ...defaults.global.transforms

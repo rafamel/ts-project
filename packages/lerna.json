@@ -4,9 +4,9 @@
     "utils",
     "universal",
     "tooling",
-    "library",
-    "react",
     "monorepo",
+    "library",
+    "next",
     "cli"
   ]
 }

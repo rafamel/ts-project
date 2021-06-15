@@ -83,9 +83,9 @@
   "peerDependencies": {
     "@babel/core": "7.x",
     "@babel/node": "7.x",
-    "babel-jest": ">= 26.6.0",
+    "babel-jest": "27.x",
     "eslint": "7.x",
-    "jest-cli": ">= 26.6.0",
+    "jest-cli": "27.x",
     "prettier": "2.x",
     "typescript": "4.x"
   }

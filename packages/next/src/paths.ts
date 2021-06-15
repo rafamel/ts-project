@@ -3,7 +3,7 @@ import { getBin } from '@riseup/utils';
 
 export const paths = {
   bin: {
-    craco: getBin('@craco/craco', 'craco', __dirname),
+    next: getBin('next', 'next', __dirname),
     sizeLimit: getBin('size-limit', 'size-limit', __dirname),
     sourceMapExplorer: getBin(
       'source-map-explorer',
@@ -12,14 +12,10 @@ export const paths = {
     )
   },
   riseup: {
-    react: path.join(__dirname, '../'),
-    tooling: path.dirname(require.resolve('@riseup/tooling/package.json'))
-  },
-  craco: {
-    config: require.resolve('./tasks/helpers/craco-config')
+    next: path.join(__dirname, '../')
   },
   babel: {
-    presetReactApp: require.resolve('babel-preset-react-app')
+    presetNext: require.resolve('next/babel')
   },
   eslint: {
     configReactApp: require.resolve('eslint-config-react-app')
