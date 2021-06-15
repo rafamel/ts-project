@@ -3,8 +3,13 @@ import { Empty } from 'type-core';
 import { create, exec, ExecOptions, Task } from 'kpo';
 import { constants } from '../constants';
 
+export interface InterceptPair {
+  original: string;
+  replacement: string;
+}
+
 export function intercept(
-  files: { original: string; replacement: string },
+  pairs: InterceptPair | InterceptPair[],
   script: string,
   args?: string[] | Empty,
   options?: ExecOptions | Empty
@@ -17,13 +22,11 @@ export function intercept(
         ...Object.assign({}, options || undefined),
         env: {
           ...((options && options.env) || undefined),
-          [constants.interceptor.env.original]: path.resolve(
-            ctx.cwd,
-            files.original
-          ),
-          [constants.interceptor.env.replacement]: path.resolve(
-            ctx.cwd,
-            files.replacement
+          [constants.interceptor.env]: JSON.stringify(
+            (Array.isArray(pairs) ? pairs : [pairs]).map((pair) => ({
+              original: path.resolve(ctx.cwd, pair.original),
+              replacement: path.resolve(ctx.cwd, pair.replacement)
+            }))
           )
         }
       }

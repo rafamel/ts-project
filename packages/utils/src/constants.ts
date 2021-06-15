@@ -6,9 +6,6 @@ export const constants = {
   node: process.execPath,
   interceptor: {
     path: require.resolve('./intercept/interceptor'),
-    env: {
-      original: 'RISEUP_INCERCEPT_ORIGINAL',
-      replacement: 'RISEUP_INTERCEPT_REPLACEMENT'
-    }
+    env: 'RISEUP_INCERCEPT_PAIRS'
   }
 };

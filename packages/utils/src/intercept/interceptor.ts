@@ -2,71 +2,113 @@
 import fs from 'fs';
 import path from 'path';
 import mockery from 'mockery';
-import { collect } from 'ensurism';
+import { coerce } from 'ensurism';
 import { constants } from '../constants';
 
-const env = collect(process.env, ({ ensure }) => ({
-  [constants.interceptor.env.original]: ensure('string', { assert: true }),
-  [constants.interceptor.env.replacement]: ensure('string', { assert: true })
-}));
+const pairsArr: any[] = coerce(
+  process.env[constants.interceptor.env],
+  {
+    type: 'array',
+    items: {
+      type: 'object',
+      required: ['original', 'replacement'],
+      properties: {
+        original: { type: 'string' },
+        replacement: { type: 'string' }
+      }
+    }
+  },
+  { assert: true }
+);
 
-const original = path.normalize(env[constants.interceptor.env.original]);
-const replacement = path.normalize(env[constants.interceptor.env.replacement]);
+const pairsRecord = pairsArr.reduce(
+  (acc, { original, replacement }) => ({
+    ...acc,
+    [original]: replacement
+  }),
+  {}
+);
 
 mockery.enable({
   warnOnReplace: true,
   warnOnUnregistered: false
 });
 
-mockery.registerMock(original, require(replacement));
+for (const pair of pairsArr) {
+  mockery.registerMock(pair.original, require(pair.replacement));
+}
 
 mockery.registerMock('fs', {
   ...fs,
   access(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.access as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   accessSync(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.accessSync as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   readFile(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.readFile as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   readFileSync(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.readFileSync as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   stat(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.stat as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   statSync(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.statSync as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   lstat(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.lstat as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   },
   lstatSync(file: fs.PathLike, ...args: any[]) {
+    const filePath = path.normalize(String(file));
     return (fs.lstatSync as any)(
-      path.normalize(String(file)) === original ? replacement : file,
+      Object.hasOwnProperty.call(pairsRecord, filePath)
+        ? pairsRecord[filePath]
+        : file,
       ...args
     );
   }
