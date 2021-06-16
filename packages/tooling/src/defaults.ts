@@ -20,6 +20,8 @@ export const defaults: Deep.Required<ToolingParams> = {
   lint: {
     dir: ['src/', 'test/'],
     types: true,
+    react: false,
+    env: { node: true, browser: false },
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
   },

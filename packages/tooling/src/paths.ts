@@ -25,10 +25,8 @@ export const paths = {
   },
   eslint: {
     configStandard: require.resolve('eslint-config-standard'),
-    configImportErrors: require.resolve('eslint-plugin-import/config/errors'),
-    configPrettier: require.resolve('eslint-config-prettier'),
     parserBabel: require.resolve('@babel/eslint-parser'),
-    parserTypeScript: require.resolve('@typescript-eslint/parser')
+    parserTypescript: require.resolve('@typescript-eslint/parser')
   },
   jest: {
     transformBabel: require.resolve('babel-jest')

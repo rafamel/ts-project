@@ -1,6 +1,6 @@
 import { Deep, Empty, Dictionary, Serial } from 'type-core';
 import { configs } from '@typescript-eslint/eslint-plugin';
-import { merge } from 'merge-strategies';
+import { deep, merge } from 'merge-strategies';
 import path from 'path';
 import { tmpFile } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
@@ -9,6 +9,8 @@ import { paths } from '../paths';
 
 export interface ConfigureEslintParams {
   dir?: string | string[];
+  react?: boolean;
+  env?: Dictionary<boolean>;
   highlight?: string[];
   rules?: Serial.Object;
 }
@@ -39,8 +41,10 @@ export function hydrateConfigureEslint(
     {
       ...hydrateToolingGlobal(options),
       dir: defaults.lint.dir,
-      rules: defaults.lint.rules,
-      highlight: defaults.lint.highlight
+      react: defaults.lint.react,
+      env: defaults.lint.env,
+      highlight: defaults.lint.highlight,
+      rules: defaults.lint.rules
     },
     options || undefined
   );
@@ -53,18 +57,19 @@ export function configureEslint(
 ): Serial.Object {
   const opts = hydrateConfigureEslint(options);
   const dir = Array.isArray(opts.dir) ? opts.dir : [opts.dir];
+  const codeExtensions = [...opts.extensions.js, ...opts.extensions.ts];
   const tsconfig = tmpFile('json', {
     ...config.typescript,
     include: dir.map((x) => path.resolve(cwd, x))
   });
 
-  return {
+  const eslint = {
     extends: [
       paths.eslint.configStandard,
-      paths.eslint.configImportErrors,
-      paths.eslint.configPrettier
+      'plugin:prettier/recommended',
+      'plugin:import/recommended'
     ],
-    env: { node: true },
+    env: opts.env,
     parserOptions: {
       impliedStrict: true,
       sourceType: 'module'
@@ -94,6 +99,9 @@ export function configureEslint(
         : 0
     },
     settings: {
+      'import/extensions': codeExtensions.map((x) =>
+        x[0] === '.' ? x : '.' + x
+      ),
       'import/resolver': {
         alias: {
           map: Object.entries(opts.alias || {}),
@@ -114,7 +122,8 @@ export function configureEslint(
         plugins: ['babel'],
         parserOptions: {
           requireConfigFile: false,
-          babelOptions: config.babel
+          babelOptions: config.babel,
+          ecmaFeatures: { jsx: true }
         },
         rules: {
           /* WARNINGS */
@@ -125,10 +134,11 @@ export function configureEslint(
       /* TYPESCRIPT */
       {
         files: [`*.{${opts.extensions.ts.join(',')}}`],
-        parser: paths.eslint.parserTypeScript,
+        parser: paths.eslint.parserTypescript,
         parserOptions: {
           project: tsconfig,
-          tsconfigRootDir: cwd
+          tsconfigRootDir: cwd,
+          ecmaFeatures: { jsx: true }
         },
         plugins: ['@typescript-eslint'],
         // Overrides don't allow for extends
@@ -176,9 +186,54 @@ export function configureEslint(
       },
       /* USER RULES */
       {
-        files: ['*'],
+        files: [`*.{${codeExtensions.join(',')}}`],
         rules: opts.rules
       }
     ]
   };
+
+  return opts.react ? reconfigureEslintReact(true, eslint) : eslint;
+}
+
+function reconfigureEslintReact(
+  react: boolean,
+  config: Serial.Object
+): Serial.Object {
+  const extension = {
+    extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
+    plugins: ['react', 'react-hooks', 'jsx-a11y'],
+    settings: {
+      react: { version: 'detect' }
+    },
+    rules: {
+      'react/react-in-jsx-scope': 0,
+      'react/no-render-return-value': 0
+    }
+  };
+
+  const clean = {
+    ...config,
+    extends: ((config.extends as string[]) || []).filter(
+      (x) => !extension.extends.includes(x)
+    ),
+    plugins: ((config.plugins as string[]) || []).filter(
+      (x) => !extension.plugins.includes(x)
+    ),
+    settings: Object.entries((config.settings as any) || {}).reduce(
+      (acc, [key, value]) => {
+        return key === 'react' ? acc : { ...acc, [key]: value };
+      },
+      {}
+    ),
+    rules: Object.entries((config.settings as any) || {}).reduce(
+      (acc, [key, value]) => {
+        return Object.hasOwnProperty.call(extension.rules, key)
+          ? acc
+          : { ...acc, [key]: value };
+      },
+      {}
+    )
+  };
+
+  return react ? deep(clean, extension) : clean;
 }
