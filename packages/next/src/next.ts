@@ -7,7 +7,7 @@ import {
   reconfigureBabelStubs,
   tooling
 } from '@riseup/tooling';
-import { start, build, analyze, size, dev, exportTask } from './tasks';
+import { dev, watch, start, build, analyze, size, exportTask } from './tasks';
 import { hydrateNextGlobal } from './global';
 import {
   NextConfigure,
@@ -27,7 +27,12 @@ export function hydrateNext(
   const global = hydrateNextGlobal(options ? options.global : null);
   const universal = hydrateUniversal(options);
   const tooling = hydrateTooling(options);
-  const next = options ? { size: { ...options.size } } : { size: {} };
+  const next = options
+    ? {
+        watch: { ...global, ...options.watch },
+        size: { ...options.size }
+      }
+    : { watch: { ...global }, size: {} };
 
   return {
     ...universal,
@@ -71,7 +76,7 @@ export function next(
       const config = reconfigureBabelNext(
         deps.tooling.configure.babel(context)
       );
-      return ['dev', 'build'].includes(context.task)
+      return ['dev', 'watch', 'build'].includes(context.task)
         ? reconfigureBabelStubs(null, config)
         : config;
     },
@@ -92,6 +97,13 @@ export function next(
     dev: create(({ cwd }) => {
       return dev(opts.global, {
         babel: configure.babel({ cwd, task: 'dev' })
+      });
+    }),
+    watch: create(({ cwd }) => {
+      return watch(opts.watch, {
+        babel: configure.babel({ cwd, task: 'watch' }),
+        eslint: deps.tooling.configure.eslint({ cwd, task: 'watch' }),
+        typescript: deps.tooling.configure.typescript({ cwd, task: 'watch' })
       });
     }),
     start: create(() => start(opts.global)),

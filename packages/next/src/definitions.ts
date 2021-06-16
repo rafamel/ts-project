@@ -13,9 +13,11 @@ import {
 } from '@riseup/universal';
 import { NextGlobalParams } from './global';
 import { SizeParams } from './tasks';
+import { WatchParams } from './tasks/watch';
 
 export interface NextParams {
   global?: NextGlobalParams;
+  watch?: WatchParams;
   size?: SizeParams;
 }
 
@@ -28,6 +30,7 @@ export type NextConfigure = UniversalConfigure & ToolingConfigure;
 export type NextTasks = UniversalTasks &
   ToolingTasks & {
     dev: Task;
+    watch: Task;
     start: Task;
     build: Task;
     export: Task;

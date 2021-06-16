@@ -9,6 +9,19 @@ export const defaults: Deep.Required<NextParams> = {
       styles: ['css', 'scss', 'sass', 'less']
     }
   },
+  watch: {
+    clear: true,
+    include: ['./'],
+    exclude: [
+      'node_modules',
+      'coverage',
+      'test',
+      'public',
+      'out',
+      'build',
+      '.next'
+    ]
+  },
   size: {
     limit: null
   }
