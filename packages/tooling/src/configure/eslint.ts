@@ -63,6 +63,18 @@ export function configureEslint(
     include: dir.map((x) => path.resolve(cwd, x))
   });
 
+  const react = {
+    extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
+    plugins: ['react', 'react-hooks', 'jsx-a11y'],
+    settings: {
+      react: { version: 'detect' }
+    },
+    rules: {
+      'react/react-in-jsx-scope': 0,
+      'react/no-render-return-value': 0
+    }
+  };
+
   const eslint = {
     extends: [
       paths.eslint.configStandard,
@@ -192,48 +204,5 @@ export function configureEslint(
     ]
   };
 
-  return opts.react ? reconfigureEslintReact(true, eslint) : eslint;
-}
-
-function reconfigureEslintReact(
-  react: boolean,
-  config: Serial.Object
-): Serial.Object {
-  const extension = {
-    extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
-    plugins: ['react', 'react-hooks', 'jsx-a11y'],
-    settings: {
-      react: { version: 'detect' }
-    },
-    rules: {
-      'react/react-in-jsx-scope': 0,
-      'react/no-render-return-value': 0
-    }
-  };
-
-  const clean = {
-    ...config,
-    extends: ((config.extends as string[]) || []).filter(
-      (x) => !extension.extends.includes(x)
-    ),
-    plugins: ((config.plugins as string[]) || []).filter(
-      (x) => !extension.plugins.includes(x)
-    ),
-    settings: Object.entries((config.settings as any) || {}).reduce(
-      (acc, [key, value]) => {
-        return key === 'react' ? acc : { ...acc, [key]: value };
-      },
-      {}
-    ),
-    rules: Object.entries((config.settings as any) || {}).reduce(
-      (acc, [key, value]) => {
-        return Object.hasOwnProperty.call(extension.rules, key)
-          ? acc
-          : { ...acc, [key]: value };
-      },
-      {}
-    )
-  };
-
-  return react ? deep(clean, extension) : clean;
+  return opts.react ? deep(eslint, react) : eslint;
 }
