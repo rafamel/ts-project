@@ -63,6 +63,10 @@ export function configureEslint(
     include: dir.map((x) => path.resolve(cwd, x))
   });
 
+  // TODO: Remove additional plugins and configs
+  // dependencies once eslint flat config lands.
+  // See: https://github.com/eslint/eslint/issues/13481
+
   const react = {
     extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
     plugins: ['react', 'react-hooks', 'jsx-a11y'],

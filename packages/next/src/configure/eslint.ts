@@ -1,12 +1,12 @@
 import { Serial } from 'type-core';
-import { paths } from '../paths';
+import { deep } from 'merge-strategies';
 
 export function reconfigureEslintNext(eslint: Serial.Object): Serial.Object {
-  return {
+  return deep(eslint, {
     ...eslint,
-    extends: [
-      ...((eslint.extends as Serial.Array) || []),
-      paths.eslint.configReactApp
-    ]
-  };
+    extends: ['plugin:@next/next/recommended'],
+    rules: {
+      'jsx-a11y/alt-text': [1, { elements: ['img'], img: ['Image'] }]
+    }
+  });
 }

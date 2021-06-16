@@ -39,6 +39,11 @@ export function hydrateNext(
     ...tooling,
     ...next,
     global,
+    lint: {
+      ...tooling.lint,
+      react: TypeGuard.isEmpty(tooling.lint.react) ? true : tooling.lint.react,
+      env: tooling.lint.env || { node: true, browser: true }
+    },
     test: {
       ...tooling.test,
       ignore: [

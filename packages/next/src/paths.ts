@@ -17,8 +17,5 @@ export const paths = {
   },
   babel: {
     presetNext: require.resolve('next/babel')
-  },
-  eslint: {
-    configReactApp: require.resolve('eslint-config-react-app')
   }
 };
