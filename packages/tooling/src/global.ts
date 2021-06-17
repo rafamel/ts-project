@@ -6,8 +6,9 @@ export interface ToolingGlobalParams {
   prettier?: boolean;
   alias?: Dictionary<string>;
   stubs?: {
-    assets?: string[];
-    styles?: string[];
+    identity?: string[];
+    route?: string[];
+    image?: string[];
   };
   extensions?: {
     js?: string[];

@@ -10,8 +10,9 @@ export interface ConfigureBabelParams {
 export interface ConfigureBabelOptions extends ConfigureBabelParams {
   alias?: Dictionary<string>;
   stubs?: {
-    assets?: string[];
-    styles?: string[];
+    identity?: string[];
+    route?: string[];
+    image?: string[];
   };
 }
 
@@ -92,13 +93,14 @@ export function reconfigureBabelAlias(
 }
 
 export function reconfigureBabelStubs(
-  stubs: { assets?: string[]; styles?: string[] } | null,
+  stubs: { identity?: string[]; route?: string[]; image?: string[] } | null,
   babel: Serial.Object
 ): Serial.Object {
   return reconfigureBabelModuleMapper((maps) => {
     const clean = Object.entries(maps).reduce((acc, [key, value]) => {
-      return value === paths.babel.mapperAsset ||
-        value === paths.babel.mapperStyle
+      return value === paths.babel.mapperIdentity ||
+        value === paths.babel.mapperRoute ||
+        value === paths.babel.mapperImage
         ? acc
         : { ...acc, [key]: value };
     }, {});
@@ -137,18 +139,25 @@ export function reconfigureBabelModuleMapper(
 }
 
 function createStubsMapperHelper(stubs: {
-  assets: string[];
-  styles: string[];
+  identity: string[];
+  route: string[];
+  image: string[];
 }): Serial.Object {
   return {
-    ...(stubs.assets.length
+    ...(stubs.identity.length
       ? {
-          ['^.+\\.(' + stubs.assets.join('|') + ')$']: paths.babel.mapperAsset
+          ['^.+\\.(' + stubs.identity.join('|') + ')$']:
+            paths.babel.mapperIdentity
         }
       : {}),
-    ...(stubs.styles.length
+    ...(stubs.route.length
       ? {
-          ['^.+\\.(' + stubs.styles.join('|') + ')$']: paths.babel.mapperStyle
+          ['^.+\\.(' + stubs.route.join('|') + ')$']: paths.babel.mapperRoute
+        }
+      : {}),
+    ...(stubs.image.length
+      ? {
+          ['^.+\\.(' + stubs.image.join('|') + ')$']: paths.babel.mapperImage
         }
       : {})
   };

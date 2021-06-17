@@ -1,12 +1,14 @@
 import { Deep } from 'type-core';
 import { NextParams } from './definitions';
+import { paths } from './paths';
 
 export const defaults: Deep.Required<NextParams> = {
   global: {
     telemetry: false,
     stubs: {
-      assets: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'ttf', 'eot'],
-      styles: ['css', 'scss', 'sass', 'less']
+      identity: ['css', 'scss', 'sass', 'less'],
+      route: ['ttf', 'eot'],
+      image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg']
     }
   },
   watch: {

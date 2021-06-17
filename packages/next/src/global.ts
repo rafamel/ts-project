@@ -6,8 +6,9 @@ import { hydrateToolingGlobal, ToolingGlobalOptions } from '@riseup/tooling';
 export interface NextGlobalParams {
   telemetry?: boolean;
   stubs?: {
-    assets?: string[];
-    styles?: string[];
+    identity?: string[];
+    route?: string[];
+    image?: string[];
   };
 }
 

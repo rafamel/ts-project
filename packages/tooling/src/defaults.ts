@@ -6,8 +6,9 @@ export const defaults: Deep.Required<ToolingParams> = {
     prettier: true,
     alias: {},
     stubs: {
-      assets: [],
-      styles: []
+      identity: [],
+      route: [],
+      image: []
     },
     extensions: {
       js: ['js', 'jsx', 'cjs', 'mjs'],
