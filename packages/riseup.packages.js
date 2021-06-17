@@ -7,7 +7,10 @@ module.exports = library(
       alias: {}
     },
     build: {
-      assets: process.cwd().endsWith('tooling') ? ['static/'] : [],
+      assets:
+        process.cwd().endsWith('tooling') || process.cwd().endsWith('next')
+          ? ['static/']
+          : [],
       types: true,
       tarball: true,
       destination: 'pkg/',
