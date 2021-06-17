@@ -13,7 +13,8 @@ export const paths = {
     )
   },
   riseup: {
-    next: path.join(__dirname, '../')
+    pkgNext: path.join(__dirname, '../'),
+    logoNext: path.join(__dirname, '../static/react.svg')
   },
   babel: {
     presetNext: require.resolve('next/babel')

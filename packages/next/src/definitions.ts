@@ -13,11 +13,13 @@ import {
 } from '@riseup/universal';
 import { NextGlobalParams } from './global';
 import { SizeParams } from './tasks';
+import { FaviconsParams } from './tasks/favicons';
 import { WatchParams } from './tasks/watch';
 
 export interface NextParams {
   global?: NextGlobalParams;
   watch?: WatchParams;
+  favicons?: FaviconsParams;
   size?: SizeParams;
 }
 
@@ -34,6 +36,7 @@ export type NextTasks = UniversalTasks &
     start: Task;
     build: Task;
     export: Task;
-    size: Task;
+    favicons: Task;
     analyze: Task;
+    size: Task;
   };

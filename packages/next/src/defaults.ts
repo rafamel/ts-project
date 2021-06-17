@@ -24,6 +24,18 @@ export const defaults: Deep.Required<NextParams> = {
       '.next'
     ]
   },
+  favicons: {
+    logo: paths.riseup.logoNext,
+    urls: {
+      assets: null,
+      result: '/vendor/favicons'
+    },
+    dest: {
+      assets: 'public/vendor/favicons',
+      result: 'public/vendor/favicons-result.json'
+    },
+    favicons: { logging: false } as any
+  },
   size: {
     limit: null
   }

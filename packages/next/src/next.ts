@@ -1,4 +1,4 @@
-import { Empty } from 'type-core';
+import { Empty, TypeGuard } from 'type-core';
 import { create } from 'kpo';
 import { extract, withReconfigure, Riseup } from '@riseup/utils';
 import { hydrateUniversal, universal } from '@riseup/universal';
@@ -7,7 +7,16 @@ import {
   reconfigureBabelStubs,
   tooling
 } from '@riseup/tooling';
-import { dev, watch, start, build, analyze, size, exportTask } from './tasks';
+import {
+  dev,
+  watch,
+  start,
+  build,
+  exportTask,
+  favicons,
+  analyze,
+  size
+} from './tasks';
 import { hydrateNextGlobal } from './global';
 import {
   NextConfigure,
@@ -30,9 +39,10 @@ export function hydrateNext(
   const next = options
     ? {
         watch: { ...global, ...options.watch },
+        favicons: { ...options.favicons },
         size: { ...options.size }
       }
-    : { watch: { ...global }, size: {} };
+    : { watch: { ...global }, favicons: {}, size: {} };
 
   return {
     ...universal,
@@ -118,7 +128,8 @@ export function next(
       });
     }),
     export: create(() => exportTask(opts.global)),
-    size: create(() => size(opts.size)),
-    analyze: create(() => analyze())
+    favicons: create(() => favicons(opts.favicons)),
+    analyze: create(() => analyze()),
+    size: create(() => size(opts.size))
   };
 }
