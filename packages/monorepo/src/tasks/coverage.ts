@@ -55,7 +55,7 @@ export function coverage(options: CoverageOptions | Empty): Task.Async {
         exec(constants.node, [
           paths.bin.lerna,
           'exec',
-          constants.node,
+          process.platform === 'win32' ? 'node' : constants.node,
           paths.bin.coverage,
           '--',
           infile,
