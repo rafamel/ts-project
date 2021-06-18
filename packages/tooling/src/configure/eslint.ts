@@ -100,6 +100,7 @@ export function configureEslint(
       'import/export': 0,
       'no-return-await': 0,
       'no-use-before-define': 0,
+      'node/no-callback-literal': 0,
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
       /* WARNINGS */
