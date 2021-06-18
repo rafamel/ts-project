@@ -1,5 +1,6 @@
-import { Deep, Empty, Serial, TypeGuard } from 'type-core';
+import { Deep, Dictionary, Empty, Serial, TypeGuard } from 'type-core';
 import { deep, shallow } from 'merge-strategies';
+import path from 'path';
 import { getPackage } from '@riseup/utils';
 import { defaults } from '../defaults';
 
@@ -38,7 +39,7 @@ export function configureTypedoc(
     }
   }
 
-  return deep(
+  const configuration = deep(
     {
       name:
         (opts.name ? opts.name + ' ' : '') +
@@ -52,4 +53,42 @@ export function configureTypedoc(
     },
     opts.overrides || undefined
   );
+
+  return relativeToAbsolute(cwd, configuration, [
+    ['tsconfig', []],
+    ['entryPoints', []],
+    ['packages', []],
+    ['exclude', []],
+    ['externalPattern', []],
+    ['media', []],
+    ['includes', []],
+    ['out', []],
+    ['json', []],
+    ['theme', ['default', 'minimal']],
+    ['readme', ['none']]
+  ]);
+}
+
+function relativeToAbsolute(
+  cwd: string,
+  record: Dictionary,
+  properties: Array<[string, string[]]>
+): Dictionary {
+  if (!properties.length) return record;
+
+  const [item, ...pending] = properties;
+  const [property, exclusions] = item;
+  if (!Object.hasOwnProperty.call(record, property) || !record[property]) {
+    return relativeToAbsolute(cwd, record, pending);
+  }
+
+  const value = record[property];
+  return {
+    ...relativeToAbsolute(cwd, record, pending),
+    [property]: Array.isArray(value)
+      ? value.map((x) => (exclusions.includes(x) ? x : path.resolve(cwd, x)))
+      : exclusions.includes(value)
+      ? value
+      : path.resolve(cwd, value)
+  };
 }
