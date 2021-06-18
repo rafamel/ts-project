@@ -1,5 +1,5 @@
 import { Deep, Empty, Serial } from 'type-core';
-import { Task } from 'kpo';
+import { context, Task } from 'kpo';
 import { nextTask } from './helpers/next-task';
 import { hydrateNextGlobal } from '../global';
 
@@ -24,5 +24,8 @@ export function build(
 ): Task.Async {
   const opts = hydrateBuild(options);
 
-  return nextTask('build', opts, config);
+  return context(
+    (ctx) => ({ ...ctx, args: ['--no-lint', ...ctx.args] }),
+    nextTask('build', opts, config)
+  );
 }
