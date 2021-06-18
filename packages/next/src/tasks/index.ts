@@ -4,5 +4,5 @@ export * from './start';
 export * from './build';
 export * from './export';
 export * from './favicons';
-export * from './analyze';
+export * from './explore';
 export * from './size';

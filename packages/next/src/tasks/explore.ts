@@ -8,25 +8,25 @@ import { paths } from '../paths';
 import { ensureProjectBuilt } from './helpers/ensure-project-built';
 import { getRecursiveFiles } from './helpers/get-recursive-files';
 
-export interface AnalyzeParams {
+export interface ExploreParams {
   dir?: string;
 }
 
-export type AnalyzeOptions = AnalyzeParams;
+export type ExploreOptions = ExploreParams;
 
-export function hydrateAnalyze(
-  options: AnalyzeOptions | Empty
-): Deep.Required<AnalyzeOptions> {
+export function hydrateExplore(
+  options: ExploreOptions | Empty
+): Deep.Required<ExploreOptions> {
   return merge(
     {
-      dir: defaults.analyze.dir
+      dir: defaults.explore.dir
     },
     options || undefined
   );
 }
 
-export function analyze(options: AnalyzeOptions | Empty): Task.Async {
-  const opts = hydrateAnalyze(options);
+export function explore(options: ExploreOptions | Empty): Task.Async {
+  const opts = hydrateExplore(options);
 
   return create(async (ctx) => {
     const dir = path.resolve(ctx.cwd, opts.dir);
@@ -40,7 +40,7 @@ export function analyze(options: AnalyzeOptions | Empty): Task.Async {
 
     if (!maps.length) {
       throw Error(
-        `Project must be built with source maps for analysis. ` +
+        `Project must be built with source maps for exploration. ` +
           `Enable the productionBrowserSourceMaps option in next configuration.`
       );
     }

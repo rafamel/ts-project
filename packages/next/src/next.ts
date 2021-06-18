@@ -14,7 +14,7 @@ import {
   build,
   exportTask,
   favicons,
-  analyze,
+  explore,
   size
 } from './tasks';
 import { hydrateNextGlobal } from './global';
@@ -40,10 +40,10 @@ export function hydrateNext(
     ? {
         watch: { ...global, ...options.watch },
         favicons: { ...options.favicons },
-        analyze: { ...options.analyze },
+        explore: { ...options.explore },
         size: { ...options.size }
       }
-    : { watch: { ...global }, favicons: {}, analyze: {}, size: {} };
+    : { watch: { ...global }, favicons: {}, explore: {}, size: {} };
 
   return {
     ...universal,
@@ -130,7 +130,7 @@ export function next(
     }),
     export: create(() => exportTask(opts.global)),
     favicons: create(() => favicons(opts.favicons)),
-    analyze: create(() => analyze(opts.analyze)),
+    explore: create(() => explore(opts.explore)),
     size: create(() => size(opts.size))
   };
 }
