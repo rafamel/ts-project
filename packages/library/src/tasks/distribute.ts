@@ -32,14 +32,14 @@ export function distribute(options: DistributeOptions | Empty): Task.Async {
       exec('npm', ['publish', '--dry-run']),
       confirm(
         { message: 'Continue?', default: true },
-        progress(
-          { message: 'Publish package' },
-          series(
-            exec('npm', ['publish']),
-            opts.push
-              ? context({ args: [] }, exec('git', ['push', '--follow-tags']))
-              : null
-          )
+        series(
+          progress({ message: 'Publish package' }, exec('npm', ['publish'])),
+          opts.push
+            ? progress(
+                { message: 'Push to remote' },
+                context({ args: [] }, exec('git', ['push', '--follow-tags']))
+              )
+            : null
         )
       )
     )
