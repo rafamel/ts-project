@@ -40,9 +40,10 @@ export function hydrateNext(
     ? {
         watch: { ...global, ...options.watch },
         favicons: { ...options.favicons },
+        analyze: { ...options.analyze },
         size: { ...options.size }
       }
-    : { watch: { ...global }, favicons: {}, size: {} };
+    : { watch: { ...global }, favicons: {}, analyze: {}, size: {} };
 
   return {
     ...universal,
@@ -129,7 +130,7 @@ export function next(
     }),
     export: create(() => exportTask(opts.global)),
     favicons: create(() => favicons(opts.favicons)),
-    analyze: create(() => analyze()),
+    analyze: create(() => analyze(opts.analyze)),
     size: create(() => size(opts.size))
   };
 }
