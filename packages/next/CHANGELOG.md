@@ -1,0 +1,25 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.7.0](https://github.com/rafamel/riseup/compare/v0.6.0...v0.7.0) (2021-06-18)
+
+
+### Bug Fixes
+
+* **packages:** fix next tests for images add more descriptive names for babel stubs ([397c1b0](https://github.com/rafamel/riseup/commit/397c1b09b4c29f2d2d4be05ec8063931f4657980))
+* **packages:** update dependencies ([f92c5a9](https://github.com/rafamel/riseup/commit/f92c5a98cc97f463f21001b62ff4a02c012aa563))
+* **packages/next:** build task passes --no-lint by default ([695fb09](https://github.com/rafamel/riseup/commit/695fb094780e240b09e258e1dc761c1ede7e7652))
+* **packages/next:** fix analyze task ([e286e7b](https://github.com/rafamel/riseup/commit/e286e7bfa92e1f93605e528d73fe59dec48b2436))
+* **packages/next:** fix and add dir option to size task ([d2747bd](https://github.com/rafamel/riseup/commit/d2747bd642aafbfb553d2e1aa33f4b9605f5cb8c))
+* **packages/next:** next related tasks can receive arguments ([e517a40](https://github.com/rafamel/riseup/commit/e517a40999628a459d8404814867562d65224a1f))
+
+
+### Features
+
+* **packages:** replace react pacakge by next package ([eb8052b](https://github.com/rafamel/riseup/commit/eb8052b6baee6207cdc192728348b2bebc4cac03))
+* **packages/next:** add favicons task ([ea600b3](https://github.com/rafamel/riseup/commit/ea600b3ca3fcb561734d9ef9afd6b4ca5ffb42de))
+* **packages/next:** add watch task ([ac55d88](https://github.com/rafamel/riseup/commit/ac55d888faaa122276fbac860789ce7a5da1f881))
+* **packages/next:** prevent next default write of next-env.d.ts ([0bbbd59](https://github.com/rafamel/riseup/commit/0bbbd59824858ef838116c800c461eef6064b4de))
+* **packages/next:** upgrades next to v11 ([bf7345a](https://github.com/rafamel/riseup/commit/bf7345a9fb2046443bbda124cefb559478229c94))
