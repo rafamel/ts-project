@@ -17,12 +17,17 @@ export function nextTask(
   config: NextTaskConfig
 ): Task.Async {
   return series(
-    log('debug', `telemetry: ${options.telemetry}`),
     context(
-      (ctx) => ({ ...ctx, stdio: [null, null, ctx.stdio[2]] }),
-      exec('next', ['telemetry', options.telemetry ? 'enable' : 'disable'])
+      { args: [] },
+      series(
+        log('debug', `telemetry: ${options.telemetry}`),
+        context(
+          (ctx) => ({ ...ctx, stdio: [null, null, ctx.stdio[2]] }),
+          exec('next', ['telemetry', options.telemetry ? 'enable' : 'disable'])
+        ),
+        log('debug', `process intercept: ${Boolean(config.babel)}`)
+      )
     ),
-    log('debug', `process intercept: ${Boolean(config.babel)}`),
     config.babel
       ? tmpTask('json', config.babel, (babelFile) => {
           return intercept(
