@@ -37,6 +37,7 @@ export const defaults: Deep.Required<NextParams> = {
     favicons: { logging: false } as any
   },
   size: {
+    dir: '_next',
     limit: null
   }
 };
