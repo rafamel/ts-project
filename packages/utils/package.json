@@ -38,7 +38,7 @@
   "dependencies": {
     "ensurism": "^0.6.0",
     "find-up": "^5.0.0",
-    "kpo": "^0.21.0",
+    "kpo": "^0.22.0",
     "minimatch": "^3.0.4",
     "mockery": "^2.1.0",
     "object-hash": "^2.1.1",

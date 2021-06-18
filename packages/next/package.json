@@ -56,7 +56,7 @@
     "favicons": "^6.2.2",
     "htmlparser2": "^6.1.0",
     "jest-cli": "^27.0.4",
-    "kpo": "^0.21.0",
+    "kpo": "^0.22.0",
     "merge-strategies": "^0.2.0",
     "pirates": "^4.0.1",
     "prettier": "^2.2.1",

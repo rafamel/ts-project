@@ -70,7 +70,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "find-up": "^5.0.0",
-    "kpo": "^0.21.0",
+    "kpo": "^0.22.0",
     "merge-strategies": "^0.2.0",
     "ttypescript": "^1.5.12",
     "type-core": "^0.12.0"
