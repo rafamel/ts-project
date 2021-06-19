@@ -13,7 +13,7 @@ import {
   start,
   build,
   exportTask,
-  favicons,
+  publicTask,
   explore,
   size
 } from './tasks';
@@ -39,11 +39,11 @@ export function hydrateNext(
   const next = options
     ? {
         watch: { ...global, ...options.watch },
-        favicons: { ...options.favicons },
+        public: { ...options.public },
         explore: { ...options.explore },
         size: { ...options.size }
       }
-    : { watch: { ...global }, favicons: {}, explore: {}, size: {} };
+    : { watch: { ...global }, public: {}, explore: {}, size: {} };
 
   return {
     ...universal,
@@ -129,7 +129,7 @@ export function next(
       });
     }),
     export: create(() => exportTask(opts.global)),
-    favicons: create(() => favicons(opts.favicons)),
+    public: create(() => publicTask(opts.public)),
     explore: create(() => explore(opts.explore)),
     size: create(() => size(opts.size))
   };

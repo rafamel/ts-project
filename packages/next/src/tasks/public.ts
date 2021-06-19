@@ -1,42 +1,84 @@
 import { Deep, Dictionary, Empty } from 'type-core';
-import { create, progress, write, series, mkdir, Task } from 'kpo';
+import {
+  create,
+  progress,
+  write,
+  series,
+  mkdir,
+  Task,
+  remove,
+  copy
+} from 'kpo';
 import faviconsFn, { FaviconOptions, FaviconResponse } from 'favicons';
 import { parseDocument } from 'htmlparser2';
 import { merge } from 'merge-strategies';
 import path from 'path';
 import { defaults } from '../defaults';
 
-export interface FaviconsParams {
-  logo?: string | Buffer | string[];
-  urls?: {
-    assets?: string | null;
-    result?: string | null;
-  };
-  dest?: {
-    assets?: string;
-    result?: string;
-  };
-  favicons?: FaviconOptions;
+export interface PublicParams {
+  dest?: string;
+  clean?: boolean;
+  assets?: string[];
+  favicons?: null | PublicFaviconsParams;
 }
 
-export type FaviconsOptions = FaviconsParams;
+export interface PublicFaviconsParams {
+  logo?: string | Buffer | string[];
+  result?: string;
+  urls?: {
+    result?: string | null;
+    manifests?: string | null;
+  };
+  options?: FaviconOptions;
+}
 
-export function hydrateFavicons(
-  options: FaviconsOptions | Empty
-): Deep.Required<FaviconsOptions> {
+export type PublicOptions = PublicParams;
+
+export function hydratePublic(
+  options: PublicOptions | Empty
+): Deep.Required<PublicOptions> {
   return merge(
     {
-      logo: defaults.favicons.logo,
-      urls: defaults.favicons.urls,
-      dest: defaults.favicons.dest,
-      favicons: defaults.favicons.favicons as any
+      dest: defaults.public.dest,
+      clean: defaults.public.dest,
+      assets: defaults.public.assets,
+      favicons: defaults.public.favicons
     },
     options || undefined
   );
 }
 
-export function favicons(options: FaviconsOptions | Empty): Task.Async {
-  const opts = hydrateFavicons(options);
+export function publicTask(options: PublicOptions | Empty): Task.Async {
+  const opts = hydratePublic(options);
+  return series(
+    mkdir(opts.dest, { ensure: true }),
+    opts.clean
+      ? remove(path.join(opts.dest, '*'), {
+          glob: true,
+          strict: false,
+          recursive: true
+        })
+      : null,
+
+    opts.assets
+      ? progress(
+          { message: 'Handling assets' },
+          copy(opts.assets, opts.dest, {
+            glob: true,
+            single: false,
+            strict: false,
+            exists: 'overwrite'
+          })
+        )
+      : null,
+    faviconsTask(opts)
+  );
+}
+
+function faviconsTask(opts: Deep.Required<PublicOptions>): Task.Async | null {
+  const favicons = opts.favicons;
+  if (!favicons) return null;
+
   return progress(
     { message: 'Building icons and manifest' },
     create(async () => {
@@ -46,8 +88,8 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
 
       const response = await new Promise<FaviconResponse>((resolve, reject) => {
         faviconsFn(
-          opts.logo,
-          { ...opts.favicons, path: urlPath },
+          favicons.logo,
+          { ...favicons.options, path: urlPath },
           (err, res) => {
             return err ? reject(err) : resolve(res);
           }
@@ -55,42 +97,40 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
       });
 
       return series(
-        mkdir([opts.dest.assets, path.dirname(opts.dest.result)], {
+        mkdir([opts.dest, path.dirname(favicons.result)], {
           ensure: true
         }),
         ...response.images.map((asset) => {
-          return write(
-            path.join(opts.dest.assets, asset.name),
-            asset.contents,
-            { exists: 'overwrite' }
-          );
+          return write(path.join(opts.dest, asset.name), asset.contents, {
+            exists: 'overwrite'
+          });
         }),
         ...response.files.map((asset) => {
-          const content = opts.urls.assets
+          const content = favicons.urls.manifests
             ? String(asset.contents).replace(
                 urlPathRegex,
-                opts.urls.assets.replace(/\/$/, '')
+                favicons.urls.manifests.replace(/\/$/, '')
               )
             : String(asset.contents).replace(urlPathSlashRegex, '');
 
-          return write(path.join(opts.dest.assets, asset.name), content, {
+          return write(path.join(opts.dest, asset.name), content, {
             exists: 'overwrite'
           });
         }),
         create(() => {
           const html = response.html.map((x) => {
-            return opts.urls.result
-              ? x.replace(urlPathRegex, opts.urls.result.replace(/\/$/, ''))
+            return favicons.urls.result
+              ? x.replace(urlPathRegex, favicons.urls.result.replace(/\/$/, ''))
               : x.replace(urlPathSlashRegex, '');
           });
 
           const manifest = response.files
             .filter((asset) => asset.name === 'manifest.json')
             .map((asset) => {
-              return opts.urls.result
+              return favicons.urls.result
                 ? asset.contents.replace(
                     urlPathRegex,
-                    opts.urls.result.replace(/\/$/, '')
+                    favicons.urls.result.replace(/\/$/, '')
                   )
                 : asset.contents.replace(urlPathSlashRegex, '');
             });
@@ -100,7 +140,9 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
             head: responseHtmlToElements(html)
           };
 
-          return write(opts.dest.result, content, { exists: 'overwrite' });
+          return write(path.resolve(opts.dest, favicons.result), content, {
+            exists: 'overwrite'
+          });
         })
       );
     })
