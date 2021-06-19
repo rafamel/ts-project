@@ -1,6 +1,6 @@
 import { Serial } from 'type-core';
 import { log, series, context, exec, Task } from 'kpo';
-import { tmpTask, intercept, constants } from '@riseup/utils';
+import { intercept, constants } from '@riseup/utils';
 import { paths } from '../../paths';
 
 export interface NextTaskOptions {
@@ -29,13 +29,15 @@ export function nextTask(
       )
     ),
     config.babel
-      ? tmpTask('json', config.babel, (babelFile) => {
-          return intercept(
-            { original: '.babelrc.json', replacement: babelFile },
-            paths.bin.nextEntry,
-            [cmd]
-          );
-        })
+      ? intercept(
+          {
+            path: '.babelrc',
+            content: JSON.stringify(config.babel),
+            require: 'json'
+          },
+          paths.bin.nextEntry,
+          [cmd]
+        )
       : exec(constants.node, [paths.bin.next, cmd])
   );
 }

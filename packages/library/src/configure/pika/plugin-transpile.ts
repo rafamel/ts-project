@@ -76,23 +76,25 @@ function transpile(
         }
       ),
       create((ctx) => {
-        return options.types && getTypeScriptPath(ctx.cwd)
-          ? tmpTask('json', config.typescript, (file) => {
-              const project = path.resolve(ctx.cwd, path.basename(file));
+        const project = path.resolve(ctx.cwd, 'tsconfig.build.json');
 
-              return intercept(
-                { original: project, replacement: file },
-                paths.bin.typescript,
-                [
-                  '--declaration',
-                  '--emitDeclarationOnly',
-                  ...['--noEmit', 'false'],
-                  ...['--project', project],
-                  ...['--outDir', destination]
-                ]
-              );
-            })
-          : undefined;
+        return options.types && getTypeScriptPath(ctx.cwd)
+          ? intercept(
+              {
+                path: project,
+                content: JSON.stringify(config.typescript),
+                require: 'json'
+              },
+              paths.bin.typescript,
+              [
+                '--declaration',
+                '--emitDeclarationOnly',
+                ...['--noEmit', 'false'],
+                ...['--project', project],
+                ...['--outDir', destination]
+              ]
+            )
+          : null;
       }),
       options.types
         ? copy('src/**/*.d.ts', destination, {

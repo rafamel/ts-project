@@ -5,7 +5,7 @@ export const constants = {
   tmp: path.resolve(os.tmpdir(), 'riseup'),
   node: process.execPath,
   interceptor: {
-    path: require.resolve('./intercept/interceptor'),
-    env: 'RISEUP_INCERCEPT_PAIRS'
+    path: require.resolve('./tasks/intercept/interceptor'),
+    env: 'RISEUP_INCERCEPT_FILES'
   }
 };

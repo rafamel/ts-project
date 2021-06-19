@@ -1,115 +1,82 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import fs from 'fs';
+/* eslint-disable no-eval */
+import { Dictionary } from 'type-core';
+import { ufs as unionfs } from 'unionfs';
+import { fs as memfs } from 'memfs';
+import nativefs from 'fs';
 import path from 'path';
 import mockery from 'mockery';
 import { coerce } from 'ensurism';
 import { constants } from '../constants';
 
-const pairsArr: any[] = coerce(
+const filesArr: any[] = coerce(
   process.env[constants.interceptor.env],
   {
     type: 'array',
     items: {
       type: 'object',
-      required: ['original', 'replacement'],
+      required: ['path', 'content', 'require'],
       properties: {
-        original: { type: 'string' },
-        replacement: { type: 'string' }
+        path: { type: 'string' },
+        content: { type: 'string' },
+        require: {
+          oneOf: [{ type: 'null' }, { type: 'string', enum: ['js', 'json'] }]
+        }
       }
     }
   },
   { assert: true }
 );
 
-const pairsRecord = pairsArr.reduce(
-  (acc, { original, replacement }) => ({
-    ...acc,
-    [original]: replacement
-  }),
-  {}
-);
+// Native filesystem with memfs backup
+unionfs.use(memfs as any).use(nativefs);
 
-mockery.enable({
-  warnOnReplace: true,
-  warnOnUnregistered: false
-});
-
-for (const pair of pairsArr) {
-  mockery.registerMock(pair.original, require(pair.replacement));
+// Create a native fs compatible object
+const pathsArr = filesArr.map((file) => file.path);
+const proxyfs = interceptMethods(nativefs, unionfs, pathsArr);
+if (nativefs.promises) {
+  proxyfs.promises = interceptMethods(
+    nativefs.promises,
+    unionfs.promises,
+    pathsArr
+  );
 }
 
-mockery.registerMock('fs', {
-  ...fs,
-  access(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.access as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  accessSync(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.accessSync as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  readFile(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.readFile as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  readFileSync(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.readFileSync as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  stat(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.stat as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  statSync(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.statSync as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  lstat(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.lstat as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
-    );
-  },
-  lstatSync(file: fs.PathLike, ...args: any[]) {
-    const filePath = path.normalize(String(file));
-    return (fs.lstatSync as any)(
-      Object.hasOwnProperty.call(pairsRecord, filePath)
-        ? pairsRecord[filePath]
-        : file,
-      ...args
+// Mock fs calls
+mockery.enable({ warnOnReplace: true, warnOnUnregistered: false });
+mockery.registerMock('fs', proxyfs);
+
+for (const file of filesArr) {
+  memfs.mkdirpSync(path.dirname(file.path));
+  memfs.writeFileSync(file.path, file.content);
+
+  if (file.require) {
+    mockery.registerMock(
+      file.path,
+      file.require === 'js' ? eval(file.content) : JSON.parse(file.content)
     );
   }
-});
+}
+
+function interceptMethods(
+  native: Dictionary,
+  replacement: Dictionary,
+  paths: string[]
+): Dictionary {
+  const result: Dictionary = { ...native };
+
+  for (const [key, value] of Object.entries(result)) {
+    result[key] =
+      typeof value === 'function'
+        ? new Proxy(value, {
+            apply(_, self, args) {
+              return Object.hasOwnProperty.call(replacement, key) &&
+                paths.includes(String(args[0]))
+                ? replacement[key].apply(self, args)
+                : native[key].apply(self, args);
+            }
+          })
+        : value;
+  }
+
+  return result;
+}

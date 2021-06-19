@@ -14,7 +14,7 @@ import {
   progress,
   Task
 } from 'kpo';
-import { tmpTask, constants, intercept } from '@riseup/utils';
+import { constants, intercept } from '@riseup/utils';
 import { paths } from '../paths';
 import { defaults } from '../defaults';
 
@@ -50,19 +50,18 @@ export function build(
 
   return create((ctx) => {
     return series(
-      tmpTask('json', config.babel, (file) => {
-        return intercept(
-          {
-            original: path.resolve(ctx.cwd, '.babelrc.json'),
-            replacement: file
-          },
-          paths.bin.pika,
-          [
-            ...['--out', opts.destination],
-            ...['--pipeline', JSON.stringify(config.pika)]
-          ]
-        );
-      }),
+      intercept(
+        {
+          path: path.resolve(ctx.cwd, '.babelrc'),
+          content: JSON.stringify(config.babel),
+          require: 'json'
+        },
+        paths.bin.pika,
+        [
+          ...['--out', opts.destination],
+          ...['--pipeline', JSON.stringify(config.pika)]
+        ]
+      ),
       create((ctx) => {
         if (!opts.tarball) return;
 

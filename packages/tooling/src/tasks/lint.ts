@@ -95,19 +95,19 @@ export function lint(
           ...config.typescript,
           include: dir.map((x) => path.resolve(ctx.cwd, x))
         };
-
-        return tmpTask('json', tsconfig, (file) => {
-          const project = path.resolve(ctx.cwd, path.basename(file));
-
-          return intercept(
-            { original: project, replacement: file },
-            paths.bin.typescript,
-            [
-              ...['--noEmit', '--emitDeclarationOnly', 'false'],
-              ...['--project', project]
-            ]
-          );
-        });
+        const project = path.resolve(ctx.cwd, 'tsconfig.lint.json');
+        return intercept(
+          {
+            path: project,
+            content: JSON.stringify(tsconfig),
+            require: 'json'
+          },
+          paths.bin.typescript,
+          [
+            ...['--noEmit', '--emitDeclarationOnly', 'false'],
+            ...['--project', project]
+          ]
+        );
       })
     )
   );
