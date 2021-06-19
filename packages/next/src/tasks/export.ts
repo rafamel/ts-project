@@ -7,7 +7,7 @@ export interface ExportOptions {
   telemetry?: boolean;
 }
 
-export function hydrateExports(
+export function hydrateExport(
   options: ExportOptions | Empty
 ): Deep.Required<ExportOptions> {
   const { telemetry } = hydrateNextGlobal(options);
@@ -15,7 +15,7 @@ export function hydrateExports(
 }
 
 export function exportTask(options: ExportOptions | Empty): Task.Async {
-  const opts = hydrateExports(options);
+  const opts = hydrateExport(options);
 
   return nextTask('export', opts, { babel: null });
 }
