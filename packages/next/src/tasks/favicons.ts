@@ -54,8 +54,6 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
         );
       });
 
-      let manifest: any = null;
-
       return series(
         mkdir([opts.dest.assets, path.dirname(opts.dest.result)], {
           ensure: true
@@ -75,10 +73,6 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
               )
             : String(asset.contents).replace(urlPathSlashRegex, '');
 
-          if (asset.name === 'manifest.json') {
-            manifest = JSON.parse(content);
-          }
-
           return write(path.join(opts.dest.assets, asset.name), content, {
             exists: 'overwrite'
           });
@@ -90,8 +84,19 @@ export function favicons(options: FaviconsOptions | Empty): Task.Async {
               : x.replace(urlPathSlashRegex, '');
           });
 
+          const manifest = response.files
+            .filter((asset) => asset.name === 'manifest.json')
+            .map((asset) => {
+              return opts.urls.result
+                ? asset.contents.replace(
+                    urlPathRegex,
+                    opts.urls.result.replace(/\/$/, '')
+                  )
+                : asset.contents.replace(urlPathSlashRegex, '');
+            });
+
           const content = {
-            ...(manifest ? { manifest } : {}),
+            ...(manifest.length ? { manifest: JSON.parse(manifest[0]) } : {}),
             head: responseHtmlToElements(html)
           };
 
