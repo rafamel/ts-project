@@ -23,8 +23,8 @@ export function execute(): Task.Async {
         exec(constants.node, [
           paths.bin.lerna,
           'exec',
-          'node',
           process.platform === 'win32' ? 'node' : constants.node,
+          paths.bin.execute,
           cmd,
           ...['--concurrency', '1'],
           ...['--loglevel', 'silent'],
