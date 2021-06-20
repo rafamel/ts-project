@@ -1,10 +1,16 @@
 import { Deep, Serial } from 'type-core';
 import { capture } from 'errorish';
-import { context, copy, create, mkdir, run, series, Task } from 'kpo';
+import { context, copy, create, exec, mkdir, run, series, Task } from 'kpo';
 import path from 'path';
+import fs from 'fs';
 import { BuilderOptions } from '@pika/types';
 import { reconfigureBabelEnv } from '@riseup/tooling';
-import { getTypeScriptPath, intercept } from '@riseup/utils';
+import {
+  constants,
+  getTypeScriptPath,
+  intercept,
+  temporal
+} from '@riseup/utils';
 import { paths } from '../../paths';
 import {
   ConfigurePikaConfig,
@@ -51,26 +57,51 @@ function transpile(
     { args: [] },
     series(
       mkdir(destination, { ensure: true }),
-      intercept(
+      temporal(
         {
-          path: '.babelrc',
-          content: JSON.stringify(
-            reconfigureBabelEnv({ targets: options.targets }, config.babel)
-          ),
-          require: 'json'
-        },
-        paths.bin.babelCli,
-        [
-          'src',
-          ...['--source-maps', 'inline'],
-          ...['--out-dir', destination],
-          ...[
-            '--extensions',
-            [...options.extensions.js, ...options.extensions.ts]
-              .map((x) => '.' + x)
-              .join(',')
+          ext: 'json',
+          content: JSON.stringify(config.babel),
+          overrides: [
+            'babel.config.json',
+            'babel.config.js',
+            'babel.config.cjs',
+            'babel.config.mjs',
+            '.babelrc',
+            '.babelrc.json',
+            '.babelrc.js',
+            '.babelrc.cjs',
+            '.babelrc.mjs'
           ]
-        ]
+        },
+        ([basefile]) => {
+          return temporal(
+            {
+              ext: 'json',
+              content: JSON.stringify(
+                reconfigureBabelEnv(
+                  { targets: options.targets },
+                  JSON.parse(String(fs.readFileSync(basefile)))
+                )
+              ),
+              overrides: []
+            },
+            ([file]) => {
+              return exec(constants.node, [
+                paths.bin.babelCli,
+                'src',
+                ...['--config-file', file],
+                ...['--source-maps', 'inline'],
+                ...['--out-dir', destination],
+                ...[
+                  '--extensions',
+                  [...options.extensions.js, ...options.extensions.ts]
+                    .map((x) => '.' + x)
+                    .join(',')
+                ]
+              ]);
+            }
+          );
+        }
       ),
       create((ctx) => {
         const project = path.resolve(ctx.cwd, 'tsconfig.build.json');
