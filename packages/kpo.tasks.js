@@ -13,6 +13,7 @@ const tasks = {
   run: riseup.run,
   execute: riseup.execute,
   build: series(
+    exec('lerna', ['link']),
     exec('kpo', ['build'], { cwd: './utils' }),
     exec('kpo', ['build'], { cwd: './universal' }),
     exec('kpo', ['build'], { cwd: './tooling' }),
