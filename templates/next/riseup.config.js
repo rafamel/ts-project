@@ -11,19 +11,24 @@ module.exports = next(
       // Path aliases -must be set in tsconfig too
       alias: { '@root': './src' }
     },
-    favicons: {
-      // Path of source image
-      logo: 'public/assets/react.svg',
-      // Url prefixes
-      urls: { assets: null, result: urljoin(publicUrl, 'vendor') },
-      // Favicons destination
-      dest: { assets: 'public/vendor', result: 'src/vendor/meta.json' },
-      // Favicons options
+    public: {
+      // Clean contents of public folder
+      clean: true,
+      // Array of globs for files to copy to public folder
+      assets: ['static/*'],
+      // Build favicons and manifest
       favicons: {
-        appName: manifest.name,
-        appShortName: manifest.shortName,
-        appDescription: manifest.description,
-        ...manifest
+        // Path of source image
+        logo,
+        // Path result manifest
+        result: '../src/vendor/result.json',
+        // Favicons options
+        options: {
+          appName: manifest.name,
+          appShortName: manifest.shortName,
+          appDescription: manifest.description,
+          ...manifest
+        }
       }
     },
     watch: {

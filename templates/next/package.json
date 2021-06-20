@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/next": "^0.7.0",
+    "@riseup/next": "^0.8.0",
     "@testing-library/dom": "^7.30.4",
     "@testing-library/react": "^11.2.6",
     "@types/react": "^17.0.11",

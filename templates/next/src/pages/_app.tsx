@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import reportWebVitals from '../utils/report-web-vitals';
-import result from '../vendor/meta.json';
+import result from '../vendor/result.json';
 import '../styles/globals.scss';
 
 // TODO: to start measuring performance, pass a function

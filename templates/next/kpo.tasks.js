@@ -16,7 +16,7 @@ const tasks = {
   watch: riseup.watch,
   build: series(riseup.build, riseup.size),
   export: riseup.export,
-  favicons: riseup.favicons,
+  public: riseup.public,
   explore: riseup.explore,
   fix: riseup.fix,
   lint: series(riseup.lintmd, riseup.lint),
@@ -30,7 +30,7 @@ const tasks = {
     catches({ level: 'silent' }, exec('npm', ['outdated']))
   ),
   /* Hooks */
-  prepare: riseup.favicons,
+  prepare: riseup.public,
   postinstall: catches(null, exec('simple-git-hooks')),
   version: create(() => tasks.validate)
 };

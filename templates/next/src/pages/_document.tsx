@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import result from '../vendor/meta.json';
+import result from '../vendor/result.json';
 
 class AppDocument extends Document {
   render(): JSX.Element {
