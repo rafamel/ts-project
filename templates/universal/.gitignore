@@ -7,11 +7,11 @@ vendor
 lib
 dist
 out
+public
 coverage
+vendor-*
 .npmrc
 _test*
-vendor-*
-workbox-*
 
 # Environment Variables #
 #########################
