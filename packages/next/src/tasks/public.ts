@@ -97,9 +97,10 @@ function faviconsTask(opts: Deep.Required<PublicOptions>): Task.Async | null {
       });
 
       return series(
-        mkdir([opts.dest, path.dirname(favicons.result)], {
-          ensure: true
-        }),
+        mkdir(
+          [opts.dest, path.dirname(path.resolve(opts.dest, favicons.result))],
+          { ensure: true }
+        ),
         ...response.images.map((asset) => {
           return write(path.join(opts.dest, asset.name), asset.contents, {
             exists: 'overwrite'
