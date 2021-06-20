@@ -1,8 +1,8 @@
-import { mkdir, remove, series, print, create, Task, exec } from 'kpo';
+import { mkdir, remove, series, print, create, Task } from 'kpo';
 import { shallow } from 'merge-strategies';
 import { Serial, Empty, Deep } from 'type-core';
 import path from 'path';
-import { temporal, getTypeScriptPath, constants } from '@riseup/utils';
+import { getTypeScriptPath, intercept } from '@riseup/utils';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -47,20 +47,14 @@ export function docs(
         strict: false,
         recursive: true
       }),
-      temporal(
+      intercept(
         {
-          ext: 'json',
+          path: 'typedoc.json',
           content: JSON.stringify(config.typedoc),
-          overrides: ['typedoc.json', 'typedoc.js']
+          require: 'json'
         },
-        ([file]) => {
-          return exec(constants.node, [
-            paths.bin.typedoc,
-            'src',
-            ...['--out', opts.destination],
-            ...['--options', file]
-          ]);
-        }
+        paths.bin.typedoc,
+        ['src', '--out', opts.destination]
       )
     );
   });
