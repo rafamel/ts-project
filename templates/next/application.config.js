@@ -1,8 +1,13 @@
 const pkg = require('./package.json');
 
 module.exports = {
-  publicUrl: '/',
+  // Public url
+  url: '/',
+  // Source image for favicons
+  logo: 'static/react.svg',
+  // Enable Progressive Web App capabilities
   enablePwa: true,
+  // Application breakpoints
   breakpoints: {
     xs: 0,
     sm: 576,

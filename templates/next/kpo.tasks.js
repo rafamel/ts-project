@@ -30,7 +30,8 @@ const tasks = {
     catches({ level: 'silent' }, exec('npm', ['outdated']))
   ),
   /* Hooks */
-  postinstall: series(catches(null, exec('simple-git-hooks')), riseup.favicons),
+  prepare: riseup.favicons,
+  postinstall: catches(null, exec('simple-git-hooks')),
   version: create(() => tasks.validate)
 };
 
