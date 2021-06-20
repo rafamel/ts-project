@@ -4,7 +4,6 @@ import { getBin } from '@riseup/utils';
 export const paths = {
   bin: {
     next: getBin('next', 'next', __dirname),
-    nextEntry: require.resolve('./tasks/helpers/next-entry'),
     sizeLimit: getBin('size-limit', 'size-limit', __dirname),
     sourceMapExplorer: getBin(
       'source-map-explorer',

@@ -30,12 +30,15 @@ export function nextTask(
     ),
     config.babel
       ? intercept(
-          {
-            path: '.babelrc',
-            content: JSON.stringify(config.babel),
-            require: 'json'
-          },
-          paths.bin.nextEntry,
+          [
+            {
+              path: '.babelrc',
+              content: JSON.stringify(config.babel),
+              require: 'json'
+            },
+            { path: 'next-env.d.ts', content: '', require: null }
+          ],
+          paths.bin.next,
           [cmd]
         )
       : exec(constants.node, [paths.bin.next, cmd])
