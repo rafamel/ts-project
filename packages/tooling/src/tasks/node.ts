@@ -1,6 +1,6 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { create, exec, Task } from 'kpo';
-import { tmpTask, constants } from '@riseup/utils';
+import { temporal, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
 import { paths } from '../paths';
 
@@ -28,21 +28,38 @@ export function node(
   const opts = hydrateNode(options);
 
   return create((ctx) => {
-    return tmpTask('json', config.babel, (file) => {
-      return exec(
-        constants.node,
-        [
-          paths.bin.babelNode,
-          ...['--config-file', file],
-          ...[
-            '--extensions',
-            [...opts.extensions.js, ...opts.extensions.ts]
-              .map((x) => '.' + x)
-              .join(',')
-          ]
-        ],
-        { env: { NODE_ENV: ctx.env.NODE_ENV || 'development' } }
-      );
-    });
+    return temporal(
+      {
+        ext: 'json',
+        content: JSON.stringify(config.babel),
+        overrides: [
+          'babel.config.json',
+          'babel.config.js',
+          'babel.config.cjs',
+          'babel.config.mjs',
+          '.babelrc',
+          '.babelrc.json',
+          '.babelrc.js',
+          '.babelrc.cjs',
+          '.babelrc.mjs'
+        ]
+      },
+      ([file]) => {
+        return exec(
+          constants.node,
+          [
+            paths.bin.babelNode,
+            ...['--config-file', file],
+            ...[
+              '--extensions',
+              [...opts.extensions.js, ...opts.extensions.ts]
+                .map((x) => '.' + x)
+                .join(',')
+            ]
+          ],
+          { env: { NODE_ENV: ctx.env.NODE_ENV || 'development' } }
+        );
+      }
+    );
   });
 }

@@ -6,7 +6,7 @@ import nativefs from 'fs';
 import path from 'path';
 import mockery from 'mockery';
 import { coerce } from 'ensurism';
-import { constants } from '../constants';
+import { constants } from '../../constants';
 
 const filesArr: any[] = coerce(
   process.env[constants.interceptor.env],

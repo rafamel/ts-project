@@ -4,7 +4,7 @@ import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
 import path from 'path';
 import {
   getTypeScriptPath,
-  tmpTask,
+  temporal,
   constants,
   intercept
 } from '@riseup/utils';
@@ -52,20 +52,33 @@ export function lint(
   return context(
     { args: [] },
     finalize(
-      tmpTask('json', config.eslint, async (file) => {
-        return exec(constants.node, [
-          paths.bin.eslint,
-          ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
-          ...['--config', file],
-          ...[
-            '--ext',
-            [...opts.extensions.js, ...opts.extensions.ts]
-              .map((x) => '.' + x)
-              .join(',')
-          ],
-          ...['--resolve-plugins-relative-to', paths.riseup.tooling]
-        ]);
-      }),
+      temporal(
+        {
+          ext: 'json',
+          content: JSON.stringify(config.eslint),
+          overrides: [
+            '.eslintrc.js',
+            '.eslintrc.cjs',
+            '.eslintrc.yaml',
+            '.eslintrc.yml',
+            '.eslintrc.json'
+          ]
+        },
+        async ([file]) => {
+          return exec(constants.node, [
+            paths.bin.eslint,
+            ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
+            ...['--config', file],
+            ...[
+              '--ext',
+              [...opts.extensions.js, ...opts.extensions.ts]
+                .map((x) => '.' + x)
+                .join(',')
+            ],
+            ...['--resolve-plugins-relative-to', paths.riseup.tooling]
+          ]);
+        }
+      ),
       create((ctx) => {
         const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
           (dir) => {

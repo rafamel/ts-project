@@ -1,15 +1,10 @@
 import { Deep, Serial } from 'type-core';
 import { capture } from 'errorish';
-import { context, copy, create, exec, mkdir, run, series, Task } from 'kpo';
+import { context, copy, create, mkdir, run, series, Task } from 'kpo';
 import path from 'path';
 import { BuilderOptions } from '@pika/types';
 import { reconfigureBabelEnv } from '@riseup/tooling';
-import {
-  constants,
-  getTypeScriptPath,
-  intercept,
-  tmpTask
-} from '@riseup/utils';
+import { getTypeScriptPath, intercept } from '@riseup/utils';
 import { paths } from '../../paths';
 import {
   ConfigurePikaConfig,
@@ -56,24 +51,26 @@ function transpile(
     { args: [] },
     series(
       mkdir(destination, { ensure: true }),
-      tmpTask(
-        'json',
-        reconfigureBabelEnv({ targets: options.targets }, config.babel),
-        (file) => {
-          return exec(constants.node, [
-            paths.bin.babelCli,
-            'src',
-            ...['--source-maps', 'inline'],
-            ...['--config-file', file],
-            ...['--out-dir', destination],
-            ...[
-              '--extensions',
-              [...options.extensions.js, ...options.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ]
-          ]);
-        }
+      intercept(
+        {
+          path: '.babelrc',
+          content: JSON.stringify(
+            reconfigureBabelEnv({ targets: options.targets }, config.babel)
+          ),
+          require: 'json'
+        },
+        paths.bin.babelCli,
+        [
+          'src',
+          ...['--source-maps', 'inline'],
+          ...['--out-dir', destination],
+          ...[
+            '--extensions',
+            [...options.extensions.js, ...options.extensions.ts]
+              .map((x) => '.' + x)
+              .join(',')
+          ]
+        ]
       ),
       create((ctx) => {
         const project = path.resolve(ctx.cwd, 'tsconfig.build.json');

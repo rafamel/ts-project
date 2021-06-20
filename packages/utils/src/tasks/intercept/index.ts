@@ -1,7 +1,7 @@
 import path from 'path';
 import { Empty } from 'type-core';
 import { create, exec, ExecOptions, log, series, Task } from 'kpo';
-import { constants } from '../constants';
+import { constants } from '../../constants';
 
 export interface InterceptFile {
   path: string;

@@ -1,7 +1,7 @@
 import { Serial, Empty, Deep } from 'type-core';
 import { shallow } from 'merge-strategies';
 import { Task, exec } from 'kpo';
-import { tmpTask, constants } from '@riseup/utils';
+import { temporal, constants } from '@riseup/utils';
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -37,12 +37,24 @@ export function lintmd(
 ): Task.Async {
   const opts = hydrateLintmd(options);
 
-  return tmpTask('json', config.markdownlint, (file) => {
-    return exec(constants.node, [
-      paths.bin.markdownlint,
-      ...['--config', file],
-      ...(opts.exclude ? ['--ignore', opts.exclude] : []),
-      ...[opts.include || './']
-    ]);
-  });
+  return temporal(
+    {
+      ext: 'json',
+      content: JSON.stringify(config.markdownlint),
+      overrides: [
+        '.markdownlintrc',
+        '.markdownlint.json',
+        '.markdownlint.yaml',
+        '.markdownlint.yml'
+      ]
+    },
+    ([file]) => {
+      return exec(constants.node, [
+        paths.bin.markdownlint,
+        ...['--config', file],
+        ...(opts.exclude ? ['--ignore', opts.exclude] : []),
+        ...[opts.include]
+      ]);
+    }
+  );
 }

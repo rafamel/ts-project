@@ -1,3 +1,4 @@
+export * from './tasks';
 export * from './extract';
 export * from './get-bin';
 export * from './get-lerna';
@@ -6,8 +7,6 @@ export * from './get-package';
 export * from './get-typescript-path';
 export * from './tmp-path';
 export * from './tmp-file';
-export * from './tmp-task';
 export * from './with-reconfigure';
-export * from './intercept';
 export * from './constants';
 export * from './definitions';
