@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/rafamel/riseup/compare/v0.7.0...v0.8.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **packages/monorepo:** fix execute and run tasks ([8a1d555](https://github.com/rafamel/riseup/commit/8a1d5550e1e683e639b40d1072944326b7f82499))
+
+
+
+
+
 # [0.7.0](https://github.com/rafamel/riseup/compare/v0.6.0...v0.7.0) (2021-06-18)
 
 

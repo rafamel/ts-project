@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/rafamel/riseup/compare/v0.7.0...v0.8.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **packages/next:** disable next forceful write of next-env.d.ts ([99af30e](https://github.com/rafamel/riseup/commit/99af30e2901565a26ab52cb421d1e8b48efc38a5))
+* **packages/next:** fix result.manifest urls for favicons task ([dfe36d2](https://github.com/rafamel/riseup/commit/dfe36d290d3b367208336e273b6cf56b40989d92))
+* **packages/next:** rename hydrateExports to hydrateExport ([f2eee8f](https://github.com/rafamel/riseup/commit/f2eee8fb7f1a96701059f80a58b4e3d81cdb7d65))
+
+
+### Features
+
+* **packages/next:** rename favicons task to public; can copy assets to public folder ([1e65317](https://github.com/rafamel/riseup/commit/1e65317c7415b7b580d1797a9e432e1b3bb8449a))
+* **packages/utils:** interceptor sets up an in memory fs; defaults to the filesystem; wider compatibility ([5de75d4](https://github.com/rafamel/riseup/commit/5de75d4d327c18cc8a472d8847895148a451e31e))
+
+
+
+
+
 # [0.7.0](https://github.com/rafamel/riseup/compare/v0.6.0...v0.7.0) (2021-06-18)
 
 

@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/rafamel/riseup/compare/v0.7.0...v0.8.0) (2021-06-20)
+
+
+### Bug Fixes
+
+* **packages/library:** docs task intercepts typedoc configuration file for proper path resolution ([23939f3](https://github.com/rafamel/riseup/commit/23939f3e14b0270037267b67489c73ecde52bf18))
+* **packages/library:** fixes typedoc options relative paths ([11fc8e1](https://github.com/rafamel/riseup/commit/11fc8e1aa15f4bd79d7e03cd879d977f23cfda47))
+* **packages/library:** reconfigure babel on transpile even for configuration override files ([4aeb828](https://github.com/rafamel/riseup/commit/4aeb828669aa384449df7a2192b84df2b7e7f776))
+* **packages/monorepo:** fix execute and run tasks ([8a1d555](https://github.com/rafamel/riseup/commit/8a1d5550e1e683e639b40d1072944326b7f82499))
+* **packages/next:** disable next forceful write of next-env.d.ts ([99af30e](https://github.com/rafamel/riseup/commit/99af30e2901565a26ab52cb421d1e8b48efc38a5))
+* **packages/next:** fix result.manifest urls for favicons task ([dfe36d2](https://github.com/rafamel/riseup/commit/dfe36d290d3b367208336e273b6cf56b40989d92))
+* **packages/next:** rename hydrateExports to hydrateExport ([f2eee8f](https://github.com/rafamel/riseup/commit/f2eee8fb7f1a96701059f80a58b4e3d81cdb7d65))
+* **templates:** update dependencies ([3740736](https://github.com/rafamel/riseup/commit/37407362a6c51c2730ea7d7e914b050089f1e370))
+
+
+### Features
+
+* **packages/next:** rename favicons task to public; can copy assets to public folder ([1e65317](https://github.com/rafamel/riseup/commit/1e65317c7415b7b580d1797a9e432e1b3bb8449a))
+* **packages/utils:** interceptor sets up an in memory fs; defaults to the filesystem; wider compatibility ([5de75d4](https://github.com/rafamel/riseup/commit/5de75d4d327c18cc8a472d8847895148a451e31e))
+* **packages/utils:** rename tmpTask to temporal; files are overriden by existing files ([f5e389b](https://github.com/rafamel/riseup/commit/f5e389b497e941c2352c715ac0eeec96c8b03876))
+* **templates:** add config comments ([bd8aaa8](https://github.com/rafamel/riseup/commit/bd8aaa8cae3f721a0a005dc743bd0fe77b907b60))
+* **templates:** add next template ([14ce687](https://github.com/rafamel/riseup/commit/14ce687e2a46349de4b902d7417264629c37a2e6))
+* **templates/next:** set title and metadata globally ([3962d41](https://github.com/rafamel/riseup/commit/3962d414be2812ffc36d62aac1392c3e038b9fc1))
+
+
+
+
+
 # [0.7.0](https://github.com/rafamel/riseup/compare/v0.6.0...v0.7.0) (2021-06-18)
 
 
