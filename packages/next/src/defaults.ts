@@ -25,14 +25,18 @@ export const defaults: Deep.Required<NextParams> = {
     ]
   },
   public: {
-    dest: 'public',
     clean: false,
+    destination: 'public',
     assets: [],
+    fonts: null,
     favicons: {
       logo: paths.riseup.logoNext,
-      result: 'result.json',
-      urls: { result: null, manifests: null },
       options: { logging: false } as any
+    },
+    result: {
+      url: null,
+      path: 'public/result.json',
+      values: null
     }
   },
   explore: {
