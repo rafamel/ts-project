@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/rafamel/riseup/compare/v0.8.0...v0.9.0) (2021-06-22)
+
+
+### Bug Fixes
+
+* **packages/next:** resolve public task result path relative to dest ([8b0fbd4](https://github.com/rafamel/riseup/commit/8b0fbd468ad81806c6c3dba83da6494805007ab7))
+
+
+### Features
+
+* **packages/next:** add fonts download capabilities to public task ([f6431d8](https://github.com/rafamel/riseup/commit/f6431d8357d218eaa8e0caec81965a89e71784ac))
+
+
+
+
+
 # [0.8.0](https://github.com/rafamel/riseup/compare/v0.7.0...v0.8.0) (2021-06-20)
 
 
