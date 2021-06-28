@@ -9,7 +9,7 @@ module.exports = next(
       // Enable Next telemetry
       telemetry: false,
       // Path aliases -must be set in tsconfig too
-      alias: { '@root': './src' }
+      alias: { '@src': './src' }
     },
     public: {
       // Clean contents of public folder

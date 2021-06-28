@@ -6,7 +6,7 @@ module.exports = library(
       // Enable prettier
       prettier: true,
       // Path aliases -must be set in tsconfig too
-      alias: { '@root': './src' }
+      alias: { '@src': './src' }
     },
     build: {
       // Assets to copy
