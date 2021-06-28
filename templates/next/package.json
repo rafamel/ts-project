@@ -19,7 +19,7 @@
     "watch": "kpo watch --",
     "build": "kpo build --",
     "export": "kpo export --",
-    "favicons": "kpo favicons --",
+    "public": "kpo public --",
     "explore": "kpo explore --",
     "fix": "kpo fix --",
     "lint": "kpo lint --",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/next": "^0.8.0",
+    "@riseup/next": "latest",
     "@testing-library/dom": "^7.30.4",
     "@testing-library/react": "^11.2.6",
     "@types/react": "^17.0.11",

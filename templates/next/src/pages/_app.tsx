@@ -9,7 +9,7 @@ import '../styles/globals.scss';
 // See: https://bit.ly/3vC0YFn
 if (typeof window !== 'undefined') reportWebVitals();
 
-const title = `${result.manifest.name} - ${result.manifest.description}`;
+const title = `${result.values.manifest.name} - ${result.values.manifest.description}`;
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (

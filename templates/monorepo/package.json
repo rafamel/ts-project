@@ -34,7 +34,7 @@
     "url": "https://github.com/rafamel/monorepo-template/issues"
   },
   "devDependencies": {
-    "@riseup/monorepo": "^0.8.0",
+    "@riseup/monorepo": "latest",
     "kpo": "^0.22.0",
     "lerna": "^4.0.0"
   },

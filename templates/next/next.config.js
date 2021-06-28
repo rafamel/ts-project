@@ -1,5 +1,5 @@
 const withPWA = require('next-pwa');
-const { url, enablePwa } = require('./application.config');
+const { app, enablePwa } = require('./application.config');
 
 // See: https://nextjs.org/docs/api-reference/next.config.js
 module.exports = withPWA({
@@ -8,7 +8,7 @@ module.exports = withPWA({
   // Clean build directory
   cleanDistDir: true,
   // Public url
-  basePath: url === '/' ? '' : url,
+  basePath: app.url === '/' ? '' : app.url,
   // Serve w/ gzip compression. See: https://bit.ly/2SaFIca
   compress: true,
   // Fonts build time inline. See: https://bit.ly/35DbDoS
@@ -29,7 +29,7 @@ module.exports = withPWA({
     // Destination folder for Service Worker
     dest: 'public',
     // Service Worker scope
-    scope: url,
+    scope: app.url,
     // Disable plugin
     disable: process.env.NODE_ENV === 'development' ? true : !enablePwa
   },

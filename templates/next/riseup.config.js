@@ -1,5 +1,11 @@
 const { next } = require('@riseup/next');
-const { logo, manifest } = require('./application.config');
+const {
+  logo,
+  fonts,
+  app,
+  manifest,
+  breakpoints
+} = require('./application.config');
 
 module.exports = next(
   {
@@ -12,16 +18,25 @@ module.exports = next(
       alias: { '@src': './src' }
     },
     public: {
-      // Clean contents of public folder
+      // Clean all contents of destination folder
       clean: true,
+      // Destination folder for all assets
+      destination: 'public',
       // Array of globs for files to copy to public folder
       assets: ['static/*'],
+      // Google fonts to download -see: https://bit.ly/2TREByt
+      fonts: {
+        // Fonts display
+        display: 'swap',
+        // Fonts subsets
+        subsets: ['latin-ext'],
+        // Font families object
+        families: fonts
+      },
       // Build favicons and manifest
       favicons: {
         // Path of source image
         logo,
-        // Path result manifest
-        result: '../src/vendor/result.json',
         // Favicons options
         options: {
           appName: manifest.name,
@@ -29,6 +44,15 @@ module.exports = next(
           appDescription: manifest.description,
           ...manifest
         }
+      },
+      // Result json
+      result: {
+        // Base url for assets
+        url: app.url,
+        // File path for result
+        path: 'src/vendor/result.json',
+        // Serializable content
+        values: { app, manifest, breakpoints }
       }
     },
     watch: {
