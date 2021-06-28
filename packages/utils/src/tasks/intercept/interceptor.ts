@@ -62,6 +62,7 @@ function interceptMethods(
   replacement: Dictionary,
   paths: string[]
 ): Dictionary {
+  const normalPaths = paths.map((item) => path.normalize(item));
   const result: Dictionary = { ...native };
 
   for (const [key, value] of Object.entries(result)) {
@@ -70,7 +71,7 @@ function interceptMethods(
         ? new Proxy(value, {
             apply(_, self, args) {
               return Object.hasOwnProperty.call(replacement, key) &&
-                paths.includes(String(args[0]))
+                normalPaths.includes(path.normalize(String(args[0])))
                 ? replacement[key].apply(self, args)
                 : native[key].apply(self, args);
             }
