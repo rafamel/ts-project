@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.1](https://github.com/rafamel/riseup/compare/v0.9.0...v0.9.1) (2021-06-28)
+
+
+### Bug Fixes
+
+* **packages:** update dependencies ([d8fabf9](https://github.com/rafamel/riseup/commit/d8fabf9d8cfb5180ecba281c3ac1194268dda2e8))
+* **packages/utils:** fix intercept in Windows ([9485cb7](https://github.com/rafamel/riseup/commit/9485cb7485aa70a0ccc1daa3a73354a415c5a97b))
+* **templates:** update to latest riseup ([5aa6532](https://github.com/rafamel/riseup/commit/5aa653229d2adefbaa204db50a1f03ce367bb645))
+
+
+
+
+
 # [0.9.0](https://github.com/rafamel/riseup/compare/v0.8.0...v0.9.0) (2021-06-22)
 
 
