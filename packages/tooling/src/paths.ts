@@ -22,7 +22,8 @@ export const paths = {
     mapperImage: require.resolve('./configure/babel/mapper-image')
   },
   typescript: {
-    config: require.resolve('../static/tsconfig.json')
+    config: require.resolve('../static/tsconfig.json'),
+    transformPaths: require.resolve('@zerollup/ts-transform-paths')
   },
   eslint: {
     configStandard: require.resolve('eslint-config-standard'),

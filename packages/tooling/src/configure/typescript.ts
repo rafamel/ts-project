@@ -8,7 +8,12 @@ export function configureTypescript(cwd: string): Serial.Object {
     extends: file,
     exclude: ['node_modules'],
     compilerOptions: {
-      baseUrl: cwd
+      baseUrl: cwd,
+      plugins: [
+        {
+          transform: paths.typescript.transformPaths
+        }
+      ]
     }
   };
 }

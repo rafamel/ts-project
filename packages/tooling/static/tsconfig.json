@@ -2,12 +2,6 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   // https://www.typescriptlang.org/docs/handbook/compiler-options.html
   "compilerOptions": {
-    /* Plugins */
-    "plugins": [
-      {
-        "transform": "@zerollup/ts-transform-paths"
-      }
-    ],
     /* Basic Options */
     /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
     "target": "esnext",
