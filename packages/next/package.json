@@ -49,7 +49,7 @@
     "@riseup/tooling": "^0.9.0",
     "@riseup/universal": "^0.9.0",
     "@riseup/utils": "^0.9.0",
-    "@size-limit/file": "^4.10.2",
+    "@size-limit/file": "^5.0.1",
     "@types/favicons": "^6.2.1",
     "babel-jest": "^27.0.2",
     "eslint": "^7.25.0",
@@ -61,7 +61,7 @@
     "merge-strategies": "^0.2.0",
     "pirates": "^4.0.1",
     "prettier": "^2.2.1",
-    "size-limit": "^4.10.2",
+    "size-limit": "^5.0.1",
     "source-map-explorer": "^2.5.2",
     "type-core": "^0.12.0"
   },
