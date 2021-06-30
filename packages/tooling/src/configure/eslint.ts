@@ -166,6 +166,8 @@ export function configureEslint(
           /* FIXES */
           // See: https://github.com/eslint/typescript-eslint-parser/issues/437
           'no-undef': 0,
+          // Interprets overloads as duplicates
+          'no-dupe-class-members': 0,
           // Very prone to expose parser bugs and already
           // covered by noUnusedLocals and noUnusedParameters
           '@typescript-eslint/no-unused-vars': 0,
