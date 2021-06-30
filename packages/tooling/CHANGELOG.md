@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.2](https://github.com/rafamel/riseup/compare/v0.9.1...v0.9.2) (2021-06-30)
+
+
+### Bug Fixes
+
+* **packages/tooling:** disable no-dupe-class-members eslint rule for typescript ([b12a622](https://github.com/rafamel/riseup/commit/b12a622dad4fefaa7ff0b6562a639f2e7a90131b))
+
+
+
+
+
 ## [0.9.1](https://github.com/rafamel/riseup/compare/v0.9.0...v0.9.1) (2021-06-28)
 
 
